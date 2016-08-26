@@ -1,4 +1,5 @@
-# compiler_proyect
+
+
 - Compilar 
 
    >ant
@@ -10,4 +11,8 @@ Luego de que se genero el analizados léxico y sintáctico , compila y arma un J
    > java -jar Compiler.jar ../input.test
 
 en el archivo input.test, tienen 3 expresiones.. 2 de las cuales son correctas y una tiene un error sintáctico. En este ejemplo, muestra el resultado de la expresión si es correcta, caso contrario informa el Error.
+
+4+4;
+5++5; -->ERROR 
+5+5*2;
 

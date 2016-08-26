@@ -1,0 +1,61 @@
+/*4+4;
+5++5; 
+5+5*2;
+*/
+bool;
+bool			
+break			
+class			
+continue		
+else			
+extern		
+false			
+float			
+for			
+if			
+integer		
+return		
+true			
+void			
+while			
+
+/*	assign operator	*/
+=				
++=			
+-=			
+
+/*	concatenation operator 	*/ 						//ver!!!
+;				
+
+/*	arith operators	*/
++				
+-				
+*				
+/				
+%				
+
+/*		*/											//ver
+--			
+++			
+
+/*	eq operators	*/
+==			
+!=			
+
+/*	rel operators	*/
+<				
+>				
+<=			
+>=			
+
+/*	cond operators	*/
+&&			
+||			
+!				  		//ver!!!			
+
+/*		*/											//ver!!!
+(				
+)				
+
+/*	comments	*/
+
