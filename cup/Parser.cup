@@ -47,8 +47,28 @@ parser code {:
     }
 :}
 
-terminal SEMI, PLUS, TIMES, LPAREN, RPAREN;
-terminal Integer NUMBER;
+/*	keywords	*/
+terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, BOOL_LITERAL, FOR, IF, RET, WHILE; 
+
+/*	assign operators	*/
+terminal ASSIGN, ASSIGNP, ASSIGNM;
+
+/*	arith operators	*/
+terminal SEMI, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS;
+
+/*	eq operators	*/
+terminal EQUAL, DISTINCT;
+
+/*	rel operators	*/
+terminal SMALLER, BIGGER, LTOE, GTOE;
+
+/*	cond operators	*/
+terminal AND, OR, NOT;
+
+/*		*/
+terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
+terminal Integer INTNUMBER;
+terminal REALNUMBER, ID;
 
 non terminal expr_list, expr_part;
 non terminal Expr expr;
