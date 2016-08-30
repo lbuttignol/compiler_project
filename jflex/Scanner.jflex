@@ -31,7 +31,7 @@ CommentContent 		= ( [ˆ*] | "\*"+ [ˆ/] )*
 
 IntegerLiteral 		= 0 | [1-9][0-9]*
 RealLiteral			= {IntegerLiteral} "." {IntegerLiteral} ("e" "-"? {IntegerLiteral} )?
-Identifier			= [a-zA-Z][a-zA-Z0-9_]*																	////////////CAMBIAR					
+Identifier			= [a-zA-Z][a-zA-Z0-9_]*																	
 
 %state COMMENTSMULTILINE
 %state COMMENTSENDOFLINE
@@ -67,6 +67,8 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*																	////////////CAMBIAR
 
 /*	concatenation operator 	*/ 					
 ";"					{ return symbol("Colon", sym.SEMI); }
+'.'					{ return symbol("Doc", sym.DOC); }
+','					{ return symbol("Comma", sym.COMMA); }
 
 /*	arith operators	*/
 "+"					{ return symbol("Plus", sym.PLUS); }

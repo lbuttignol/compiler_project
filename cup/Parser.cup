@@ -54,13 +54,13 @@ terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, EL
 terminal ASSIGN, ASSIGNP, ASSIGNM;
 
 /*	arith operators	*/
-terminal SEMI, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS;
+terminal SEMI, DOC, COMMA, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS;
 
 /*	eq operators	*/
 terminal EQUAL, DISTINCT;
 
 /*	rel operators	*/
-terminal SMALLER, BIGGER, LTOE, GTOE;
+terminal SMALLER, BIGGER, LTOE, GTOE;   // 
 
 /*	cond operators	*/
 terminal AND, OR, NOT;
@@ -70,12 +70,129 @@ terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal Integer INTNUMBER;
 terminal REALNUMBER, ID;
 
-non terminal expr_list, expr_part;
-non terminal Expr expr;
+non terminal program, class_decl, class_declN, field_decl, aux_field_decl, aux_field_declN, method_decl, aux_method_decl, aux_aux_method_decl, aux_aux_method_declN,
+			 body, block, type, statement, assign_op, method_call, aux_method_call1, aux_method_call2, aux_aux_method_call2, location, expr, exprN,
+			 bin_op, arith_op, rel_op, eq_op, cond_op, literal;
 
 precedence left PLUS;
 precedence left TIMES;
 
+program             	::= class_decl:cd1  class_declN:cdN1;      //class_decl+
+
+class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl:fd1 method_decl:md1 RBRACE;
+
+class_declN         	::= CLASS_DECL ID:i2 LBRACE field_decl:fd1 method_decl:md1 RBRACE class_declN 	
+						| /* empty */;
+
+field_decl          	::= type:t1 aux_field_decl:af1  aux_field_declN:af2 SEMI field_decl
+						| /* empty */;
+
+aux_field_decl      	::= ID:i4 
+						| ID:i5 LBRACKET INTNUMBER:il1 RBRACKET ;
+
+aux_field_declN     	::= COMMA ID:i5
+						| ID:i6 LBRACKET INTNUMBER:il1 RBRACKET aux_field_declN 
+						| /* empty */;
+
+method_decl         	::= type:t1 ID:i7 LPAREN aux_method_decl RPAREN body:bo1 method_decl 	
+						| /*empty*/;
+
+aux_method_decl     	::= aux_aux_method_decl  aux_aux_method_declN  
+						| /*empty*/;
+
+aux_aux_method_decl 	::= type:t2 ID:i8 ;
+
+aux_aux_method_declN	::= COMMA type:t3 ID:i9 aux_aux_method_declN 									
+						| /* empty */ ;
+
+body 					::= block:bl1 
+						| EXTERN SEMI;
+
+block					::= LBRACE field_decl  statement:s1 RBRACE;
+
+type					::= INT_TYPE 
+						| FLOAT_TYPE 
+						| BOOL_TYPE 
+						| ID:i10 
+						| VOID_TYPE ;
+
+statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI
+						| method_call:mc1 SEMI
+						| IF LPAREN expr:e2 RPAREN statement:s2 aux_statement:as1
+						| FOR ID:i11 ASSIGN expr:e3 COMMA expr:e3 statement:s4
+						| WHILE expr:e4 statement:s5
+						| RET <expr:e5 SEMI 
+						| BREAK SEMI
+						| CONT SEMI
+						| SEMI
+					 	| block:bl2  statement:s5 													
+						| /*empty*/ ;
+
+aux_statement			::= 	/*jnj*/	;
+
+assign_op  				::= ASSIGN 
+						| ASSIGNP 
+						| ASSIGNM ;
+
+method_call         	::= ID aux_method_call1:amc11 LPAREN aux_method_call2:amc21 RPAREN;
+
+aux_method_call1 		::= DOC ID aux_method_call1:amc12 												
+						| /* empty */;
+
+aux_method_call2    	::= expr aux_aux_method_call2:amc22 											
+						| /*empty */;
+
+aux_aux_method_call2	::= COMMA expr aux_aux_method_call2:acm23 					
+						| /* empty */;
+
+location 				::= ID aux_method_call1:amc13 
+						| ID aux_method_call1:amc14 LBRACKET expr RBRACKET;
+
+expr					::= location:l2
+						| method_call:mc2
+						| literal:li1
+						| expr:e4 bin_op:bo2 expr:e5
+						| MINUS expr:e6
+						| NOT expr:e7
+						| LPAREN expr:e8 RPAREN ;
+
+exprN					::= location:l3
+						| method_call:mc3
+						| literal: li2
+						| expr:e9 bin_op:bo3 expr:e10
+						| MINUS expr:e11
+						| NOT expr:e12
+						| LPAREN expr:e13 RPAREN  exprN:eN1 
+						| /*empty*/;
+
+bin_op  				::= arith_op:ao2 
+						| rel_op:ro1 
+						| eq_op:eo1 
+						| cond_op:co1;
+
+arith_op 				::= PLUS 
+						| MINUS 
+						| TIMES 
+						| DIV 
+						| MOD ;
+
+rel_op   				::= SMALLER 
+						| BIGGER 
+						| LTOE 
+						| GTOE ;
+
+eq_op    				::= EQUAL 
+						| DISTINCT ;
+
+cond_op  				::= AND 
+						| OR;
+
+literal  				::= INTNUMBER 
+						| REALNUMBER 
+						| BOOL_LITERAL ;
+/*
+precedence left PLUS;
+precedence left TIMES;
 expr_list ::= expr_list expr_part | expr_part;
 expr_part ::= expr:e {: System.out.println(" = "+e.eval()+";"); :} SEMI
             | error:e SEMI:s {: parser.report_error("Syntax error in input from "+exleft +" to "+sxright,e); :}
@@ -89,3 +206,4 @@ expr      ::= NUMBER:n
 	    | LPAREN expr:e RPAREN
 	      {: RESULT=e; :}
 	    ;
+*/
