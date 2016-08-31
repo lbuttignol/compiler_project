@@ -71,7 +71,7 @@ terminal Integer INTNUMBER;
 terminal REALNUMBER, ID;
 
 non terminal program, class_decl, class_declN, field_decl, aux_field_decl, aux_field_declN, method_decl, aux_method_decl, aux_aux_method_decl, aux_aux_method_declN,
-			 body, block, type, statement, assign_op, method_call, aux_method_call1, aux_method_call2, aux_aux_method_call2, location, expr, exprN,
+			 body, block, type, statement, aux_statement, assign_op, method_call, aux_method_call1, aux_method_call2, aux_aux_method_call2, location, expr, exprN,
 			 bin_op, arith_op, rel_op, eq_op, cond_op, literal;
 
 precedence left PLUS;
@@ -116,19 +116,20 @@ type					::= INT_TYPE
 						| ID:i10 
 						| VOID_TYPE ;
 
-statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI
+statement				::= { location:l1 assign_op:ao1 expr:e1 SEMI
 						| method_call:mc1 SEMI
 						| IF LPAREN expr:e2 RPAREN statement:s2 aux_statement:as1
 						| FOR ID:i11 ASSIGN expr:e3 COMMA expr:e3 statement:s4
 						| WHILE expr:e4 statement:s5
-						| RET <expr:e5 SEMI 
+						| RET {expr:e5 | /*empty*/} SEMI 
 						| BREAK SEMI
 						| CONT SEMI
 						| SEMI
-					 	| block:bl2  statement:s5 													
+					 	| block:bl2 } statement:s5 													
 						| /*empty*/ ;
 
-aux_statement			::= 	/*jnj*/	;
+aux_statement			::= 	ELSE statement:s6 
+						| /*empty*/	;
 
 assign_op  				::= ASSIGN 
 						| ASSIGNP 
