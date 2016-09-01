@@ -26,8 +26,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 %eofval}
 
 LineTerminator 		= \r|\n|\r\n 
-InputCharacter		= [ˆ\r\n]
-CommentContent 		= ( [ˆ*] | "\*"+ [ˆ/] )*
+// InputCharacter		= [ˆ\r\n]
 
 IntegerLiteral 		= 0 | [1-9][0-9]*
 RealLiteral			= {IntegerLiteral} "." {IntegerLiteral} ("e" "-"? {IntegerLiteral} )?
@@ -67,8 +66,8 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 
 /*	concatenation operator 	*/ 					
 ";"					{ return symbol("Colon", sym.SEMI); }
-'.'					{ return symbol("Doc", sym.DOC); }
-','					{ return symbol("Comma", sym.COMMA); }
+","					{ return symbol("Comma", sym.COMMA); }
+"."					{ return symbol("Doc", sym.DOC); }
 
 /*	arith operators	*/
 "+"					{ return symbol("Plus", sym.PLUS); }
@@ -108,6 +107,7 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 {Identifier}		{ return symbol("IDENTIFIER", sym.ID); }
 
 [ \t\r\n\f] 		{ /* ignore white space. */ }
+
 . 					{ System.err.println("Illegal character: "+yytext()); }
 }
 
