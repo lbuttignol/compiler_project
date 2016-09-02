@@ -1,0 +1,80 @@
+//	Test declaration of attributes and methods
+class main{}
+
+class main1{
+	integer val1;
+	integer max(integer a, integer b){}	
+}
+
+class main2{
+	float val1;
+	integer max(integer a, integer b){}
+	integer prod(float q, float d){}
+	float mult(void a, ejemplo a){}
+	void aud( val t, bool sa){}
+}
+
+class main3{
+	bool val;
+}
+
+class main4{
+	void val;
+}
+
+class main5{
+	integer val[4];
+}
+
+class main6{
+	float val[78];
+}
+
+class main6{
+	integer a;
+	integer b;
+	integer c;
+	integer d[3];
+	integer e[5];
+	integer max(integer a, integer b){}
+}
+
+class main6_0{
+	integer a;
+	bool b;
+	float c;
+	void d[3];
+	integer e[5];	
+	integer max(integer a, integer b,float c, cont j){}
+	integer prod(float q, float d){}
+	float mult(void a, ejemplo a){}
+	void aud( val t, bool sa){}
+}
+
+class main7{
+	integer a ; void b;	
+}
+
+class main8{
+	integer a,g,b,c,d[3],e[5];
+}
+
+class main9 {
+	integer a,d[23],c[43],d,e,f;
+	void g,h[4],j[94];
+	bool k[4],l,m[5];
+	float n,o[5],p;
+	juan q,r[6],s;
+	integer max(integer a, integer b){}
+	integer prod(float q, float d){}
+	float mult(void a, ejemplo a){}
+	void aud( val t, bool sa){}
+}
+
+class main10{
+	integer a,d[23],c[43],d,e,f;void g,h[4],j[94];bool k[4],l,m[5];float n,o[5],p;juan q,r[6],s;
+	integer max(integer a, integer b){}
+	integer prod(float q, float d){}
+	float mult(void a, ejemplo a){}
+	void aud( val t, bool sa){}
+}

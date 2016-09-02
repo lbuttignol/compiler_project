@@ -70,9 +70,9 @@ terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal Integer INTNUMBER;
 terminal REALNUMBER, ID;
 
-non terminal program, class_decl, class_decl_list, field_decl, method_decl, aux_method_decl, method_decl_list,
+non terminal program, class_decl, class_decl_list, field_decl, method_decl, method_decl_list,
 			 body, block, type, statement, statement_list, assign_op, method_call, attribute_access_list, attribute_access,params,
-			 location, expr, bin_op, arith_op, rel_op, eq_op, cond_op, literal, field_decl_list,id_name_list,id_name, return_st;
+			 location, expr, bin_op, arith_op, rel_op, eq_op, cond_op, literal, field_decl_list,id_name_list,id_name, return_st, params_list;
 
 precedence left LBRACE, RBRACE;
 precedence left LPAREN,RPAREN;
@@ -90,8 +90,8 @@ program             	::= class_decl_list:cdN1 ;
 class_decl_list        	::= class_decl_list:cD1 class_decl:cD2
 						| class_decl:cD3 ;
 
-class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl:md1 RBRACE
-						| CLASS_DECL ID:i1 LBRACE method_decl:md1 RBRACE
+class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl_list:md1 RBRACE
+						| CLASS_DECL ID:i1 LBRACE method_decl_list:md1 RBRACE
 						| CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 RBRACE
 						| CLASS_DECL ID:i1 LBRACE RBRACE ;
 
@@ -106,14 +106,14 @@ id_name_list			::= id_name_list COMMA id_name
 id_name		      		::= ID:i5 LBRACKET INTNUMBER:il1 RBRACKET
 						| ID:i4 ;
 
+method_decl_list		::= method_decl_list method_decl
+						| method_decl;
+
 method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1
-						| type:t1 ID:i7 LPAREN aux_method_decl RPAREN body:bo1  
-						| type:t1 ID:i7 LPAREN method_decl_list RPAREN body:bo1 ; 
+						| type:t1 ID:i7 LPAREN params_list RPAREN body:bo1 ; 
 
-aux_method_decl     	::= type:t2 ID:i8 ;
-
-method_decl_list		::= method_decl_list COMMA aux_method_decl
-						| aux_method_decl ;
+params_list				::= params_list COMMA type:t2 ID:i8
+						| type:t3 ID:i8 ;
 
 body 					::= block:bl1 
 						| EXTERN SEMI ;
@@ -136,7 +136,7 @@ statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI
 						| method_call:mc1 SEMI
 						| IF LPAREN expr:e2 RPAREN statement:s2 
 						| IF LPAREN expr:e2 RPAREN statement:s2 ELSE statement:s3
-						| FOR ID:i11 ASSIGN expr:e3 COMMA method_decl_list
+						| FOR ID:i11 ASSIGN expr:e3 COMMA expr statement
 						| WHILE expr:e3 statement
 						| return_st
 						| BREAK SEMI
