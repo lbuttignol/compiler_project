@@ -118,8 +118,8 @@ method_decl_list		::= method_decl_list COMMA aux_method_decl
 body 					::= block:bl1 
 						| EXTERN SEMI ;
 
-block					::= LBRACE field_decl  statement_list:s1 RBRACE
-						| LBRACE field_decl RBRACE
+block					::= LBRACE field_decl_list:fdl3  statement_list:s1 RBRACE
+						| LBRACE field_decl_list RBRACE
 						| LBRACE statement_list:s1 RBRACE
 						| LBRACE RBRACE ;
 

@@ -1,0 +1,32 @@
+class main{
+	integer x;
+	integer method1() extern;
+
+}
+
+class main1{
+	integer y;
+	
+	integer method1 (){
+		integer z;
+		book book_instance;
+		z=1;
+
+		if (z==1){
+			return z;
+		}else{
+			return 0;
+		}
+	}
+}
+
+class main2{
+	integer x;
+	integer method2(integer y,integer z) extern;
+}
+
+class main3{
+	book getBook(){
+		return this.book;
+	}
+}
