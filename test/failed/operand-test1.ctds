@@ -1,0 +1,7 @@
+class main6(){
+	int a,b,c=5;
+	integer myMethod(a){
+		var d:=a*b-c;
+		return d;	
+	}
+}

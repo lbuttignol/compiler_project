@@ -1,0 +1,7 @@
+class main2(){	
+	integer x,y,z;
+	integer method(){
+		z=(x+y/x;
+		return x-z;
+	}	
+}

@@ -1,0 +1,5 @@
+class main3(){
+	integer a,b;
+	a=1;
+	b=a++;
+}
