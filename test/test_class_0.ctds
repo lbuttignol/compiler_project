@@ -65,3 +65,4 @@ class main9 {
 class main10{
 	integer a,d[23],c[43],d,e,f;void g,h[4],j[94];bool k[4],l,m[5];float n,o[5],p;juan q,r[6],s;
 }
+

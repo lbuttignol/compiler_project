@@ -136,14 +136,14 @@ statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI
 						| method_call:mc1 SEMI
 						| IF LPAREN expr:e2 RPAREN statement:s2 
 						| IF LPAREN expr:e2 RPAREN statement:s2 ELSE statement:s3
-						| FOR ID:i11 ASSIGN expr:e3 COMMA method_decl_list
+						| FOR ID:i11 ASSIGN expr:e3 COMMA expr statement
 						| WHILE expr:e3 statement
 						| return_st
 						| BREAK SEMI
 						| CONT SEMI
 						| SEMI
-						| expr PLUSPLUS SEMI
-						| expr MINUSMINUS SEMI
+						| expr PLUSPLUS
+						| expr MINUSMINUS
 					 	| block:bl2 ;
 
 return_st 				::= RET expr SEMI
