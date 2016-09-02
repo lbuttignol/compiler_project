@@ -1,0 +1,43 @@
+class main1(){
+	;var i
+}
+
+class main2(){	
+	integer x,y,z;
+	integer method(){
+		z=(x+y/x;
+		return x-z;
+	}	
+}
+
+class main3(){
+	integer a,b;
+	a=1;
+	b=a++;
+}
+
+class main4(){
+	integer a,b;
+	a=1*(;
+	b=a++;
+}
+
+class main5(){
+	integer a,b;
+	a=1/null;
+}
+
+class main6(){
+	int a,b,c;
+	d:=a*b-c;
+	return d;
+}
+
+class main6(){
+	int a,b,c=5;
+	integer myMethod(a){
+		var d:=a*b-c;
+		return d;	
+	}
+}
+
