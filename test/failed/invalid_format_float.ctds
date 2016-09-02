@@ -1,0 +1,20 @@
+class main{
+	
+	integer x,y,z;
+	integer method(){
+		boolean exist;
+		float f;
+		z=x+y;
+		x=-y;
+		y=z-x;
+		z=(x+y)/x;
+		exists= ! false;
+		f = 1,35;
+		return x-z;
+	}
+
+
+	
+}
+
+//End of test

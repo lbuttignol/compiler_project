@@ -1,0 +1,68 @@
+//	Test declaration of attibutes
+// Simple comment
+/* Multi line comment
+*/
+class main{}
+
+class main1{
+	integer val1;	
+}
+
+class main2{
+	float val1;
+}
+
+class main3{
+	bool val;
+}
+
+class main4{
+	void val;
+}
+
+class main5{
+	integer val[4];
+}
+
+class main6{
+	float val[f];
+}
+
+//first problem
+class main6{
+	integer a;
+	integer b;
+	integer c;
+	integer d[3];
+	integer e[5];
+}
+
+class main6_0{
+	integer a;
+	bool b;
+	float c;
+	void d[3];
+	integer e[5];	
+}
+
+// second problem 
+class main7{
+	integer a ; void b;	
+}
+
+//third problem
+class main8{
+	integer a,g,b,c,d[3],e[5];
+}
+
+class main9 {
+	integer a,d[23],c[43],d,e,f;
+	void g,h[4],j[94];
+	bool k[4],l,m[5];
+	float n,o[5],p;
+	juan q,r[6],s;
+}
+class main10{
+	integer a,d[23],c[43],d,e,f;void g,h[4],j[94];bool k[4],l,m[5];float n,o[5],p;juan q,r[6],s;
+}
+
