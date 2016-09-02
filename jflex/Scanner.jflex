@@ -39,8 +39,8 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 <YYINITIAL>{
 
 /* Comments */
-"/*"				{ System.out.print("/*");yybegin(COMMENTSMULTILINE); }
-"//"				{ System.out.print("//");yybegin(COMMENTSENDOFLINE); }
+"/*"				{ ;yybegin(COMMENTSMULTILINE); }
+"//"				{ yybegin(COMMENTSENDOFLINE); }
 
 /*	keywords	*/
 "bool"				{ return symbol("Boolean declaration", sym.BOOL_TYPE); }
@@ -112,15 +112,15 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 }
 
 <COMMENTSMULTILINE> {
-"*/"  				{ System.out.print("*/");yybegin(YYINITIAL); }
-{LineTerminator} 	{ System.out.println(""); }
-. 					{ System.out.print(yytext()); }
+"*/"  				{ yybegin(YYINITIAL); }
+{LineTerminator} 	{  }
+. 					{  }
 }
 
 
 <COMMENTSENDOFLINE> {
-{LineTerminator} 	{ System.out.println("");yybegin(YYINITIAL); }
-. 					{ System.out.print(yytext()); }
+{LineTerminator} 	{ yybegin(YYINITIAL); }
+. 					{  }
 }
 
 /* error fallback */
