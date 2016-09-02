@@ -1,0 +1,17 @@
+class main0{
+	int method1(){
+		integer i;
+		callMethod();
+		i.g[2]=2;
+		if (3==4){
+		  while (3==6){
+		  	for i = 3,i.next(){
+		  		break;
+		  	}
+		  	continue;
+		  }
+		}
+		return a.b.c.d.e(f,g,h,i,j,k);
+	}
+	
+}

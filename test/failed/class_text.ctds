@@ -1,0 +1,4 @@
+class main{
+    integer x;
+    integer y
+}
