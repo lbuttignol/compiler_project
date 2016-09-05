@@ -1,4 +1,4 @@
-package Example;
+package Compiler;
 
 import java_cup.runtime.*;
 import java_cup.runtime.ComplexSymbolFactory.Location;
