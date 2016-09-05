@@ -54,7 +54,7 @@ terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, EL
 terminal ASSIGN, ASSIGNP, ASSIGNM;
 
 /*	arith operators	*/
-terminal SEMI, DOC, COMMA, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS;
+terminal SEMI, DOC, COMMA, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS, UMINUS;
 
 /*	eq operators	*/
 terminal EQUAL, DISTINCT;
@@ -72,15 +72,17 @@ terminal REALNUMBER, ID;
 
 non terminal program, class_decl, class_decl_list, field_decl, method_decl, method_decl_list,
 			 body, block, type, statement, statement_list, assign_op, method_call, attribute_access_list, attribute_access,params,
-			 location, expr, bin_op, arith_op, rel_op, eq_op, cond_op, literal, field_decl_list,id_name_list,id_name, return_st, params_list;
+			 location, expr, literal, field_decl_list,id_name_list,id_name, return_st, params_list, bin_op;
 
 precedence left LBRACE, RBRACE;
 precedence left LPAREN,RPAREN;
 precedence left LBRACKET, RBRACKET;
-precedence left SMALLER,BIGGER,LTOE,GTOE,AND,OR,EQUAL,DISTINCT; 
-precedence left PLUS,MINUS;
+precedence left AND ;
+precedence left OR ;
+precedence nonassoc SMALLER,BIGGER,LTOE,GTOE,EQUAL,DISTINCT; 
+precedence left PLUS, MINUS;
 precedence left TIMES,DIV,MOD;
-precedence right NOT;
+precedence left NOT, UMINUS;
 precedence left ELSE;
 
 start with program;
@@ -174,32 +176,23 @@ location 				::= ID
 expr					::= location:l2
 						| method_call:mc2
 						| literal:li1
-						| expr:e4 bin_op:bo2 expr:e5
-						| MINUS expr:e6
-						| NOT expr:e7
-						| LPAREN expr:e8 RPAREN ;
-
-bin_op  				::= arith_op:ao2 
-						| rel_op:ro1 
-						| eq_op:eo1 
-						| cond_op:co1 ;
-
-arith_op 				::= PLUS 
-						| MINUS 
-						| TIMES 
-						| DIV 
-						| MOD ;
-
-rel_op   				::= SMALLER 
-						| BIGGER 
-						| LTOE 
-						| GTOE ;
-
-eq_op    				::= EQUAL 
-						| DISTINCT ;
-
-cond_op  				::= AND 
-						| OR ;
+						| LPAREN expr:e4 RPAREN
+						| expr:e4 AND expr:e5
+						| expr:e4 OR expr:e5
+						| expr:e4 PLUS expr:e5 
+						| expr:e4 MINUS expr:e5 
+						| expr:e4 TIMES expr:e5 
+						| expr:e4 DIV expr:e5
+						| expr:e4 MOD expr:e5
+						| expr:e4 SMALLER expr:e5
+						| expr:e4 BIGGER expr:e5
+						| expr:e4 LTOE expr:e5
+						| expr:e4 GTOE expr:e5
+						| expr:e4 EQUAL expr:e5
+						| expr:e4 DISTINCT expr:e5
+						| expr:e2 bin_op expr:e1
+						//| MINUS expr:e6 %prec UMINUS
+						| NOT expr:e7;
 
 literal  				::= INTNUMBER 
 						| REALNUMBER 
