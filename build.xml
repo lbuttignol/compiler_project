@@ -1,27 +1,26 @@
 <project name="Compiler" default="jar" basedir=".">
-  <property name="cup"     location="cup"     />
-  <property name="jflex"   location="jflex"    />
-  <property name="src"     location="src"     />
-  <property name="classes" location="bin" />
-  <property name="dist"    location="dist"    />
-  <property name="lib"     location="lib"     />
-  <property name="tools"   location="tools"     />
+  <property name="cup"     location="cup"  />
+  <property name="jflex"   location="jflex"/>
+  <property name="src"     location="src"  />
+  <property name="classes" location="bin"  />
+  <property name="dist"    location="dist" />
+  <property name="lib"     location="lib"  />
+  <property name="tools"   location="tools"/>
 
   <target name="init">
     <mkdir dir="${classes}"/>
     <mkdir dir="${dist}"/>
   </target>
 
-  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${tools}/JFlex.jar" />
+  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${tools}/JFlex.jar"        />
   <taskdef name="cup" classname="java_cup.anttask.CUPTask"  classpath="${tools}/java-cup-11b.jar" />
 
-  <target name="generate" depends="init">
-    <jflex file="${jflex}/Scanner.jflex"  destdir="${src}" />
-    <cup srcfile="${cup}/Parser.cup"      destdir="${src}" 
-         interface="true" parser="Parser" locations="true"   />
+  <target   name="generate" depends="init">
+    <jflex  file="${jflex}/Scanner.jflex"  destdir="${src}"/>
+    <cup    srcfile="${cup}/Parser.cup"    destdir="${src}" 
+            interface="true" parser="Parser" locations="true"       />
   </target>
 
-  
   <path id="libraries">
     <files includes="${lib}/java-cup-11b-runtime.jar" />
   </path>
@@ -34,7 +33,7 @@
   <target name="jar" depends="compile">
     <jar jarfile="${dist}/Compiler.jar" basedir="${classes}">
      <manifest>
-       <attribute name="Main-Class" value="Example.Parser" />
+       <attribute name="Main-Class" value="Compiler.Parser"          />
        <attribute name="Class-Path" value="java-cup-11b-runtime.jar" />
      </manifest>
     </jar>
@@ -51,10 +50,10 @@
   </target>
 
   <target name="clean">
-    <delete file="${src}/Example/Scanner.java" />
-    <delete file="${src}/Example/Parser.java" />
-    <delete file="${src}/Example/sym.java" />
-    <delete dir="${classes}" />
-    <delete dir="${dist}" />
+    <delete file="${src}/Compiler/Scanner.java"/>
+    <delete file="${src}/Compiler/Parser.java" />
+    <delete file="${src}/Compiler/sym.java"    />
+    <delete dir="${classes}"/>
+    <delete dir="${dist}"   />
   </target>
 </project>
