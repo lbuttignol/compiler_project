@@ -1,18 +1,7 @@
 package Compiler;
 
 import java_cup.runtime.*;
-//import Compiler.Parser.Expr;
-parser code {:
-/*	public static void main(String args[]) throws Exception {
-	ComplexSymbolFactory sf = new ComplexSymbolFactory();
-	if (args.length==0) new Parser(new Scanner(System.in,sf),sf).parse();
-	else new Parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf).parse();
-    }
 
-    public void syntax_error(Symbol sym){ 
-	// Mute legacy Error Printing
-	}*/
-:}
 /*	keywords	*/
 terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, BOOL_LITERAL, FOR, IF, RET, WHILE; 
 
@@ -20,13 +9,13 @@ terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, EL
 terminal ASSIGN, ASSIGNP, ASSIGNM;
 
 /*	arith operators	*/
-terminal SEMI, DOC, COMMA, PLUS, MINUS, TIMES, DIV, MOD, MINUSMINUS, PLUSPLUS, UMINUS;
+terminal SEMI, DOC, COMMA, PLUS, MINUS, TIMES, DIV, MOD, UMINUS;
 
 /*	eq operators	*/
 terminal EQUAL, DISTINCT;
 
 /*	rel operators	*/
-terminal SMALLER, BIGGER, LTOE, GTOE;   // 
+terminal SMALLER, BIGGER, LTOE, GTOE;   
 
 /*	cond operators	*/
 terminal AND, OR, NOT;
@@ -34,11 +23,12 @@ terminal AND, OR, NOT;
 /*		*/
 terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal Integer INTNUMBER;
-terminal REALNUMBER, ID;
+terminal Float REALNUMBER;
+terminal String ID;
 
 non terminal program, class_decl, class_decl_list, field_decl, method_decl, method_decl_list,
 			 body, block, type, statement, statement_list, assign_op, method_call, attribute_access_list, attribute_access,params,
-			 location, expr, literal, field_decl_list,id_name_list,id_name, return_st, params_list;
+			 location, expr, literal, field_decl_list,id_name_list,id_name, return_st, params_decl_list, params_decl ;
 
 precedence left LBRACE, RBRACE;
 precedence left LPAREN,RPAREN;
@@ -89,8 +79,11 @@ method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1
 						| type:t1 ID:i7 LPAREN params_list RPAREN body:bo1 
 						; 
 
-params_list				::= params_list COMMA type:t2 ID:i8
-						| type:t3 ID:i8 
+params_decl_list		::= params__decl_list COMMA params_decl
+						| params_decl
+						;
+
+params_decl 			::= type:t3 ID:i8 
 						;
 
 body 					::= block:bl1 
