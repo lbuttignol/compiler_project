@@ -29,7 +29,7 @@ public class IfThenStmt extends Statement {
 
 	@Override
 	public String toString(){
-		return "if " + condition + '\n' + ifBlock.toString();
+		return "if " + condition.toString() + '\n' + ifBlock.toString();
 	}
 
 	@Override

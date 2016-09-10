@@ -75,8 +75,8 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 "*"					{ return symbol("Times", sym.TIMES); }
 "/"					{ return symbol("Div", sym.DIV); }
 "%"					{ return symbol("Mod", sym.MOD); }
-"--"				{ return symbol("MinusMinus", sym.MINUSMINUS); }
-"++"				{ return symbol("PlusPlus", sym.PLUSPLUS); }
+//"--"				{ return symbol("MinusMinus", sym.MINUSMINUS); }
+//"++"				{ return symbol("PlusPlus", sym.PLUSPLUS); }
 
 /*	eq operators	*/
 "=="				{ return symbol("Equal", sym.EQUAL); }

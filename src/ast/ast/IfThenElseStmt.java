@@ -7,8 +7,8 @@ public class IfThenElseStmt extends IfThenStmt {
 	
 
 	public IfThenElseStmt(Expression cond, Statement ifBl, Statement elseBl) {
-		this.condition = cond;
-		this.ifBlock = ifBl;
+		this.setCondition(cond);
+		this.setIfBlock(ifBl);
 		this.elseBlock = elseBl;
 	}
 
@@ -22,7 +22,7 @@ public class IfThenElseStmt extends IfThenStmt {
 	
 	@Override
 	public String toString(){
-		return "if " + condition + '\n' + ifBlock.toString() + '\n' + "else \n" + elseBlock.toString();
+		return "if " + this.getCondition().toString() + '\n' + this.getIfBlock().toString() + '\n' + "else \n" + elseBlock.toString();
 	}
 
 	@Override

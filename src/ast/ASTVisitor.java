@@ -7,7 +7,13 @@ public interface ASTVisitor<T> {
 // visit statements
 	T visit(AssignStmt stmt);
 	T visit(ReturnStmt stmt);
-	T visit(IfStmt stmt);
+	T visit(ReturnVoidStmt stmt);
+	T visit(IfThenStmt stmt);
+	T visit(IfThenElseStmt stmt);
+	T visit(BlockStmt stmt); 		//VER
+	T visit(BreakStmt stmt);
+	T visit(ContinueStmt stmt);
+	T visit(WhileStmt stmt);
 	
 // visit expressions
 	T visit(BinOpExpr expr);;
