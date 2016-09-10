@@ -6,7 +6,7 @@ public class VarLocation extends Location {
 	private int blockId;
 
 	public VarLocation(String id) {
-		this.id = id;
+		super(id);
 		this.blockId = -1;
 	}
 	
