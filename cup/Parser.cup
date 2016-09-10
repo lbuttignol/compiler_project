@@ -1,6 +1,7 @@
 package Compiler;
 
 import java_cup.runtime.*;
+import ir.ast.*;
 
 /*	keywords	*/
 terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, BOOL_LITERAL, FOR, IF, RET, WHILE; 
@@ -76,10 +77,10 @@ method_decl_list		::= method_decl_list method_decl
 						;
 
 method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1
-						| type:t1 ID:i7 LPAREN params_list RPAREN body:bo1 
+						| type:t1 ID:i7 LPAREN params_decl_list RPAREN body:bo1 
 						; 
 
-params_decl_list		::= params__decl_list COMMA params_decl
+params_decl_list		::= params_decl_list COMMA params_decl
 						| params_decl
 						;
 
