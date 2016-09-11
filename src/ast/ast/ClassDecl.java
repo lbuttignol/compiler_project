@@ -6,8 +6,10 @@ public class ClassDecl extends AST{
 	private List<FieldDecl> attributes;
 	private List<MethodDecl> methods;
 
-	public ClassDecl (){
-		
+	public ClassDecl (String name,List<FieldDecl> attributes, List<MethodDecl> methods){
+		this.name       = name;
+		this.attributes = attributes;
+		this.methods    = methods;
 	}
 
 	public String getName(){

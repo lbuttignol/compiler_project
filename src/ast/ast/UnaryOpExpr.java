@@ -2,18 +2,18 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
-public abstract class UnaryOpExpr extends Expression {
+public abstract class UnaryOpExpr <T extends Expression> extends Expression {
 	protected BinOpType operator; 
-	protected Expression operand;
+	protected T operand;
 
 	
-	public UnaryOpExpr(BinOpType operator, Expression operand ){
+	public UnaryOpExpr(BinOpType operator, T operand ){
 		this.operator = operator;
 		this.operand  = operand;
 	}
 	
 	/*
-	public BinOpExpr(Expression e, TempExpression t) {
+	public BinOpExpr(T e, TempT t) {
 		lOperand = e;
 		operator = t.getOperator();
 		rOperand = t.getRightOperand();
@@ -28,11 +28,11 @@ public abstract class UnaryOpExpr extends Expression {
 		this.operator = operator;
 	}
 
-	public Expression getOperand() {
+	public T getOperand() {
 		return operand;
 	}
 
-	public void setLeftOperand(Expression operand) {
+	public void setLeftOperand(T operand) {
 		this.operand = operand;
 	}
 

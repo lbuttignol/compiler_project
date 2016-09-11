@@ -2,9 +2,9 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
-public class LogicalBinOp extends BinOpExpr {
+public class LogicalBinOp <T extends Expression> extends BinOpExpr<T> {
 
-	public LogicalBinOp(Expression l, BinOpType op, Expression r){
+	public LogicalBinOp(T l, BinOpType op, T r){
 		super(l,op,r);
 	}
 

@@ -1,6 +1,6 @@
 package ir.ast;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import ir.ASTVisitor;
 
@@ -10,16 +10,23 @@ public class Block extends Statement {
 	private int blockId;
 	
 	public Block(int bId) {
-		variables = new ArrayList<FieldDecl>();
-		statements = new ArrayList<Statement>();
+		variables = new LinkedList<FieldDecl>();
+		statements = new LinkedList<Statement>();
 		blockId = bId;
 	}
 	
+	/*
 	public Block(int bId, List<Statement> s) {
 		blockId = bId;
 		statements = s;
 	}
 
+	public Block(int bId, List<FieldDecl> v){
+		variables = v;
+		blockId = bId;
+	}
+	*/
+	
 	public Block(int bId, List<Statement> s, List<FieldDecl> v){
 		variables = v;
 		statements = s;

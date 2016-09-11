@@ -1,14 +1,29 @@
 package ir.ast;
 
+import java.util.LinkedList;
 import java.util.List;
+
 public class MethodDecl extends AST{
+	private Type type;
 	private String name;
-	private Type retType;
 	private List<ParamDecl> params;
-	private List<FieldDecl> variables;
 	private List<Statement> body;
 
-	public MethodDecl(){
+	public MethodDecl( Type type,String name,List<ParamDecl> params, 
+					   List<Statement> body){
+		this.type      = type;
+		this.name      = name;
+		this.params    = params;
+		this.body      = body;
+
+	}
+
+	public MethodDecl( Type type,String name, 
+					   List<Statement> body){
+		this.type      = type;
+		this.name      = name;
+		this.params    =  new LinkedList<ParamDecl>();
+		this.body      = body;
 
 	}
 
@@ -21,11 +36,11 @@ public class MethodDecl extends AST{
 	}
 
 	public Type getReturnType(){
-		return this.retType;
+		return this.type;
 	}
 
 	public void setType(Type t){
-		this.retType = t;
+		this.type = t;
 	}
 
 	public List<ParamDecl> getParams(){
@@ -34,14 +49,6 @@ public class MethodDecl extends AST{
 
 	public void setParams(List<ParamDecl> p){
 		this.params = p;
-	}
-
-	public List<FieldDecl> getVariables(){
-		return this.variables;
-	}
-
-	public void setVariables(List<FieldDecl> v){
-		this.variables = v;
 	}
 
 	public List<Statement> getBody(){

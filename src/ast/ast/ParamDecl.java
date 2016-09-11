@@ -5,8 +5,9 @@ public class ParamDecl extends AST{
 	private Type type;
 	private String name;
 
-	public ParamDecl(){
-		
+	public ParamDecl(Type type, String name){
+		this.type = type;
+		this.name = name;
 	}
 
 	public Type getType(){

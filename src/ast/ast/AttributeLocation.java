@@ -3,6 +3,7 @@ package ir.ast;
 import ir.ASTVisitor;
 import java.util.List;
 
+
 public class AttributeLocation extends Location {
 	
 	private int blockId;

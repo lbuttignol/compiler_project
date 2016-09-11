@@ -62,6 +62,7 @@ public class PrettyPrintVisitor implements ASTVisitor {
 	public void visit(VarLocation loc){
 	}
 
+
 	@Override
 	public void visit(AST ast){
 	}

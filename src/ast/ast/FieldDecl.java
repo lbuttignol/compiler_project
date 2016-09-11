@@ -3,10 +3,11 @@ package ir.ast;
 import java.util.List;
 public class FieldDecl extends AST{
 	private Type type;
-	private String name;
+	private List<IdDecl> names;
 
-	public FieldDecl(){
-		
+	public FieldDecl(Type type, List<IdDecl> names){
+		this.type = type;
+		this.names = names;
 	}
 
 	public Type getType(){
@@ -17,11 +18,11 @@ public class FieldDecl extends AST{
 		this.type = t;
 	} 
 
-	public String getName(){
-		return this.name;
+	public List<IdDecl> getName(){
+		return this.names;
 	}
 
-	public void setName(String n){
-		this.name = n;
+	public void setName(List<IdDecl> n){
+		this.names = n;
 	}
 }

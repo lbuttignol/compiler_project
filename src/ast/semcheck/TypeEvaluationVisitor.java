@@ -65,9 +65,13 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(VarLocation loc){
 	}
 
+
+
 	@Override
 	public void visit(AST ast){
 	}
+
+	
 
 	private void addError(AST a, String desc) {
 		this.errors.add(new Error(a.getLineNumber(), a.getColumnNumber(), desc));
