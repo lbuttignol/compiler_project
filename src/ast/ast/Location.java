@@ -14,4 +14,8 @@ public abstract class Location extends Expression {
 	public String getId() {
 		return id;
 	}
+
+	public String toString(){
+		return id;
+	}
 }
