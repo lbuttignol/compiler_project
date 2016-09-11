@@ -3,44 +3,45 @@ package ir.ast;
 import ir.ASTVisitor;
 //import ir.ast.TempExpression;
 
+
 public class BinOpExpr extends Expression {
 	protected BinOpType operator; //operator in the expr = expr operator expr
 	protected Expression lOperand; //left expression
 	protected Expression rOperand; //right expression
 	
 	public BinOpExpr(Expression l, BinOpType op, Expression r){
-		operator = op;
-		lOperand = l;
-		rOperand = r;
+		this.operator = op;
+		this.lOperand = l;
+		this.rOperand = r;
 	}
 	
 	public BinOpType getOperator() {
-		return operator;
+		return this.operator;
 	}
 
-	public void setOperator(BinOpType operator) {
-		this.operator = operator;
+	public void setOperator(BinOpType op) {
+		this.operator = op;
 	}
 
 	public Expression getLeftOperand() {
-		return lOperand;
+		return this.lOperand;
 	}
 
-	public void setLeftOperand(Expression lOperand) {
-		this.lOperand = lOperand;
+	public void setLeftOperand(Expression lOp) {
+		this.lOperand = lOp;
 	}
 
 	public Expression getRightOperand() {
-		return rOperand;
+		return this.rOperand;
 	}
 
-	public void setRightOperand(Expression rOperand) {
-		this.rOperand = rOperand;
+	public void setRightOperand(Expression rOp) {
+		this.rOperand = rOp;
 	}
 	
 	@Override
 	public String toString() {
-		return lOperand + " " + operator + " " + rOperand;
+		return lOperand.toString() + " " + operator.toString() + " " + rOperand.toString();
 	}
 
 	@Override
