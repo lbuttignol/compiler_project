@@ -5,6 +5,10 @@ public class FieldDecl extends AST{
 	private Type type;
 	private String name;
 
+	public FieldDecl(){
+		
+	}
+
 	public Type getType(){
 		return this.type;
 	}

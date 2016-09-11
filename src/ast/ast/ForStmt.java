@@ -3,6 +3,7 @@ package ir.ast;
 import ir.ASTVisitor;
 
 public class ForStmt extends Statement {
+	String counterName;
 	Expression initValue;
 	Expression endValue;
 	Statement body;
@@ -39,11 +40,11 @@ public class ForStmt extends Statement {
 
 	@Override
 	public String toString() {
-		return "for" + " " + operator + " " + expr; //VER
+		return "for " + this.counterName + ", " + initValue.toString() + " ," + endValue.toString() + ", "  + body.toString(); //VER
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

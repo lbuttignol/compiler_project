@@ -1,6 +1,7 @@
 package ir.ast;
 
 import ir.ASTVisitor;
+//import ir.ast.TempExpression;
 
 public class BinOpExpr extends Expression {
 	private BinOpType operator; //operator in the expr = expr operator expr
@@ -13,7 +14,7 @@ public class BinOpExpr extends Expression {
 		rOperand = r;
 	}
 	
-	public BinOpExpr(Expression e, TempExpression t) {
+	public BinOpExpr(BinOpExpr e, BinOpExpr t) { //TempExpression t VEEEEEEERRRRRRRR!!!!!!
 		lOperand = e;
 		operator = t.getOperator();
 		rOperand = t.getRightOperand();
@@ -49,7 +50,7 @@ public class BinOpExpr extends Expression {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

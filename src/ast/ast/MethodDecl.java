@@ -8,6 +8,10 @@ public class MethodDecl extends AST{
 	private List<FieldDecl> variables;
 	private List<Statement> body;
 
+	public MethodDecl(){
+
+	}
+
 	public String getName(){
 		return this.name;
 	}

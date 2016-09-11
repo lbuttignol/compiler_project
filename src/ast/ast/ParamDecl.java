@@ -5,6 +5,10 @@ public class ParamDecl extends AST{
 	private Type type;
 	private String name;
 
+	public ParamDecl(){
+		
+	}
+
 	public Type getType(){
 		return this.type;
 	}

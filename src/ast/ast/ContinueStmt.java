@@ -4,12 +4,16 @@ import ir.ASTVisitor;
 
 public class ContinueStmt extends Statement {
 
+	public ContinueStmt(){
+
+	}
+	
 	public String toString() {
 		return "continue";
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

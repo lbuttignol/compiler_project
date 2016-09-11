@@ -24,7 +24,7 @@ public class VarLocation extends Location {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

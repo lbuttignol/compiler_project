@@ -4,11 +4,9 @@ import ir.ASTVisitor;
 
 public class IfThenElseStmt extends IfThenStmt {
 	private Statement elseBlock;
-	
 
-	public IfThenElseStmt(Expression cond, Statement ifBl, Statement elseBl) {
-		this.setCondition(cond);
-		this.setIfBlock(ifBl);
+	public IfThenElseStmt(Expression cond, Statement ifBl, Statement elseBl){
+		super(cond, ifBl);
 		this.elseBlock = elseBl;
 	}
 
@@ -26,7 +24,7 @@ public class IfThenElseStmt extends IfThenStmt {
 	}
 
 	@Override
-	public <T> T accept(ASTVisitor<T> v) {
-		return v.visit(this);
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

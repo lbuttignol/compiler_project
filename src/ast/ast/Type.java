@@ -5,7 +5,7 @@ public enum Type {
 	INTARRAY,
 	VOID,
 	UNDEFINED;
-	
+
 	@Override
 	public String toString() {
 		switch(this) {

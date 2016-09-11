@@ -5,7 +5,7 @@ import ir.ASTVisitor;
 public abstract class AST {
 	private int lineNumber;
 	private int colNumber;
-	
+
 	public int getLineNumber() {
 		return lineNumber;
 	}
@@ -22,5 +22,7 @@ public abstract class AST {
 		colNumber = cn;
 	}
 	
-	public abstract <T> T accept(ASTVisitor<T> v);
+	public void accept(ASTVisitor v){
+		v.visit(this);
+	}
 }
