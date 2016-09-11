@@ -3,6 +3,8 @@ package ir.ast;
 public enum Type {
 	INT,
 	INTARRAY,
+	FLOAT,
+	BOOLEAN,
 	VOID,
 	UNDEFINED;
 
@@ -13,6 +15,10 @@ public enum Type {
 				return "int";
 			case VOID:
 				return "void";
+			case FLOAT:
+				return "float";
+			case BOOLEAN:
+				return "boolean";
 			case UNDEFINED:
 				return "undefined";
 			case INTARRAY:
