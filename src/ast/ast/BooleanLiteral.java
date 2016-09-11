@@ -1,27 +1,29 @@
 package ir.ast;
 
 import ir.ASTVisitor;
+import ir.ast.Type;
 
 public class BooleanLiteral extends Literal {
 	private String rawValue;
-	private Boolean alue;
+	private Boolean value;
+	//private Type type = (Type)BOOLEAN;
 	
 	/*
 	 * Constructor for boolean literal that takes a string as an input
 	 * @param: String integer
 	 */
 	public BooleanLiteral(String val){
-		rawValue = val; // Will convert to boolean value in semantic check
-		value = null;
+		this.rawValue = val; // Will convert to boolean value in semantic check
+		this.value = null;
 	}
 
 	@Override
 	public Type getType() {
-		return Type.Boolean;
+		return Type.BOOLEAN;
 	}
 
 	public String getStringValue() {
-		return rawValue;
+		return this.rawValue;
 	}
 
 	public void setStringValue(String stringValue) {
@@ -29,7 +31,7 @@ public class BooleanLiteral extends Literal {
 	}
 
 	public Boolean getValue() {
-		return value;
+		return this.value;
 	}
 
 	public void setValue(Boolean value) {
@@ -37,7 +39,7 @@ public class BooleanLiteral extends Literal {
 	}
 	
 	public String getRawValue() {
-		return rawValue;
+		return this.rawValue;
 	}
 
 	public void setRawValue(String rawValue) {
@@ -46,11 +48,11 @@ public class BooleanLiteral extends Literal {
 
 	@Override
 	public String toString() {
-		return rawValue;
+		return this.rawValue;
 	}
 
 	@Override
-	public void accept(ASTVisitor<T> v) {
+	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
 }

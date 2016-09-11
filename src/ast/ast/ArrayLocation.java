@@ -1,5 +1,6 @@
 package ir.ast;
 
+
 import ir.ASTVisitor;
 
 public class ArrayLocation extends Location {

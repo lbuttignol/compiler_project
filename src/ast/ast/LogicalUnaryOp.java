@@ -9,7 +9,7 @@ public class LogicalUnaryOp extends UnaryOpExpr {
 	}
 
 	@Override
-	public void accept(AScaTVisitor v) {
+	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
 }

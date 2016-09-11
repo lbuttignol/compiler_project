@@ -11,8 +11,8 @@ public class FloatLiteral extends Literal {
 	 * @param: String integer
 	 */
 	public FloatLiteral(String val){
-		rawValue = val; // Will convert to float value in semantic check
-		value = null;
+		this.rawValue = val; // Will convert to float value in semantic check
+		this.value = 0;
 	}
 
 	@Override

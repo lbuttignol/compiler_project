@@ -10,6 +10,6 @@ public class LogicalBinOp extends BinOpExpr {
 
 	@Override
 	public void accept(ASTVisitor v) {
-		PUv.visit(this);
+		v.visit(this);
 	}
 }
