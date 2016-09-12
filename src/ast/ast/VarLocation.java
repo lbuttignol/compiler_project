@@ -20,7 +20,7 @@ public class VarLocation extends Location {
 	
 	@Override
 	public String toString() {
-		return id;
+		return ids.toString();
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class AttributeArrayLocation extends Location {
 
 	@Override
 	public String toString() {
-		return id;
+		return ids.toString();
 	}
 
 	@Override

@@ -22,17 +22,10 @@ public class ArrayLocation extends Location {
 		this.blockId = blockId;
 	}
 	
-	public Expression getIds(){
-		return this.expr;
-	}
-
-	public void setIds(Expression ids){
-		this.expr = expr;
-	}
 
 	@Override
 	public String toString() {
-		return id;
+		return ids.toString();
 	}
 
 	@Override

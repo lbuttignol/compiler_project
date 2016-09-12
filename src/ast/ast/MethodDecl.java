@@ -7,10 +7,10 @@ public class MethodDecl extends AST{
 	private Type type;
 	private String name;
 	private List<ParamDecl> params;
-	private List<Statement> body;
+	private BodyDecl body;
 
 	public MethodDecl( Type type,String name,List<ParamDecl> params, 
-					   List<Statement> body){
+					   BodyDecl body){
 		this.type      = type;
 		this.name      = name;
 		this.params    = params;
@@ -19,7 +19,7 @@ public class MethodDecl extends AST{
 	}
 
 	public MethodDecl( Type type,String name, 
-					   List<Statement> body){
+					   BodyDecl body){
 		this.type      = type;
 		this.name      = name;
 		this.params    =  new LinkedList<ParamDecl>();
@@ -51,11 +51,11 @@ public class MethodDecl extends AST{
 		this.params = p;
 	}
 
-	public List<Statement> getBody(){
+	public BodyDecl getBody(){
 		return this.body;
 	}
 
-	public void setBody(List<Statement> b){
+	public void setBody(BodyDecl b){
 		this.body = b;
 	}
 }

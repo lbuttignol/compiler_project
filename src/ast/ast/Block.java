@@ -27,7 +27,7 @@ public class Block extends Statement {
 	}
 	*/
 	
-	public Block(int bId, List<Statement> s, List<FieldDecl> v){
+	public Block(int bId, List<FieldDecl> v, List<Statement> s){
 		variables = v;
 		statements = s;
 		blockId = bId;

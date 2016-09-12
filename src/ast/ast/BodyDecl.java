@@ -3,15 +3,15 @@ package ir.ast;
 import java.util.List;
 public class BodyDecl extends AST{
 	private Boolean isExtern;
-	private BodyDecl body;
+	private Block block;
 
-	public BodyDecl(BodyDecl body){
-		this.body = body;
+	public BodyDecl(Block block){
+		this.block = block;
 		this.isExtern = false;
 	}
 
 	public BodyDecl(Boolean isExtern){
-		this.body = null;
+		this.block = null;
 		this.isExtern = isExtern;
 	}
 
@@ -20,21 +20,21 @@ public class BodyDecl extends AST{
 	}
 
 	public void setExtern(Boolean isExtern){
-		if (this.body!=null){
+		if (this.block!=null){
 			// throw new ....
 		}
 		this.isExtern = isExtern;
 	}
 
-	public BodyDecl getBody(){
-		return this.body;
+	public Block getBlock(){
+		return this.block;
 	}
 
-	public void setBody(BodyDecl body){
+	public void setBlock(Block block){
 		if (isExtern){
 			// throw new IllegalArgument ...
 		}
-		this.body = body;
+		this.block = block;
 	}
 	
 }

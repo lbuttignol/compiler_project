@@ -1,21 +1,43 @@
 package ir.ast;
+import java.util.List;
+import java.util.LinkedList;
 
 public abstract class Location extends Expression {
-	protected String id;
+	protected List<String> ids;
+	protected Expression expr;
 
-	public Location(String a){
-		this.setId(a);
+	public Location(String id){
+		this.ids = new LinkedList<String>();
+		this.ids.add(id);
 	}
-	
-	public void setId(String id) {
-		this.id = id;
+
+	public Location(List<String> ids){
+		this.ids = ids;
 	}
-	
-	public String getId() {
-		return id;
+
+	public Location(List<String> ids, Expression expr){
+		this.ids  = ids;
+		this.expr = expr;
 	}
+
+	public List<String> getIds(){
+		return this.ids;
+	}
+
+	public void setIds(List<String> ids){
+		this.ids = ids;
+	}
+
+	public Expression getExpression(){
+		return this.expr;
+	}
+
+	public void setExpression(Expression expr){
+		this.expr = expr;
+	}
+
 
 	public String toString(){
-		return id;
+		return ids.toString();
 	}
 }

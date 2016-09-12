@@ -28,9 +28,7 @@ terminal Integer INTNUMBER;
 terminal Float REALNUMBER;
 terminal String ID;
 
-non terminal 
-			 assign_op, attribute_access_list, attribute_access,params,
-			 location, expr, literal, return_st;
+non terminal  return_st;
 
 non terminal Program program;
 non terminal ClassDecl class_decl;
@@ -45,10 +43,19 @@ non terminal IdDecl id_name;
 non terminal List<ParamDecl> params_decl_list;
 non terminal ParamDecl params_decl;
 non terminal BodyDecl  body;
-non terminal BlockDecl block;
+non terminal Block block;
 non terminal Statement statement;
 non terminal List<Statement> statement_list;
+
+
 non terminal MethodCall method_call;
+non terminal ir.ast.Location location;
+non terminal Expression expr;
+non terminal Literal literal;
+non terminal List<Expression> params;
+non terminal String attribute_access;
+non terminal List<String> attribute_access_list;
+non terminal AssignOpType assign_op;
 
 precedence left LBRACE, RBRACE;
 precedence left LPAREN,RPAREN;
@@ -126,7 +133,7 @@ type					::= INT_TYPE 													{:RESULT = Type.INT;:}
  						| VOID_TYPE 													{:RESULT = Type.VOID;:}
 						;
 
-statement_list			::= statement_list:sL1 statement:s1								{:sL1.add(s1);RESULT = s1;:}
+statement_list			::= statement_list:sL1 statement:s1								{:sL1.add(s1);RESULT = sL1;:}
 						| statement:s1 													{:List<Statement> stmt = new LinkedList<Statement>();stmt.add(s1);RESULT = stmt;:}
 						;
 
@@ -140,7 +147,7 @@ statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI						{:RESULT = new Ass
 						| BREAK SEMI													{:RESULT = new BreakStmt();:}
 						| CONT SEMI														{:RESULT = new ContinueStmt();:}
 						| SEMI															
-					 	| block:bl2 													{:RESULT = new Block();:}
+					 	| block:bl2 													{:RESULT = new Block(0);:}
 					 	;
 
 return_st 				::= RET expr SEMI												{:RESULT = new ReturnStmt(expr);:}
@@ -152,51 +159,53 @@ assign_op  				::= ASSIGN 														{:RESULT = AssignOpType.ASSIGN;:}
 						| ASSIGNM 														{:RESULT = AssignOpType.DECREMENT;:}
 						;
 
-method_call         	::= ID attribute_access_list:amc11 LPAREN params:p2 RPAREN
-						| ID attribute_access_list:amc11 LPAREN RPAREN
-						| ID LPAREN params:p2 RPAREN
-						| ID LPAREN  RPAREN 
+
+
+method_call         	::= ID:id1 attribute_access_list:amc11 LPAREN params:p2 RPAREN		{:amc11.add(id1);RESULT = new MethodCall(amc11,p2);:}
+						| ID:id2 attribute_access_list:amc11 LPAREN RPAREN					{:amc11.add(id2);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(amc11,params);:}
+						| ID:id3 LPAREN params:p2 RPAREN									{:List<String> ids = new LinkedList<String>();ids.add(id3); RESULT = new MethodCall(ids,p2);:}
+						| ID:id4 LPAREN  RPAREN 											{:List<String> ids = new LinkedList<String>();ids.add(id4); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params);:}
 						; 
 
-params					::= params COMMA expr											{:;:}
-						| expr 
+params					::= params:p1 COMMA expr:e1										    {:p1.add(e1);RESULT=p1;:}
+						| expr:e2 															{:List<Expression> exprList = new LinkedList<Expression>();exprList.add(e2);RESULT = exprList;:}
 						;
 
-attribute_access_list 	::= attribute_access_list attribute_access
-						| attribute_access 
+attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1					{:aal1.add(aa1);RESULT=aal1;:}
+						| attribute_access:aa2												{:List<String> ids = new LinkedList<String>();ids.add(aa2);RESULT = ids;:}
 						;
 
-attribute_access		::= DOC ID 
+attribute_access		::= DOC ID:i1 														{:RESULT = new String(i1);:}
 						;
 
-location 				::= ID 
-						| ID attribute_access_list:amc13 
-						| ID LBRACKET expr RBRACKET
-						| ID attribute_access_list LBRACKET expr RBRACKET
+location 				::= ID:id1 															{:RESULT = new ir.ast.Location(id1);:}
+						| ID:id2 attribute_access_list:acl2 										{:acl2.add(id2); RESULT = new ir.ast.Location(acl2);:}
+						| ID:id3 LBRACKET expr:e1 RBRACKET										   {:List<String> ids = new LinkedList<String>(); ids.add(id3); RESULT = new ir.ast.Location(ids,e1);:}
+						| ID:id4 attribute_access_list:acl2 LBRACKET expr:e2 RBRACKET				{:acl2.add(id2);RESULT = new ir.ast.Location(acl2,e2);:}
 						;
 
-expr					::= location:l2
-						| method_call:mc2
-						| literal:li1
-						| LPAREN expr:e4 RPAREN
-						| expr:e4 AND expr:e5
-						| expr:e4 OR expr:e5
-						| expr:e4 PLUS expr:e5 
-						| expr:e4 MINUS expr:e5 
-						| expr:e4 TIMES expr:e5 
-						| expr:e4 DIV expr:e5
-						| expr:e4 MOD expr:e5
-						| expr:e4 SMALLER expr:e5
-						| expr:e4 BIGGER expr:e5
-						| expr:e4 LTOE expr:e5
-						| expr:e4 GTOE expr:e5
-						| expr:e4 EQUAL expr:e5
-						| expr:e4 DISTINCT expr:e5
-						| MINUS expr:e6 %prec UMINUS
-						| NOT expr:e7
+expr					::= location:l2										{:RESULT = l2;:}													
+						| method_call:mc2									{:RESULT = mc2;:}
+						| literal:li1										{:RESULT = li1;:}
+						| LPAREN expr:e4 RPAREN								{:RESULT = e4;:}
+						| expr:e4 AND:op expr:e5							{:RESULT = new LogicalBinOp<Expression>(e4,BinOpType.AND,e5);:}
+						| expr:e5 OR:op expr:e6								{:RESULT = new LogicalBinOp<Expression>(e4,BinOpType.OR,e5);:}
+						| expr:e4 PLUS:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.PLUS,e5);:}
+						| expr:e4 MINUS:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.MINUS,e5);:}
+						| expr:e4 TIMES:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.TIMES,e5);:}
+						| expr:e4 DIV:op expr:e5							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.DIV,e5);:}
+						| expr:e4 MOD:op expr:e5							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.MOD,e5);:}
+						| expr:e4 SMALLER:op expr:e5						{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.SMALL,e5);:}
+						| expr:e4 BIGGER:op expr:e5							{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.BIGGER,e5);:}
+						| expr:e4 LTOE:op expr:e5							{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.LTOE,e5);:}
+						| expr:e4 GTOE expr:e5								{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.GTOE,e5);:}
+						| expr:e4 EQUAL expr:e5								{:RESULT = new EqOpExpr<Expression>(e4,BinOpType.EQUAL,e5);:}
+						| expr:e4 DISTINCT expr:e5							{:RESULT = new EqOpExpr<Expression>(e4,BinOpType.DISTINCT,e5);:}
+						| MINUS:op expr:e6 									{:RESULT = new UnaryOpExpr<Expression>(UnaryOpType.MINUS,e6);:}	 %prec UMINUS	
+						| NOT:op expr:e7									{:RESULT = new UnaryOpExpr<Expression>(UnaryOpType.NOT,e7);:}
 						;
 
-literal  				::= INTNUMBER 
+literal  				::= INTNUMBER 										
 						| REALNUMBER 
 						| BOOL_LITERAL 
 						;
