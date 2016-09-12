@@ -2,6 +2,7 @@ package Compiler;
 
 import java_cup.runtime.*;
 import ir.ast.*;
+import java.util.*;
 
 /*	keywords	*/
 terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, BOOL_LITERAL, FOR, IF, RET, WHILE; 
@@ -27,9 +28,27 @@ terminal Integer INTNUMBER;
 terminal Float REALNUMBER;
 terminal String ID;
 
-non terminal program, class_decl, class_decl_list, field_decl, method_decl, method_decl_list,
-			 body, block, type, statement, statement_list, assign_op, method_call, attribute_access_list, attribute_access,params,
-			 location, expr, literal, field_decl_list,id_name_list,id_name, return_st, params_decl_list, params_decl ;
+non terminal 
+			 assign_op, attribute_access_list, attribute_access,params,
+			 location, expr, literal, return_st;
+
+non terminal Program program;
+non terminal ClassDecl class_decl;
+non terminal List<ClassDecl> class_decl_list;
+non terminal FieldDecl field_decl;
+non terminal List<FieldDecl> field_decl_list;
+non terminal MethodDecl method_decl;
+non terminal List<MethodDecl> method_decl_list;
+non terminal Type type;
+non terminal List<IdDecl> id_name_list;
+non terminal IdDecl id_name;
+non terminal List<ParamDecl> params_decl_list;
+non terminal ParamDecl params_decl;
+non terminal BodyDecl  body;
+non terminal BlockDecl block;
+non terminal Statement statement;
+non terminal List<Statement> statement_list;
+non terminal MethodCall method_call;
 
 precedence left LBRACE, RBRACE;
 precedence left LPAREN,RPAREN;
@@ -44,90 +63,93 @@ precedence left ELSE;
 
 start with program;
 
-program             	::= class_decl_list:cdN1 
+program             	::= class_decl_list:cdN1                                        {: RESULT = new Program(cdN1); :}
 						;
 
-class_decl_list        	::= class_decl_list:cD1 class_decl:cD2
-						| class_decl:cD3 
+class_decl_list        	::= class_decl_list:cD1 class_decl:cD2                          {:cD1.add(cD2);RESULT=cD1;:}
+						| class_decl:cD3                                                {:List<ClassDecl> classDeclL=new LinkedList<ClassDecl>();classDeclL.add(cD3)
+																                         ; RESULT=classDeclL;:}
 						;
 
-class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl_list:md1 RBRACE
-						| CLASS_DECL ID:i1 LBRACE method_decl_list:md1 RBRACE
-						| CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 RBRACE
-						| CLASS_DECL ID:i1 LBRACE RBRACE 
+class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl_list:md1 RBRACE {:RESULT = new ClassDecl(i1,fd1,md1);:}
+						| CLASS_DECL ID:i1 LBRACE method_decl_list:md1 RBRACE           {:RESULT = new ClassDecl(i1,new LinkedList<FieldDecl>(),md1);:} 
+						| CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 RBRACE            {:RESULT = new ClassDecl(i1,fd1,new LinkedList<MethodDecl>());:}
+						| CLASS_DECL ID:i1 LBRACE RBRACE                                {:RESULT = new ClassDecl(i1,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>());:}
 						;
 
-field_decl_list    		::= field_decl_list field_decl 
-						|  field_decl 
+field_decl_list    		::= field_decl_list:fdl1 field_decl:fd                          {:fdl1.add(fd);RESULT=fdl1;:}
+						|  field_decl:fd                                                {:List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fd);
+																                          RESULT = fieldDeclL;:}
 						;
 
-field_decl          	::= type:t1 id_name_list:af1 SEMI 
+field_decl          	::= type:t1 id_name_list:af1 SEMI 		                        {:RESULT = new FieldDecl(t1,af1);:}
 						;
 
-id_name_list			::= id_name_list COMMA id_name
-						| id_name 
+id_name_list			::= id_name_list:inl1 COMMA id_name:in1                         {:inl1.add(in1);RESULT=inl1;:}  
+						| id_name:in2							                        {:List<IdDecl> names = new LinkedList<IdDecl>();names.add(in2);RESULT=names;:}
 						;
  
-id_name		      		::= ID:i5 LBRACKET INTNUMBER:il1 RBRACKET
-						| ID:i4 
+id_name		      		::= ID:i5 LBRACKET INTNUMBER:il1 RBRACKET                       {:RESULT = new ArrayIdDecl(i5,il1);:}
+						| ID:i4 								                        {:RESULT = new IdDecl(i4);:}
 						;
 
-method_decl_list		::= method_decl_list method_decl
+method_decl_list		::= method_decl_list:mdl1 method_decl:md		                {:mdl1.add(md); RESULT = mdl1;:}
 						| method_decl
 						;
 
-method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1
-						| type:t1 ID:i7 LPAREN params_decl_list RPAREN body:bo1 
+method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1                        {:RESULT = new MethodDecl(t1,i7,bo1);:}
+						| type:t1 ID:i7 LPAREN params_decl_list:pdl1 RPAREN body:bo1    {:RESULT = new MethodDecl(t1,i7,pdl1,bo1);:}
 						; 
 
-params_decl_list		::= params_decl_list COMMA params_decl
-						| params_decl
+params_decl_list		::= params_decl_list:pdl1 COMMA params_decl:pd1 			    {:pdl1.add(pd1); RESULT = pdl1;:}
+						| params_decl:pd2 											    {:List<ParamDecl> params = new LinkedList<ParamDecl>();
+																						params.add(pd2);RESULT=params;:}
 						;
 
-params_decl 			::= type:t3 ID:i8 
+params_decl 			::= type:t3 ID:i8 												{:RESULT = new ParamDecl(t3,i8);:}
 						;
 
-body 					::= block:bl1 
-						| EXTERN SEMI 
+body 					::= block:bl1 													{:RESULT = new BodyDecl(bl1);:}
+						| EXTERN SEMI 													{:RESULT = new BodyDecl(true);:}
 						;
 
-block					::= LBRACE field_decl_list:fdl3  statement_list:s1 RBRACE
-						| LBRACE field_decl_list RBRACE
-						| LBRACE statement_list:s1 RBRACE
-						| LBRACE RBRACE 
+block					::= LBRACE field_decl_list:fdl3  statement_list:s1 RBRACE       {:RESULT = new Block(0,fdl3,s1);:}
+						| LBRACE field_decl_list:fdl4 RBRACE 							{:RESULT = new Block(0,fdl4,new LinkedList<Statement>());:}
+						| LBRACE statement_list:s1 RBRACE 								{:RESULT = new Block(0,new LinkedList<FieldDecl>(),s1);:}
+						| LBRACE RBRACE 												{:RESULT = new Block(0);:}
 						;
 
-type					::= INT_TYPE 
-						| FLOAT_TYPE 
-						| BOOL_TYPE 
-						| ID:i10 
-						| VOID_TYPE 
+type					::= INT_TYPE 													{:RESULT = Type.INT;:}
+						| FLOAT_TYPE 													{:RESULT = Type.FLOAT;:}
+						| BOOL_TYPE 													{:RESULT = Type.BOOLEAN;:}
+						| ID:i10 														{:RESULT = Type.UNDEFINED;:} //ver
+ 						| VOID_TYPE 													{:RESULT = Type.VOID;:}
 						;
 
-statement_list			::= statement_list:sL1 statement:s1
-						| statement:s1 
+statement_list			::= statement_list:sL1 statement:s1								{:sL1.add(s1);RESULT = s1;:}
+						| statement:s1 													{:List<Statement> stmt = new LinkedList<Statement>();stmt.add(s1);RESULT = stmt;:}
 						;
 
-statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI
-						| method_call:mc1 SEMI
-						| IF LPAREN expr:e2 RPAREN statement:s2 
-						| IF LPAREN expr:e2 RPAREN statement:s2 ELSE statement:s3
-						| FOR ID:i11 ASSIGN expr:e3 COMMA expr statement
-						| WHILE expr:e3 statement
-						| return_st
-						| BREAK SEMI
-						| CONT SEMI
-						| SEMI
-					 	| block:bl2 
+statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI						{:RESULT = new AssignStmt(l1,ao1,e1);:}
+						| method_call:mc1 SEMI											//{:RESULT = new MethodCall(mc1);:}
+						| IF LPAREN expr:e2 RPAREN statement:s2 						{:RESULT = new IfThenStmt(e2,s2);:}
+						| IF LPAREN expr:e2 RPAREN statement:s2 ELSE statement:s3       {:RESULT = new IfThenElseStmt(e2,s2,s3);:}
+						| FOR ID:i11 ASSIGN expr:e3 COMMA expr:e4 statement:s4          {:RESULT = new ForStmt(i11,e3,e4,s4);:}
+						| WHILE expr:e3 statement:s5									{:RESULT = new WhileStmt(e3,s5);:}
+						| return_st														//{:RESULT = new ReturnStmt();:}
+						| BREAK SEMI													{:RESULT = new BreakStmt();:}
+						| CONT SEMI														{:RESULT = new ContinueStmt();:}
+						| SEMI															
+					 	| block:bl2 													{:RESULT = new Block();:}
 					 	;
 
-return_st 				::= RET expr SEMI
-						| RET SEMI 
+return_st 				::= RET expr SEMI												{:RESULT = new ReturnStmt(expr);:}
+						| RET SEMI 														{:RESULT = new ReturnVoidStmt();:}
 						;
 
-assign_op  				::= ASSIGN 
-						| ASSIGNP 
-						| ASSIGNM 
+assign_op  				::= ASSIGN 														{:RESULT = AssignOpType.ASSIGN;:}
+						| ASSIGNP 														{:RESULT = AssignOpType.INCREMENT;:}
+						| ASSIGNM 														{:RESULT = AssignOpType.DECREMENT;:}
 						;
 
 method_call         	::= ID attribute_access_list:amc11 LPAREN params:p2 RPAREN
@@ -136,7 +158,7 @@ method_call         	::= ID attribute_access_list:amc11 LPAREN params:p2 RPAREN
 						| ID LPAREN  RPAREN 
 						; 
 
-params					::= params COMMA expr
+params					::= params COMMA expr											{:;:}
 						| expr 
 						;
 
