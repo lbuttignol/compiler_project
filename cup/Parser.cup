@@ -6,7 +6,7 @@ import ir.ast.*;
 import java.util.*;
 
 /*	keywords	*/
-terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, BOOL_LITERAL, FOR, IF, RET, WHILE; 
+terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, FOR, IF, RET, WHILE; 
 
 /*	assign operators	*/
 terminal ASSIGN, ASSIGNP, ASSIGNM;
@@ -27,6 +27,7 @@ terminal AND, OR, NOT;
 terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal Integer INTNUMBER;
 terminal Float REALNUMBER;
+terminal Boolean BOOL_LITERAL;
 terminal String ID;
 
 non terminal  return_st;
@@ -38,7 +39,7 @@ non terminal FieldDecl field_decl;
 non terminal List<FieldDecl> field_decl_list;
 non terminal MethodDecl method_decl;
 non terminal List<MethodDecl> method_decl_list;
-non terminal Type type;
+non terminal String type;
 non terminal List<IdDecl> id_name_list;
 non terminal IdDecl id_name;
 non terminal List<ParamDecl> params_decl_list;
@@ -46,9 +47,8 @@ non terminal ParamDecl params_decl;
 non terminal BodyDecl  body;
 non terminal Block block;
 non terminal Statement statement;
-non terminal List<Statement> statement_list;
-
-
+non terminal List<Statement> statement_list;	
+non terminal MethodCallStmt method_call_stmt;
 non terminal MethodCall method_call;
 non terminal ir.ast.Location location;
 non terminal Expression expr;
@@ -71,142 +71,154 @@ precedence left ELSE;
 
 start with program;
 
-program             	::= class_decl_list:cdN1                                        {:RESULT = new Program(cdN1); :}
+//Inicializar type al principio del programa
+program             	::= class_decl_list:classDeclList                                   		{: RESULT = new Program(classDeclList); :}
 						;
 
-class_decl_list        	::= class_decl_list:cD1 class_decl:cD2                          {:cD1.add(cD2);RESULT=cD1;:}
-						| class_decl:cD3                                                {:List<ClassDecl> classDeclL=new LinkedList<ClassDecl>();classDeclL.add(cD3) ;
-																                         RESULT=classDeclL;:}
+class_decl_list        	::= class_decl_list:classDeclList class_decl:classDecl		        		{: classDeclList.add(classDecl); RESULT = classDeclList; :}
+						| class_decl:classDecl                                             			{: List<ClassDecl> classDeclList=new LinkedList<ClassDecl>();classDeclList.add(classDecl)
+																                         			; RESULT=classDeclList;:}
+
 						;
 
-class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl_list:md1 RBRACE {:RESULT = new ClassDecl(i1,fd1,md1);:}
-						| CLASS_DECL ID:i1 LBRACE method_decl_list:md1 RBRACE           {:RESULT = new ClassDecl(i1,new LinkedList<FieldDecl>(),md1);:} 
-						| CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 RBRACE            {:RESULT = new ClassDecl(i1,fd1,new LinkedList<MethodDecl>());:}
-						| CLASS_DECL ID:i1 LBRACE RBRACE                                {:RESULT = new ClassDecl(i1,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>());:}
+class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: RESULT = new ClassDecl(id,fieldDeclL,methodDeclL); :}
+						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL); :} 
+						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>());:}
+						| CLASS_DECL ID:id LBRACE RBRACE                                							{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>());:}
 						;
 
-field_decl_list    		::= field_decl_list:fdl1 field_decl:fd                          {:fdl1.add(fd);RESULT=fdl1;:}
-						|  field_decl:fd                                                {:List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fd);
-																                          RESULT = fieldDeclL;:}
+field_decl_list    		::= field_decl_list:fieldDeclL field_decl:fieldDecl                          				{: fieldDeclL.add(fieldDecl);RESULT=fieldDeclL;:}
+						|  field_decl:fieldDecl                                             					   	{: List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fieldDecl);
+																                          							   RESULT = fieldDeclL;:}
 						;
 
-field_decl          	::= type:t1 id_name_list:af1 SEMI 		                        {:RESULT = new FieldDecl(t1,af1);:}
+field_decl          	::= type:type id_name_list:idList SEMI 		                     			{: RESULT = new FieldDecl(type,idList);:}
 						;
 
-id_name_list			::= id_name_list:inl1 COMMA id_name:in1                         {:inl1.add(in1);RESULT=inl1;:}  
-						| id_name:in2							                        {:List<IdDecl> names = new LinkedList<IdDecl>();names.add(in2);RESULT=names;:}
+id_name_list			::= id_name_list:idList COMMA id_name:id                         			{: idList.add(id);RESULT=idList;:}  
+						| id_name:id							                        			{: List<IdDecl> names = new LinkedList<IdDecl>();names.add(id);RESULT=names;:}
 						;
  
-id_name		      		::= ID:i5 LBRACKET INTNUMBER:il1 RBRACKET                       {:RESULT = new ArrayIdDecl(i5,il1);:}
-						| ID:i4 								                        {:RESULT = new IdDecl(i4);:}
+id_name		      		::= ID:id LBRACKET INTNUMBER:number RBRACKET                       			{: RESULT = new ArrayIdDecl(id,number);:}
+						| ID:id 								                        			{: RESULT = new IdDecl(id);:}
 						;
 
-method_decl_list		::= method_decl_list:mdl1 method_decl:md		                {:mdl1.add(md); RESULT = mdl1;:}
-						| method_decl
+method_decl_list		::= method_decl_list:metnodDeclList method_decl:methodDecl		   			{: metnodDeclList.add(methodDecl); RESULT = metnodDeclList;:}
+						| method_decl:methodDecl													{: List<MethodDecl> methodDeclList = new LinkedList<MethodDecl>(); methodDeclList.add(methodDecl);
+																							 		  RESULT = methodDeclList;:}
 						;
 
-method_decl         	::= type:t1 ID:i7 LPAREN RPAREN body:bo1                        {:RESULT = new MethodDecl(t1,i7,bo1);:}
-						| type:t1 ID:i7 LPAREN params_decl_list:pdl1 RPAREN body:bo1    {:RESULT = new MethodDecl(t1,i7,pdl1,bo1);:}
+method_decl         	::= type:type ID:id LPAREN RPAREN body:body                        			{: RESULT = new MethodDecl(type,id,body);:}
+						| type:type ID:id LPAREN params_decl_list:paramsDeclList RPAREN body:body   {: RESULT = new MethodDecl(type,id,paramsDeclList,body);:}
 						; 
 
-params_decl_list		::= params_decl_list:pdl1 COMMA params_decl:pd1 			    {:pdl1.add(pd1); RESULT = pdl1;:}
-						| params_decl:pd2 											    {:List<ParamDecl> params = new LinkedList<ParamDecl>();
-																						params.add(pd2);RESULT=params;:}
+params_decl_list		::= params_decl_list:paramsDeclList COMMA params_decl:paramsDecl   			{:paramsDeclList.add(paramsDecl); RESULT = paramsDeclList;:}
+						| params_decl:paramsDecl													{:List<ParamDecl> params = new LinkedList<ParamDecl>();
+																									 params.add(paramsDecl); RESULT=params; :}
 						;
 
-params_decl 			::= type:t3 ID:i8 												{:RESULT = new ParamDecl(t3,i8);:}
+params_decl 			::= type:type ID:id 														{:RESULT = new ParamDecl(type,id);:}
 						;
 
-body 					::= block:bl1 													{:RESULT = new BodyDecl(bl1);:}
-						| EXTERN SEMI 													{:RESULT = new BodyDecl(true);:}
+body 					::= block:block 															{:RESULT = new BodyDecl(block);:}
+						| EXTERN SEMI 																{:RESULT = new BodyDecl(true);:}
 						;
 
-block					::= LBRACE field_decl_list:fdl3  statement_list:s1 RBRACE       {:RESULT = new Block(0,fdl3,s1);:}
-						| LBRACE field_decl_list:fdl4 RBRACE 							{:RESULT = new Block(0,fdl4,new LinkedList<Statement>());:}
-						| LBRACE statement_list:s1 RBRACE 								{:RESULT = new Block(0,new LinkedList<FieldDecl>(),s1);:}
-						| LBRACE RBRACE 												{:RESULT = new Block(0);:}
+block					::= LBRACE field_decl_list:fieldDeclL  statement_list:stmtList RBRACE   	{:RESULT = new Block(0,fieldDeclL,stmtList);:}
+						| LBRACE field_decl_list:fieldDeclL RBRACE 									{:RESULT = new Block(0,fieldDeclL,new LinkedList<Statement>());:}
+						| LBRACE statement_list:stmtList RBRACE 									{:RESULT = new Block(0,new LinkedList<FieldDecl>(),stmtList);:}
+						| LBRACE RBRACE 													   		{:RESULT = new Block(0);:}
 						;
 
-type					::= INT_TYPE 													{:RESULT = Type.INT;:}
-						| FLOAT_TYPE 													{:RESULT = Type.FLOAT;:}
-						| BOOL_TYPE 													{:RESULT = Type.BOOLEAN;:}
-						| ID:i10 														{:RESULT = Type.UNDEFINED;:} //ver
- 						| VOID_TYPE 													{:RESULT = Type.VOID;:}
+type					::= INT_TYPE 																{:RESULT = "INT";:}
+						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
+						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
+								| ID:id 															{://ver	
+																										try{
+																											Type.add(id);RESULT = id;}
+																										catch(Exception e){
+																									
+																										}
+																									:} 
+ 						| VOID_TYPE 																{:RESULT = "VOID";:}
 						;
 
-statement_list			::= statement_list:sL1 statement:s1								{:sL1.add(s1);RESULT = sL1;:}
-						| statement:s1 													{:List<Statement> stmt = new LinkedList<Statement>();stmt.add(s1);RESULT = stmt;:}
+statement_list			::= statement_list:stmtList statement:stmt									{:stmtList.add(stmt);RESULT = stmtList;:}
+						| statement:stmt															{:List<Statement> statement = new LinkedList<Statement>();statement.add(stmt);RESULT = statement;:}
 						;
 
-statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI						{:RESULT = new AssignStmt(l1,ao1,e1);:}
-						| method_call:mc1 SEMI											//{:RESULT = new MethodCall(mc1);:}
-						| IF LPAREN expr:e2 RPAREN statement:s2 						{:RESULT = new IfThenStmt(e2,s2);:}
-						| IF LPAREN expr:e2 RPAREN statement:s2 ELSE statement:s3       {:RESULT = new IfThenElseStmt(e2,s2,s3);:}
-						| FOR ID:i11 ASSIGN expr:e3 COMMA expr:e4 statement:s4          {:RESULT = new ForStmt(i11,e3,e4,s4);:}
-						| WHILE expr:e3 statement:s5									{:RESULT = new WhileStmt(e3,s5);:}
-						| return_st														//{:RESULT = new ReturnStmt();:}
-						| BREAK SEMI													{:RESULT = new BreakStmt();:}
-						| CONT SEMI														{:RESULT = new ContinueStmt();:}
+statement				::=  location:loc assign_op:assignOp expr:expr SEMI							{:RESULT = new AssignStmt(loc,assignOp,expr);:}
+						| method_call:methodCall SEMI												{:RESULT = new MethodCallStmt(methodCall);:}
+						| IF LPAREN expr:expr RPAREN statement:stmt 								{:RESULT = new IfThenStmt(expr,stmt);:}
+						| IF LPAREN expr:expr RPAREN statement:stmtIf ELSE statement:stmtElse       {:RESULT = new IfThenElseStmt(expr,stmtIf,stmtElse);:}
+						| FOR ID:id ASSIGN expr:exprFor COMMA expr:exprTo statement:stmt          	{:RESULT = new ForStmt(id,exprFor,exprTo,stmt);:}
+						| WHILE expr:e3 statement:s5												{:RESULT = new WhileStmt(e3,s5);:}
+						| return_st														
+						| BREAK SEMI																{:RESULT = new BreakStmt();:}
+						| CONT SEMI																	{:RESULT = new ContinueStmt();:}
 						| SEMI															
-					 	| block:bl2 													{:RESULT = new Block(0);:}
+					 	| block:block 																{:RESULT = new Block(0);:}
 					 	;
 
-return_st 				::= RET expr:exp SEMI											{:RESULT = new ReturnStmt(exp);:}
-						| RET SEMI 														{:RESULT = new ReturnVoidStmt();:}
+
+return_st 				::= RET expr:expre SEMI														{:RESULT = new ReturnStmt(expre);:}
+						| RET SEMI 																	{:RESULT = new ReturnVoidStmt();:}
+
 						;
 
-assign_op  				::= ASSIGN 														{:RESULT = AssignOpType.ASSIGN;:}
-						| ASSIGNP 														{:RESULT = AssignOpType.INCREMENT;:}
-						| ASSIGNM 														{:RESULT = AssignOpType.DECREMENT;:}
+assign_op  				::= ASSIGN 																	{:RESULT = AssignOpType.ASSIGN;:}
+						| ASSIGNP 																	{:RESULT = AssignOpType.INCREMENT;:}
+						| ASSIGNM 																	{:RESULT = AssignOpType.DECREMENT;:}
 						;
 
 
 
-method_call         	::= ID:id1 attribute_access_list:amc11 LPAREN params:p2 RPAREN		{:amc11.add(id1);RESULT = new MethodCall(amc11,p2);:}
-						| ID:id2 attribute_access_list:amc11 LPAREN RPAREN					{:amc11.add(id2);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(amc11,params);:}
-						| ID:id3 LPAREN params:p2 RPAREN									{:List<String> ids = new LinkedList<String>();ids.add(id3); RESULT = new MethodCall(ids,p2);:}
-						| ID:id4 LPAREN  RPAREN 											{:List<String> ids = new LinkedList<String>();ids.add(id4); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params);:}
+method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params);:}
+						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params);:}
+						| ID:id LPAREN params:params RPAREN												{:List<String> ids = new LinkedList<String>();ids.add(id); RESULT = new MethodCall(ids,params);:}
+						| ID:id LPAREN  RPAREN 															{:List<String> ids = new LinkedList<String>();ids.add(id); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params);:}
 						; 
 
-params					::= params:p1 COMMA expr:e1										    {:p1.add(e1);RESULT=p1;:}
-						| expr:e2 															{:List<Expression> exprList = new LinkedList<Expression>();exprList.add(e2);RESULT = exprList;:}
+params					::= params:params COMMA expr:expr											    {:params.add(expr);RESULT=params;:}
+						| expr:expr 																	{:List<Expression> exprList = new LinkedList<Expression>();exprList.add(expr);RESULT = exprList;:}
 						;
 
-attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1					{:aal1.add(aa1);RESULT=aal1;:}
-						| attribute_access:aa2												{:List<String> ids = new LinkedList<String>();ids.add(aa2);RESULT = ids;:}
+attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1								{:aal1.add(aa1);RESULT=aal1;:}
+						| attribute_access:aa2															{:List<String> ids = new LinkedList<String>();ids.add(aa2);RESULT = ids;:}
 						;
 
-attribute_access		::= DOC ID:i1 														{:RESULT = new String(i1);:}
+attribute_access		::= DOC ID:id 																	{:RESULT = new String(id);:}
 						;
 
-location 				::= ID:id1 															{:RESULT = new VarLocation(id1);:}
-						| ID:id2 attribute_access_list:acl2 								{:List<String> ids = new LinkedList<String>(acl2); ids.add(id2); RESULT = new AttributeLocation(ids);:}
-						| ID:id3 LBRACKET expr:e1 RBRACKET									{: RESULT = new ArrayLocation(id3,e1);:}
-						| ID:id4 attribute_access_list:acl2 LBRACKET expr:e2 RBRACKET		{:List<String> ids = new LinkedList<String>(acl2);ids.add(id4); RESULT = new AttributeArrayLocation(ids,e2);:}
+location 				::= ID:id 																		{:RESULT = new VarLocation(id);:}
+						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(id); RESULT = new AttributeLocation(attributeAccessL);:}
+						| ID:id LBRACKET expr:expr RBRACKET								  				{:List<String> ids = new LinkedList<String>(); ids.add(id); RESULT = new ArrayLocation(ids,expr);:}
+						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(id);RESULT = new AttributeArrayLocation(attributeAccessL,expr);:}
 						;
 
-expr					::= location:l2										{:RESULT = l2;:}													
-						| method_call:mc2									{:RESULT = mc2;:}
-						| literal:li1										{:RESULT = li1;:}
-						| LPAREN expr:e4 RPAREN								{:RESULT = e4;:}
-						| expr:e4 AND:op expr:e5							{:RESULT = new LogicalBinOp(e4,BinOpType.AND,e5);:}
-						| expr:e5 OR:op expr:e6								{:RESULT = new LogicalBinOp(e5,BinOpType.OR,e6);:}
-						| expr:e4 PLUS:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.PLUS,e5);:}
-						| expr:e4 MINUS:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.MINUS,e5);:}
-						| expr:e4 TIMES:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.TIMES,e5);:}
-						| expr:e4 DIV:op expr:e5							{:RESULT = new ArithmeticBinOp(e4,BinOpType.DIV,e5);:}
-						| expr:e4 MOD:op expr:e5							{:RESULT = new ArithmeticBinOp(e4,BinOpType.MOD,e5);:}
-						| expr:e4 SMALLER:op expr:e5						{:RESULT = new RelationalBinOp(e4,BinOpType.SMALL,e5);:}
-						| expr:e4 BIGGER:op expr:e5							{:RESULT = new RelationalBinOp(e4,BinOpType.BIGGER,e5);:}
-						| expr:e4 LTOE:op expr:e5							{:RESULT = new RelationalBinOp(e4,BinOpType.LTOE,e5);:}
-						| expr:e4 GTOE expr:e5								{:RESULT = new RelationalBinOp(e4,BinOpType.GTOE,e5);:}
-						| expr:e4 EQUAL expr:e5								{:RESULT = new EqBinOp(e4,BinOpType.EQUAL,e5);:}
-						| expr:e4 DISTINCT expr:e5							{:RESULT = new EqBinOp(e4,BinOpType.DISTINCT,e5);:}
-						| MINUS:op expr:e6 									{:RESULT = new ArithmeticUnaryOp(UnaryOpType.MINUS,e6);:}	 %prec UMINUS	
-						| NOT:op expr:e7									{:RESULT = new LogicalUnaryOp(UnaryOpType.NOT,e7);:}
+expr					::= location:loc																{:RESULT = loc;:}													
+						| method_call:methodCall														{:RESULT = methodCall;:}
+						| literal:lit																	{:RESULT = lit;:}
+						| LPAREN expr:expr RPAREN														{:RESULT = expr;:}
+						| expr:exprLeft AND:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.AND,exprRigth);:}
+						| expr:exprLeft OR:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.OR,exprRigth);:}
+						| expr:exprLeft PLUS:op expr:exprRigth 											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.PLUS,exprRigth);:}
+						| expr:exprLeft MINUS:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MINUS,exprRigth);:}
+						| expr:exprLeft TIMES:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.TIMES,exprRigth);:}
+						| expr:exprLeft DIV:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.DIV,exprRigth);:}
+						| expr:exprLeft MOD:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MOD,exprRigth);:}
+						| expr:exprLeft SMALLER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.SMALL,exprRigth);:}
+						| expr:exprLeft BIGGER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.BIGGER,exprRigth);:}
+						| expr:exprLeft LTOE:op expr:exprRigth						   					{:RESULT = new RelationalBinOp(exprLeft,BinOpType.LTOE,exprRigth);:}
+						| expr:exprLeft GTOE expr:exprRigth												{:RESULT = new RelationalBinOp(exprLeft,BinOpType.GTOE,exprRigth);:}
+						| expr:exprLeft EQUAL expr:exprRigth											{:RESULT = new EqBinOp(exprLeft,BinOpType.EQUAL,exprRigth);:}
+						| expr:exprLeft DISTINCT expr:exprRigth											{:RESULT = new EqBinOp(exprLeft,BinOpType.DISTINCT,exprRigth);:}
+						| MINUS:op expr:expr 															{:RESULT = new ArithmeticUnaryOp(UnaryOpType.MINUS,expr);:}	 %prec UMINUS	
+						| NOT:op expr:expr																{:RESULT = new LogicalUnaryOp(UnaryOpType.NOT,expr);:}
 						;
 
-literal  				::= INTNUMBER 										
-						| REALNUMBER 
-						| BOOL_LITERAL 
+literal  				::= INTNUMBER:val														{:RESULT = new IntLiteral(val);:}								
+						| REALNUMBER:val 														{:RESULT = new FloatLiteral(val);:}
+						| BOOL_LITERAL:val 														{:RESULT = new BooleanLiteral(val);:}
+
 						;

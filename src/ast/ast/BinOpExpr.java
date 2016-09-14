@@ -1,10 +1,10 @@
 package ir.ast;
 
 import ir.ASTVisitor;
-//import ir.ast.TempExpression;
 
 
-public abstract class BinOpExpr extends Expression{
+public abstract class BinOpExpr  extends Expression {
+
 	protected BinOpType operator; //operator in the expr = expr operator expr
 	protected Expression lOperand; //left expression
 	protected Expression rOperand; //right expression

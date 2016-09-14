@@ -7,16 +7,11 @@ import ir.ASTVisitor;
 public class AttributeLocation extends Location {
 	
 	private int blockId;
-	private List<String> ids;
 
-	public AttributeLocation(String id, List<String> i){
-		super(id);
-		this.ids     = i;
+
+	public AttributeLocation(List<String>ids) {
+		super(ids);
 		this.blockId = -1;
-	}
-
-	public AttributeLocation(List<String> i){
-		super(i);
 	}
 
 /*	
@@ -27,14 +22,7 @@ public class AttributeLocation extends Location {
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
 	}
-*/	
-	public List<String> getIds(){
-		return this.ids;
-	}
-
-	public void setIds(List<String> i){
-		this.ids = i;
-	}
+*/
 
 	@Override
 	public String toString() {

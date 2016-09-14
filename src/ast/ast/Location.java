@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 public abstract class Location extends Expression {
 	protected List<String> ids;
-	protected Expression expr;
 
 	public Location(String id){
 		this.ids = new LinkedList<String>();
@@ -28,13 +27,7 @@ public abstract class Location extends Expression {
 		this.ids = ids;
 	}
 
-	public Expression getExpression(){
-		return this.expr;
-	}
 
-	public void setExpression(Expression expr){
-		this.expr = expr;
-	}
 
 
 	public String toString(){

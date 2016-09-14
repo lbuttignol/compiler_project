@@ -2,6 +2,7 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
+
 public abstract class UnaryOpExpr extends Expression {
 	protected UnaryOpType operator; 
 	protected Expression operand;
@@ -12,13 +13,6 @@ public abstract class UnaryOpExpr extends Expression {
 		this.operand  = operand;
 	}
 	
-	/*
-	public BinOpExpr(T e, TempT t) {
-		lOperand = e;
-		operator = t.getOperator();
-		rOperand = t.getRightOperand();
-	}
-	*/
 
 	public UnaryOpType getOperator() {
 		return operator;

@@ -4,12 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MethodDecl extends AST{
-	private Type type;
+	private String type;
 	private String name;
 	private List<ParamDecl> params;
 	private BodyDecl body;
 
-	public MethodDecl( Type type,String name,List<ParamDecl> params, 
+	public MethodDecl( String type,String name,List<ParamDecl> params, 
 					   BodyDecl body){
 		this.type      = type;
 		this.name      = name;
@@ -18,7 +18,7 @@ public class MethodDecl extends AST{
 
 	}
 
-	public MethodDecl( Type type,String name, 
+	public MethodDecl( String type,String name, 
 					   BodyDecl body){
 		this.type      = type;
 		this.name      = name;
@@ -35,11 +35,11 @@ public class MethodDecl extends AST{
 		this.name = n;
 	}
 
-	public Type getReturnType(){
+	public String getReturnType(){
 		return this.type;
 	}
 
-	public void setType(Type t){
+	public void setType(String t){
 		this.type = t;
 	}
 
