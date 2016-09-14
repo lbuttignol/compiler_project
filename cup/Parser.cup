@@ -133,7 +133,7 @@ type					::= INT_TYPE 																{:RESULT = "INT";:}
 						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
 						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
  						| VOID_TYPE 																{:RESULT = "VOID";:}
-								| ID:id 															{://ver	
+						| ID:id 															{://ver	
 																										try{
 																											Type.add(id);RESULT = id;}
 																										catch(Exception e){

@@ -11,7 +11,7 @@ public class IfThenElseStmt extends IfThenStmt {
 	}
 
 	public Statement getElseBlock() {
-		return elseBlock;
+		return this.elseBlock;
 	}
 
 	public void setElseBlock(Statement elseBlock) {
