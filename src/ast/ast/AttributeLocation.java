@@ -1,18 +1,20 @@
 package ir.ast;
 
-import ir.ASTVisitor;
 import java.util.List;
 
+import ir.ASTVisitor;
 
 public class AttributeLocation extends Location {
 	
 	private int blockId;
 
+
 	public AttributeLocation(List<String>ids) {
 		super(ids);
 		this.blockId = -1;
 	}
-	
+
+/*	
 	public int getBlockId() {
 		return blockId;
 	}
@@ -20,6 +22,7 @@ public class AttributeLocation extends Location {
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
 	}
+*/
 
 	@Override
 	public String toString() {

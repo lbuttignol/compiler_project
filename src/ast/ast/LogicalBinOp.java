@@ -2,6 +2,7 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
+
 public class LogicalBinOp  extends BinOpExpr {
 
 	public LogicalBinOp(Expression l, BinOpType op, Expression r){

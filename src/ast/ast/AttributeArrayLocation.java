@@ -1,4 +1,4 @@
-package ir.ast;
+		package ir.ast;
 
 import ir.ASTVisitor;
 import java.util.List;
@@ -13,7 +13,8 @@ public class AttributeArrayLocation extends Location {
 		this.expr    = expr;
 		this.blockId = -1;
 	}
-	
+
+
 	public int getBlockId() {
 		return blockId;
 	}
