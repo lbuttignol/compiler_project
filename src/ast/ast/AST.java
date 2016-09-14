@@ -6,6 +6,11 @@ public abstract class AST {
 	private int lineNumber;
 	private int colNumber;
 
+	public AST(int line, int col){
+		this.lineNumber = line;
+		this.colNumber = col;
+	}
+
 	public int getLineNumber() {
 		return lineNumber;
 	}

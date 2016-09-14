@@ -2,7 +2,7 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
-public class ReturnStmt extends Statement {
+public class ReturnStmt extends AbstractReturn {
 	private Expression expression; // the return expression
 	
 	public ReturnStmt(Expression e) {
