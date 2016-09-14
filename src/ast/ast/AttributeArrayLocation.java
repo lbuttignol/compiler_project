@@ -8,17 +8,13 @@ public class AttributeArrayLocation extends Location {
 	private int blockId;
 	private Expression expr;
 	
-	public AttributeArrayLocation(String id, List<String>ids, Expression expr) {
-		super(id);
-		this.ids     = ids;
+	public AttributeArrayLocation(List<String>ids, Expression expr) {
+		super(ids);
 		this.expr    = expr;
 		this.blockId = -1;
 	}
 
-	public AttributeArrayLocation( List<String>ids, Expression expr) {
-		super(ids,expr);
-	}
-	
+
 	public int getBlockId() {
 		return blockId;
 	}
@@ -27,13 +23,6 @@ public class AttributeArrayLocation extends Location {
 		this.blockId = blockId;
 	}
 	
-	public List<String> getIds(){
-		return this.ids;
-	}
-
-	public void setIds(List<String> ids){
-		this.ids = ids;
-	}
 
 	public Expression getExpr(){
 		return this.expr;

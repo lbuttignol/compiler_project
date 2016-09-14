@@ -2,19 +2,19 @@ package ir.ast;
 
 import java.util.List;
 public class FieldDecl extends AST{
-	private Type type;
+	private String type;
 	private List<IdDecl> names;
 
-	public FieldDecl(Type type, List<IdDecl> names){
+	public FieldDecl(String type, List<IdDecl> names){
 		this.type = type;
 		this.names = names;
 	}
 
-	public Type getType(){
+	public String getType(){
 		return this.type;
 	}
 
-	public void setType(Type t){
+	public void setType(String t){
 		this.type = t;
 	} 
 

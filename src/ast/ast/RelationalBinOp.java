@@ -2,7 +2,8 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
-public class RelationalBinOp extends BinOpExpr{
+
+public class RelationalBinOp extends BinOpExpr {
 
 	public RelationalBinOp(Expression l, BinOpType op, Expression r){
 		super(l,op,r);

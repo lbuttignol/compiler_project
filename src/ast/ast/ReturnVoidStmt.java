@@ -4,9 +4,7 @@ import ir.ASTVisitor;
 
 public class ReturnVoidStmt extends AbstractReturn {
 
-	public ReturnVoidStmt() {
-		this.expression = null;
-	}
+	public ReturnVoidStmt() {}
 
 	@Override
 	public String toString() {

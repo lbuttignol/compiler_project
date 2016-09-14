@@ -1,63 +1,39 @@
 package ir.ast;
-
-public enum Type {
-	INT,
-	INTARRAY,
-	FLOAT,
-	BOOLEAN,
-	VOID,
-	UNDEFINED;
-
-	@Override
-	public String toString() {
-		switch(this) {
-			case INT:
-				return "int";
-			case VOID:
-				return "void";
-			case FLOAT:
-				return "float";
-			case BOOLEAN:
-				return "boolean";
-			case UNDEFINED:
-				return "undefined";
-			case INTARRAY:
-				return "int[]";
-		}
-		
-		return null;
-	}
-	
-	public boolean isArray() {
-		if (this == Type.INTARRAY) {
-			return true;
-		}
-		
-		return false;
-	}
-}
-/*
-package ir.ast;
-
 import java.util.List;
 import java.util.LinkedList;
 
-public class Type {
-	private static List<String> id;
+public class Type{
 
-	public void Type(){
-		this.id = new LinkedList<String>();
-		this.id.add("bool");
-		this.id.add("boolArray");
-		this.id.add("float");
-		this.id.add("floatArray");
-		this.id.add("integer");
-		this.id.add("integerArray");
-		this.id.add("void");
-		this.id.add("undef");
+	private static List<String> types;
 
+	public Type(){
+		this.types = new LinkedList<String>();
+		this.types.add("INT");
+		this.types.add("VOID");
+		this.types.add("FLOAT");
+		this.types.add("BOOLEAN");
+		this.types.add("UNDEFINED");
+		this.types.add("INTARRAY");
+		this.types.add("BOOLARRAY");
+		this.types.add("FLOATARRAY");
 	}
 
-	
+	public static void add (String type){
+		if (!(types.contains(type.toUpperCase()))){
+			add(type.toUpperCase());
+		}else{
+			// throw new Exception("Ya existe "+type);
+		}
+	}
+
+	public static void delete(String type){
+		if (types.contains(type.toUpperCase())){
+			types.remove(type);
+		}
+	}
+
+
+	public String toString(){
+		return types.toString();
+	}
 }
-*/

@@ -12,14 +12,14 @@ public class BooleanLiteral extends Literal {
 	 * Constructor for boolean literal that takes a string as an input
 	 * @param: String integer
 	 */
-	public BooleanLiteral(String val){
-		this.rawValue = val; // Will convert to boolean value in semantic check
-		this.value = null;
+	public BooleanLiteral(Boolean val){
+		//this.rawValue = val; // Will convert to boolean value in semantic check
+		this.value = val;
 	}
 
 	@Override
-	public Type getType() {
-		return Type.BOOLEAN;
+	public String getType() {
+		return "BOOLEAN";
 	}
 
 	public String getStringValue() {

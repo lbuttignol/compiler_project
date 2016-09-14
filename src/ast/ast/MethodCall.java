@@ -2,7 +2,10 @@ package ir.ast;
 
 import java.util.List;
 import java.util.LinkedList;
+
+
 public class MethodCall extends Expression{
+
 	private List<String> ids;
 	private List<Expression> params;
 
