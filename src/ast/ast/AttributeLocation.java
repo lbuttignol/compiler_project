@@ -7,11 +7,9 @@ import java.util.List;
 public class AttributeLocation extends Location {
 	
 	private int blockId;
-	private List<String> ids;
 
-	public AttributeLocation(String id, List<String>ids) {
-		super(id);
-		this.ids     = ids;
+	public AttributeLocation(List<String>ids) {
+		super(ids);
 		this.blockId = -1;
 	}
 	
@@ -21,14 +19,6 @@ public class AttributeLocation extends Location {
 
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
-	}
-	
-	public List<String> getIds(){
-		return this.ids;
-	}
-
-	public void setIds(List<String> ids){
-		this.ids = ids;
 	}
 
 	@Override

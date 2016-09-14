@@ -3,11 +3,11 @@ package ir.ast;
 import ir.ASTVisitor;
 
 public abstract class UnaryOpExpr <T extends Expression> extends Expression {
-	protected BinOpType operator; 
+	protected UnaryOpType operator; 
 	protected T operand;
 
 	
-	public UnaryOpExpr(BinOpType operator, T operand ){
+	public UnaryOpExpr(UnaryOpType operator, T operand ){
 		this.operator = operator;
 		this.operand  = operand;
 	}
@@ -20,11 +20,11 @@ public abstract class UnaryOpExpr <T extends Expression> extends Expression {
 	}
 	*/
 
-	public BinOpType getOperator() {
+	public UnaryOpType getOperator() {
 		return operator;
 	}
 
-	public void setOperator(BinOpType operator) {
+	public void setOperator(UnaryOpType operator) {
 		this.operator = operator;
 	}
 

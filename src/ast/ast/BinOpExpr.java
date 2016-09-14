@@ -4,12 +4,12 @@ import ir.ASTVisitor;
 //import ir.ast.TempExpression;
 
 
-public abstract class BinOpExpr <T extends Expression> extends Expression {
+public abstract class BinOpExpr  extends Expression {
 	protected BinOpType operator; //operator in the expr = expr operator expr
-	protected T lOperand; //left expression
-	protected T rOperand; //right expression
+	protected Expression lOperand; //left expression
+	protected Expression rOperand; //right expression
 	
-	public BinOpExpr(T l, BinOpType op, T r){
+	public BinOpExpr(Expression l, BinOpType op, Expression r){
 		this.operator = op;
 		this.lOperand = l;
 		this.rOperand = r;
@@ -23,19 +23,19 @@ public abstract class BinOpExpr <T extends Expression> extends Expression {
 		this.operator = op;
 	}
 
-	public T getLeftOperand() {
+	public Expression getLeftOperand() {
 		return this.lOperand;
 	}
 
-	public void setLeftOperand(T lOp) {
+	public void setLeftOperand(Expression lOp) {
 		this.lOperand = lOp;
 	}
 
-	public T getRightOperand() {
+	public Expression getRightOperand() {
 		return this.rOperand;
 	}
 
-	public void setRightOperand(T rOp) {
+	public void setRightOperand(Expression rOp) {
 		this.rOperand = rOp;
 	}
 	

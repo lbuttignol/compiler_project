@@ -2,16 +2,16 @@ package ir.ast;
 
 public abstract class Expression extends AST{
 	protected Expression expr;
-	protected Type type;
+	protected String type;
 	private String id = "a";
 	public Expression(){
 	}
 	
-	public Type getType() {
+	public String getType() {
 		return this.type;
 	}
 	
-	public void setType(Type t) {
+	public void setType(String t) {
 		this.type = t;
 	}
 

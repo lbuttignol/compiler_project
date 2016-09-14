@@ -10,14 +10,14 @@ public class IntLiteral extends Literal {
 	 * Constructor for int literal that takes a string as an input
 	 * @param: String integer
 	 */
-	public IntLiteral(String val){
-		rawValue = val; // Will convert to int value in semantic check
-		value = null;
+	public IntLiteral(Integer val){
+		//rawValue = val; // Will convert to int value in semantic check
+		value = val;
 	}
 
 	@Override
-	public Type getType() {
-		return Type.INT;
+	public String getType() {
+		return "INT";
 	}
 
 	public String getStringValue() {

@@ -1,38 +1,38 @@
 package ir.ast;
+import java.util.List;
+import java.util.LinkedList;
 
-public enum Type {
-	INT,
-	INTARRAY,
-	FLOAT,
-	BOOLEAN,
-	VOID,
-	UNDEFINED;
+public class Type{
 
-	@Override
-	public String toString() {
-		switch(this) {
-			case INT:
-				return "int";
-			case VOID:
-				return "void";
-			case FLOAT:
-				return "float";
-			case BOOLEAN:
-				return "boolean";
-			case UNDEFINED:
-				return "undefined";
-			case INTARRAY:
-				return "int[]";
-		}
-		
-		return null;
+	private static List<String> types;
+
+	public Type(){
+		this.types = new LinkedList<String>();
+		this.types.add("INT");
+		this.types.add("VOID");
+		this.types.add("FLOAT");
+		this.types.add("BOOLEAN");
+		this.types.add("UNDEFINED");
+		this.types.add("INTARRAY");
+		this.types.add("BOOLARRAY");
+		this.types.add("FLOATARRAY");
 	}
-	
-	public boolean isArray() {
-		if (this == Type.INTARRAY) {
-			return true;
+
+	public static void add (String type){
+		if (!(types.contains(type.toUpperCase()))){
+			add(type.toUpperCase());
+		}else{
+			// throw new Exception("Ya existe "+type);
 		}
-		
-		return false;
+	}
+
+	public static void delete(String type){
+		if (types.contains(type.toUpperCase())){
+			types.remove(type);
+		}
+	}
+
+	public String toString(){
+		return types.toString();
 	}
 }

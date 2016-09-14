@@ -6,12 +6,10 @@ import java.util.List;
 public class AttributeArrayLocation extends Location {
 	
 	private int blockId;
-	private List<String> ids;
 	private Expression expr;
 	
-	public AttributeArrayLocation(String id, List<String>ids, Expression expr) {
-		super(id);
-		this.ids     = ids;
+	public AttributeArrayLocation(List<String>ids, Expression expr) {
+		super(ids);
 		this.expr    = expr;
 		this.blockId = -1;
 	}
@@ -24,13 +22,6 @@ public class AttributeArrayLocation extends Location {
 		this.blockId = blockId;
 	}
 	
-	public List<String> getIds(){
-		return this.ids;
-	}
-
-	public void setIds(List<String> ids){
-		this.ids = ids;
-	}
 
 	public Expression getExpr(){
 		return this.expr;

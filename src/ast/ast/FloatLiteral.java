@@ -10,14 +10,14 @@ public class FloatLiteral extends Literal {
 	 * Constructor for float lleiteral that takes a string as an input
 	 * @param: String integer
 	 */
-	public FloatLiteral(String val){
-		this.rawValue = val; // Will convert to float value in semantic check
-		this.value = 0;
+	public FloatLiteral(float val){
+		//this.rawValue = val; // Will convert to float value in semantic check
+		this.value = val;
 	}
 
 	@Override
-	public Type getType() {
-		return Type.FLOAT;
+	public String getType() {
+		return "FLOAT";
 	}
 
 	public String getStringValue() {
