@@ -1,6 +1,8 @@
 package ir.ast;
 
+import ir.ASTVisitor;
 import java.util.List;
+
 public class IdDecl extends AST {
 
 	protected String name;
@@ -21,11 +23,9 @@ public class IdDecl extends AST {
 		return this.name;
 	}
 
-	/*
 	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
-	*/
 }
 

@@ -15,6 +15,8 @@ public interface ASTVisitor {
 	public void visit(BreakStmt stmt);
 	public void visit(ContinueStmt stmt);
 	public void visit(WhileStmt stmt);
+	public void visit(FieldDecl stmt);
+	public void visit(IdDecl loc);
 	
 // visit expressions
 	public void visit(BinOpExpr expr);

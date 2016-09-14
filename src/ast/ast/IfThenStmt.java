@@ -12,7 +12,7 @@ public class IfThenStmt extends Statement {
 	}
 
 	public Expression getCondition() {
-		return condition;
+		return this.condition;
 	}
 
 	public void setCondition(Expression condition) {
