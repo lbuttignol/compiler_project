@@ -36,3 +36,28 @@ public enum Type {
 		return false;
 	}
 }
+/*
+package ir.ast;
+
+import java.util.List;
+import java.util.LinkedList;
+
+public class Type {
+	private static List<String> id;
+
+	public void Type(){
+		this.id = new LinkedList<String>();
+		this.id.add("bool");
+		this.id.add("boolArray");
+		this.id.add("float");
+		this.id.add("floatArray");
+		this.id.add("integer");
+		this.id.add("integerArray");
+		this.id.add("void");
+		this.id.add("undef");
+
+	}
+
+	
+}
+*/

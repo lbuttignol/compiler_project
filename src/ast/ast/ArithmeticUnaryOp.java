@@ -4,7 +4,7 @@ import ir.ASTVisitor;
 
 public class ArithmeticUnaryOp extends UnaryOpExpr {
 
-	public ArithmeticUnaryOp(BinOpType operator, Expression operand ){
+	public ArithmeticUnaryOp(UnaryOpType operator, Expression operand ){
 		super(operator,operand);
 	}
 

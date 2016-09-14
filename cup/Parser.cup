@@ -1,3 +1,4 @@
+
 package Compiler;
 
 import java_cup.runtime.*;
@@ -70,12 +71,12 @@ precedence left ELSE;
 
 start with program;
 
-program             	::= class_decl_list:cdN1                                        {: RESULT = new Program(cdN1); :}
+program             	::= class_decl_list:cdN1                                        {:RESULT = new Program(cdN1); :}
 						;
 
 class_decl_list        	::= class_decl_list:cD1 class_decl:cD2                          {:cD1.add(cD2);RESULT=cD1;:}
-						| class_decl:cD3                                                {:List<ClassDecl> classDeclL=new LinkedList<ClassDecl>();classDeclL.add(cD3)
-																                         ; RESULT=classDeclL;:}
+						| class_decl:cD3                                                {:List<ClassDecl> classDeclL=new LinkedList<ClassDecl>();classDeclL.add(cD3) ;
+																                         RESULT=classDeclL;:}
 						;
 
 class_decl          	::= CLASS_DECL ID:i1 LBRACE field_decl_list:fd1 method_decl_list:md1 RBRACE {:RESULT = new ClassDecl(i1,fd1,md1);:}
@@ -150,7 +151,7 @@ statement				::=  location:l1 assign_op:ao1 expr:e1 SEMI						{:RESULT = new Ass
 					 	| block:bl2 													{:RESULT = new Block(0);:}
 					 	;
 
-return_st 				::= RET expr SEMI												{:RESULT = new ReturnStmt(expr);:}
+return_st 				::= RET expr:exp SEMI											{:RESULT = new ReturnStmt(exp);:}
 						| RET SEMI 														{:RESULT = new ReturnVoidStmt();:}
 						;
 
@@ -178,31 +179,31 @@ attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1					{
 attribute_access		::= DOC ID:i1 														{:RESULT = new String(i1);:}
 						;
 
-location 				::= ID:id1 															{:RESULT = new ir.ast.Location(id1);:}
-						| ID:id2 attribute_access_list:acl2 										{:acl2.add(id2); RESULT = new ir.ast.Location(acl2);:}
-						| ID:id3 LBRACKET expr:e1 RBRACKET										   {:List<String> ids = new LinkedList<String>(); ids.add(id3); RESULT = new ir.ast.Location(ids,e1);:}
-						| ID:id4 attribute_access_list:acl2 LBRACKET expr:e2 RBRACKET				{:acl2.add(id2);RESULT = new ir.ast.Location(acl2,e2);:}
+location 				::= ID:id1 															{:RESULT = new VarLocation(id1);:}
+						| ID:id2 attribute_access_list:acl2 								{:List<String> ids = new LinkedList<String>(acl2); ids.add(id2); RESULT = new AttributeLocation(ids);:}
+						| ID:id3 LBRACKET expr:e1 RBRACKET									{: RESULT = new ArrayLocation(id3,e1);:}
+						| ID:id4 attribute_access_list:acl2 LBRACKET expr:e2 RBRACKET		{:List<String> ids = new LinkedList<String>(acl2);ids.add(id4); RESULT = new AttributeArrayLocation(ids,e2);:}
 						;
 
 expr					::= location:l2										{:RESULT = l2;:}													
 						| method_call:mc2									{:RESULT = mc2;:}
 						| literal:li1										{:RESULT = li1;:}
 						| LPAREN expr:e4 RPAREN								{:RESULT = e4;:}
-						| expr:e4 AND:op expr:e5							{:RESULT = new LogicalBinOp<Expression>(e4,BinOpType.AND,e5);:}
-						| expr:e5 OR:op expr:e6								{:RESULT = new LogicalBinOp<Expression>(e4,BinOpType.OR,e5);:}
-						| expr:e4 PLUS:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.PLUS,e5);:}
-						| expr:e4 MINUS:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.MINUS,e5);:}
-						| expr:e4 TIMES:op expr:e5 							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.TIMES,e5);:}
-						| expr:e4 DIV:op expr:e5							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.DIV,e5);:}
-						| expr:e4 MOD:op expr:e5							{:RESULT = new ArithmeticBinOp<Expression>(e4,BinOpType.MOD,e5);:}
-						| expr:e4 SMALLER:op expr:e5						{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.SMALL,e5);:}
-						| expr:e4 BIGGER:op expr:e5							{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.BIGGER,e5);:}
-						| expr:e4 LTOE:op expr:e5							{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.LTOE,e5);:}
-						| expr:e4 GTOE expr:e5								{:RESULT = new RelationalBinOp<Expression>(e4,BinOpType.GTOE,e5);:}
-						| expr:e4 EQUAL expr:e5								{:RESULT = new EqOpExpr<Expression>(e4,BinOpType.EQUAL,e5);:}
-						| expr:e4 DISTINCT expr:e5							{:RESULT = new EqOpExpr<Expression>(e4,BinOpType.DISTINCT,e5);:}
-						| MINUS:op expr:e6 									{:RESULT = new UnaryOpExpr<Expression>(UnaryOpType.MINUS,e6);:}	 %prec UMINUS	
-						| NOT:op expr:e7									{:RESULT = new UnaryOpExpr<Expression>(UnaryOpType.NOT,e7);:}
+						| expr:e4 AND:op expr:e5							{:RESULT = new LogicalBinOp(e4,BinOpType.AND,e5);:}
+						| expr:e5 OR:op expr:e6								{:RESULT = new LogicalBinOp(e5,BinOpType.OR,e6);:}
+						| expr:e4 PLUS:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.PLUS,e5);:}
+						| expr:e4 MINUS:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.MINUS,e5);:}
+						| expr:e4 TIMES:op expr:e5 							{:RESULT = new ArithmeticBinOp(e4,BinOpType.TIMES,e5);:}
+						| expr:e4 DIV:op expr:e5							{:RESULT = new ArithmeticBinOp(e4,BinOpType.DIV,e5);:}
+						| expr:e4 MOD:op expr:e5							{:RESULT = new ArithmeticBinOp(e4,BinOpType.MOD,e5);:}
+						| expr:e4 SMALLER:op expr:e5						{:RESULT = new RelationalBinOp(e4,BinOpType.SMALL,e5);:}
+						| expr:e4 BIGGER:op expr:e5							{:RESULT = new RelationalBinOp(e4,BinOpType.BIGGER,e5);:}
+						| expr:e4 LTOE:op expr:e5							{:RESULT = new RelationalBinOp(e4,BinOpType.LTOE,e5);:}
+						| expr:e4 GTOE expr:e5								{:RESULT = new RelationalBinOp(e4,BinOpType.GTOE,e5);:}
+						| expr:e4 EQUAL expr:e5								{:RESULT = new EqBinOp(e4,BinOpType.EQUAL,e5);:}
+						| expr:e4 DISTINCT expr:e5							{:RESULT = new EqBinOp(e4,BinOpType.DISTINCT,e5);:}
+						| MINUS:op expr:e6 									{:RESULT = new ArithmeticUnaryOp(UnaryOpType.MINUS,e6);:}	 %prec UMINUS	
+						| NOT:op expr:e7									{:RESULT = new LogicalUnaryOp(UnaryOpType.NOT,e7);:}
 						;
 
 literal  				::= INTNUMBER 										

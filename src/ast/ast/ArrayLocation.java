@@ -1,5 +1,6 @@
 package ir.ast;
 
+import java.util.List;
 
 import ir.ASTVisitor;
 
@@ -14,14 +15,18 @@ public class ArrayLocation extends Location {
 		this.blockId = -1;
 	}
 	
-	public int getBlockId() {
+	public ArrayLocation(List<String> i){
+		super(i);
+	}
+
+/*	public int getBlockId() {
 		return blockId;
 	}
 
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
 	}
-	
+*/	
 
 	@Override
 	public String toString() {
