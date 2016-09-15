@@ -7,7 +7,8 @@ public class FieldDecl extends AST{
 	private String type;
 	private List<IdDecl> names;
 
-	public FieldDecl(String type, List<IdDecl> names){
+	public FieldDecl(String type, List<IdDecl> names, int line, int col){
+		super(line,col);
 		this.type = type;
 		this.names = names;
 	}

@@ -5,8 +5,8 @@ public class ArrayIdDecl extends IdDecl {
 
 	private int number;
 	
-	public ArrayIdDecl (String name,int number){
-		super(name);
+	public ArrayIdDecl (String name,int number, int line, int col){
+		super(name,line,col);
 		this.number = number;
 	}
 

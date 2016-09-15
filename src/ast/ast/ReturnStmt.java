@@ -5,11 +5,13 @@ import ir.ASTVisitor;
 public class ReturnStmt extends AbstractReturn {
 	private Expression expression; // the return expression
 	
-	public ReturnStmt(Expression e) {
+	public ReturnStmt(Expression e,int line, int col){
+		super(line,col);
 		this.expression = e;
 	}
 	
-	public ReturnStmt() {
+	public ReturnStmt(int line, int col){
+		super(line,col);
 		this.expression = null;
 	}
 

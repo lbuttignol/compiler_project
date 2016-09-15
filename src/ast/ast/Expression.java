@@ -4,7 +4,8 @@ public abstract class Expression extends AST{
 	protected Expression expr;
 	protected String type;
 	private String id = "a";
-	public Expression(){
+	public Expression( int line, int col){
+		super(line,col);
 	}
 	
 	public String getType() {

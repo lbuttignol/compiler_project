@@ -9,13 +9,15 @@ public class MethodCall extends Expression{
 	private List<String> ids;
 	private List<Expression> params;
 
-	public MethodCall(List<String> ids, List<Expression> params){
+	public MethodCall(List<String> ids, List<Expression> params, int line, int col){
+		super(line,col);
 		this.ids    = ids;
 		this.params = params;
 	}
 
 
-	public MethodCall(){
+	public MethodCall(int line, int col){
+		super(line,col);
 		this.ids    = new LinkedList<String>();
 		this.params = new LinkedList<Expression>();
 	}

@@ -10,7 +10,8 @@ public class FloatLiteral extends Literal {
 	 * Constructor for float lleiteral that takes a string as an input
 	 * @param: String integer
 	 */
-	public FloatLiteral(float val){
+	public FloatLiteral(float val, int line, int col){
+		super(line,col);
 		//this.rawValue = val; // Will convert to float value in semantic check
 		this.value = val;
 	}

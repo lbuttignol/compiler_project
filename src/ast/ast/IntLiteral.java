@@ -10,7 +10,8 @@ public class IntLiteral extends Literal {
 	 * Constructor for int literal that takes a string as an input
 	 * @param: String integer
 	 */
-	public IntLiteral(Integer val){
+	public IntLiteral(Integer val, int line, int col){
+		super(line,col);
 		//rawValue = val; // Will convert to int value in semantic check
 		value = val;
 	}

@@ -6,8 +6,6 @@ public abstract class AST {
 	private int lineNumber;
 	private int colNumber;
 
-	public AST(){}
-
 	public AST(int line, int col){
 		this.lineNumber = line;
 		this.colNumber = col;

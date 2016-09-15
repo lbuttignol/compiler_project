@@ -7,7 +7,8 @@ public class WhileStmt extends Statement {
 	private Expression condition;
 	private Statement body;
 
-	public WhileStmt(Expression cond, Statement b){
+	public WhileStmt(Expression cond, Statement b,int line, int col){
+		super(line,col);
 		this.condition = cond; 
 		this.body = b;
 	} 

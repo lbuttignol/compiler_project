@@ -5,8 +5,8 @@ import ir.ASTVisitor;
 public class IfThenElseStmt extends IfThenStmt {
 	private Statement elseBlock;
 
-	public IfThenElseStmt(Expression cond, Statement ifBl, Statement elseBl){
-		super(cond, ifBl);
+	public IfThenElseStmt(Expression cond, Statement ifBl, Statement elseBl,int line, int col){
+		super(cond, ifBl,line,col);
 		this.elseBlock = elseBl;
 	}
 

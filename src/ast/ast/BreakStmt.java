@@ -4,8 +4,8 @@ import ir.ASTVisitor;
 
 public class BreakStmt extends Statement {
 
-	public BreakStmt (){
-		
+	public BreakStmt (int line, int col){
+		super(line,col);
 	}
 
 	public String toString() {

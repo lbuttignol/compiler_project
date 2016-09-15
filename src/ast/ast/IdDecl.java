@@ -7,7 +7,12 @@ public class IdDecl extends AST {
 
 	protected String name;
 	
-	public IdDecl (String name){
+	public IdDecl( int line, int col){
+		super(line,col);
+	}
+
+	public IdDecl (String name, int line, int col){
+		super(line,col);
 		this.name = name;
 	}
 
