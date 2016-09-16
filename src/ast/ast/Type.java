@@ -19,6 +19,17 @@ public class Type{
 	}
 
 	public static void add (String type){
+		if (types==null){
+			types = new LinkedList<String>();
+			types.add("INT");
+			types.add("VOID");
+			types.add("FLOAT");
+			types.add("BOOLEAN");
+			types.add("UNDEFINED");
+			types.add("INTARRAY");
+			types.add("BOOLARRAY");
+			types.add("FLOATARRAY");
+		}
 		if (!(types.contains(type.toUpperCase()))){
 			add(type.toUpperCase());
 		}else{

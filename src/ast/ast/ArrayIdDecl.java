@@ -3,18 +3,18 @@ package ir.ast;
 import java.util.List;
 public class ArrayIdDecl extends IdDecl {
 
-	private int number;
+	private Integer number;
 	
-	public ArrayIdDecl (String name,int number){
+	public ArrayIdDecl (String name,Integer number){
 		super(name);
 		this.number = number;
 	}
 
-	public int getNumber(){
+	public Integer getNumber(){
 		return this.number;
 	}
 
-	public void setNumber(int number){
+	public void setNumber(Integer number){
 		this.number = number;
 	}
 

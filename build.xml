@@ -33,7 +33,7 @@
   <target name="jar" depends="compile">
     <jar jarfile="${dist}/Compiler.jar" basedir="${classes}">
      <manifest>
-       <attribute name="Main-Class" value="Compiler.Parser"          />
+       <attribute name="Main-Class" value="Compiler.Main"          />
        <attribute name="Class-Path" value="java-cup-11b-runtime.jar" />
      </manifest>
     </jar>

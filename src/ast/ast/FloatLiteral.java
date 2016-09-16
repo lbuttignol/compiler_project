@@ -4,13 +4,13 @@ import ir.ASTVisitor;
 
 public class FloatLiteral extends Literal {
 	private String rawValue;
-	private float value;
+	private Float value;
 	
 	/*
 	 * Constructor for float lleiteral that takes a string as an input
 	 * @param: String integer
 	 */
-	public FloatLiteral(float val){
+	public FloatLiteral(Float val){
 		//this.rawValue = val; // Will convert to float value in semantic check
 		this.value = val;
 	}
@@ -28,11 +28,11 @@ public class FloatLiteral extends Literal {
 		this.rawValue = stringValue;
 	}
 
-	public float getValue() {
+	public Float getValue() {
 		return value;
 	}
 
-	public void setValue(float value) {
+	public void setValue(Float value) {
 		this.value = value;
 	}
 	

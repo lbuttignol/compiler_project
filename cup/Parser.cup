@@ -5,6 +5,7 @@ import java_cup.runtime.*;
 import ir.ast.*;
 import java.util.*;
 
+
 /*	keywords	*/
 terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, FOR, IF, RET, WHILE; 
 
@@ -72,23 +73,23 @@ precedence left ELSE;
 start with program;
 
 //Inicializar type al principio del programa
-program             	::= class_decl_list:classDeclList                                   		{: RESULT = new Program(classDeclList); :}
+program             	::= class_decl_list:classDeclList                                   		{:RESULT = new Program(classDeclList); :}
 						;
 
-class_decl_list        	::= class_decl_list:classDeclList class_decl:classDecl		        		{: classDeclList.add(classDecl); RESULT = classDeclList; :}
-						| class_decl:classDecl                                             			{: List<ClassDecl> classDeclList=new LinkedList<ClassDecl>();classDeclList.add(classDecl)
-																                         			; RESULT=classDeclList;:}
+class_decl_list        	::= class_decl_list:classDeclList class_decl:classDecl		        		{: ;classDeclList.add(classDecl); RESULT = classDeclList; :}
+						| class_decl:classDecl1                                             		{: List<ClassDecl> list=new LinkedList<ClassDecl>();list.add(classDecl1);
+																                         			 ; RESULT=list;:}
 
 						;
 
 class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: RESULT = new ClassDecl(id,fieldDeclL,methodDeclL); :}
 						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL); :} 
-						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>());:}
+						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            				    	{: RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>());:}
 						| CLASS_DECL ID:id LBRACE RBRACE                                							{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>());:}
 						;
 
 field_decl_list    		::= field_decl_list:fieldDeclL field_decl:fieldDecl                          				{: fieldDeclL.add(fieldDecl);RESULT=fieldDeclL;:}
-						|  field_decl:fieldDecl                                             					   	{: List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fieldDecl);
+						|  field_decl:fieldDecl                                             					  	{: List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fieldDecl);
 																                          							   RESULT = fieldDeclL;:}
 						;
 
@@ -96,11 +97,11 @@ field_decl          	::= type:type id_name_list:idList SEMI 		                  
 						;
 
 id_name_list			::= id_name_list:idList COMMA id_name:id                         			{: idList.add(id);RESULT=idList;:}  
-						| id_name:id							                        			{: List<IdDecl> names = new LinkedList<IdDecl>();names.add(id);RESULT=names;:}
+						| id_name:id1							                        			{: List<IdDecl> names = new LinkedList<IdDecl>();names.add(id1);RESULT=names;:}
 						;
  
 id_name		      		::= ID:id LBRACKET INTNUMBER:number RBRACKET                       			{: RESULT = new ArrayIdDecl(id,number);:}
-						| ID:id 								                        			{: RESULT = new IdDecl(id);:}
+						| ID:id 								                        		    {: RESULT = new IdDecl(id);:}
 						;
 
 method_decl_list		::= method_decl_list:metnodDeclList method_decl:methodDecl		   			{: metnodDeclList.add(methodDecl); RESULT = metnodDeclList;:}
@@ -134,11 +135,9 @@ type					::= INT_TYPE 																{:RESULT = "INT";:}
 						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
 						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
 								| ID:id 															{://ver	
-																										try{
-																											Type.add(id);RESULT = id;}
-																										catch(Exception e){
 																									
-																										}
+																										RESULT = id;
+																										
 																									:} 
  						| VOID_TYPE 																{:RESULT = "VOID";:}
 						;
@@ -173,7 +172,7 @@ assign_op  				::= ASSIGN 																	{:RESULT = AssignOpType.ASSIGN;:}
 
 
 
-method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params);:}
+method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN 	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params);:}
 						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params);:}
 						| ID:id LPAREN params:params RPAREN												{:List<String> ids = new LinkedList<String>();ids.add(id); RESULT = new MethodCall(ids,params);:}
 						| ID:id LPAREN  RPAREN 															{:List<String> ids = new LinkedList<String>();ids.add(id); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params);:}
@@ -187,7 +186,7 @@ attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1						
 						| attribute_access:aa2															{:List<String> ids = new LinkedList<String>();ids.add(aa2);RESULT = ids;:}
 						;
 
-attribute_access		::= DOC ID:id 																	{:RESULT = new String(id);:}
+attribute_access		::= DOC ID:id 																	{:RESULT = id;:}
 						;
 
 location 				::= ID:id 																		{:RESULT = new VarLocation(id);:}
