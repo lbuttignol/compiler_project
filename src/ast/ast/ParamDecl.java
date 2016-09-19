@@ -5,7 +5,8 @@ public class ParamDecl extends AST{
 	private String type;
 	private String name;
 
-	public ParamDecl(String type, String name){
+	public ParamDecl(String type, String name, int line, int col){
+		super(line,col);
 		this.type = type;
 		this.name = name;
 	}

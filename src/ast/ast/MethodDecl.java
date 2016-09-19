@@ -10,7 +10,8 @@ public class MethodDecl extends AST{
 	private BodyDecl body;
 
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
-					   BodyDecl body){
+					   BodyDecl body, int line, int col){
+		super(line,col);
 		this.type      = type;
 		this.name      = name;
 		this.params    = params;
@@ -19,7 +20,8 @@ public class MethodDecl extends AST{
 	}
 
 	public MethodDecl( String type,String name, 
-					   BodyDecl body){
+					   BodyDecl body, int line, int col){
+		super(line,col);
 		this.type      = type;
 		this.name      = name;
 		this.params    =  new LinkedList<ParamDecl>();

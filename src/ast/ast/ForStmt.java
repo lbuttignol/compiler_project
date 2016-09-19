@@ -8,7 +8,8 @@ public class ForStmt extends Statement {
 	Expression endValue;
 	Statement body;
 
-	public ForStmt(String name,Expression init, Expression end, Statement b){
+	public ForStmt(String name,Expression init, Expression end, Statement b,int line, int col){
+		super(line,col);
 		this.counterName = name;
 		this.initValue = init;
 		this.endValue = end;

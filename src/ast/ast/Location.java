@@ -5,16 +5,19 @@ import java.util.LinkedList;
 public abstract class Location extends Expression {
 	protected List<String> ids;
 
-	public Location(String id){
+	public Location(String id, int line, int col){
+		super(line,col);
 		this.ids = new LinkedList<String>();
 		this.ids.add(id);
 	}
 
-	public Location(List<String> ids){
+	public Location(List<String> ids, int line, int col){
+		super(line,col);
 		this.ids = ids;
 	}
 
-	public Location(List<String> ids, Expression expr){
+	public Location(List<String> ids, Expression expr, int line, int col){
+		super(line,col);
 		this.ids  = ids;
 		this.expr = expr;
 	}
@@ -33,4 +36,5 @@ public abstract class Location extends Expression {
 	public String toString(){
 		return ids.toString();
 	}
+
 }

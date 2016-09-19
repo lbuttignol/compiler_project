@@ -8,7 +8,8 @@ public abstract class UnaryOpExpr extends Expression {
 	protected Expression operand;
 
 	
-	public UnaryOpExpr(UnaryOpType operator, Expression operand ){
+	public UnaryOpExpr(UnaryOpType operator, Expression operand , int line, int col){
+		super(line,col);
 		this.operator = operator;
 		this.operand  = operand;
 	}

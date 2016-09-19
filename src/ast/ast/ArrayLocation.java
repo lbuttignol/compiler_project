@@ -11,14 +11,14 @@ public class ArrayLocation extends Location {
 	private int blockId;
 	private Expression expr;
 
-	public ArrayLocation(List<String> ids, Expression expr) {
-		super(ids);
+	public ArrayLocation(List<String> ids, Expression expr, int line, int col){
+		super(ids,line,col);
 		this.expr    = expr;
 		this.blockId = -1;
 	}
 	
-	public ArrayLocation(List<String> i){
-		super(i);
+	public ArrayLocation(List<String> i, int line, int col){
+		super(i,line,col);
 	}
 
 /*	public int getBlockId() {

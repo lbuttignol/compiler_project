@@ -6,13 +6,14 @@ public class IfThenStmt extends Statement {
 	private Expression condition;
 	private Statement ifBlock;
 
-	public IfThenStmt(Expression cond, Statement ifBl) {
+	public IfThenStmt(Expression cond, Statement ifBl,int line, int col){
+		super(line,col);
 		this.condition = cond;
 		this.ifBlock = ifBl;
 	}
 
 	public Expression getCondition() {
-		return condition;
+		return this.condition;
 	}
 
 	public void setCondition(Expression condition) {

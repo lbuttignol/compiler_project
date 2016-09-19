@@ -5,8 +5,8 @@ import ir.ASTVisitor;
 
 public class RelationalBinOp extends BinOpExpr {
 
-	public RelationalBinOp(Expression l, BinOpType op, Expression r){
-		super(l,op,r);
+	public RelationalBinOp(Expression l, BinOpType op, Expression r, int line, int col){
+		super(l,op,r,line,col);
 	}
 
 	@Override

@@ -65,7 +65,13 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(VarLocation loc){
 	}
 
+	@Override
+	public void visit(IdDecl loc){
+	}
 
+	@Override
+	public void visit(FieldDecl loc){
+	}
 
 	@Override
 	public void visit(AST ast){

@@ -3,7 +3,8 @@ package ir.ast;
 public class MethodCallStmt extends Statement{
 	MethodCall methodC;
 
-	public MethodCallStmt(MethodCall mc){
+	public MethodCallStmt(MethodCall mc, int line, int col){
+		super(line,col);
 		this.methodC = mc;
 	}
 

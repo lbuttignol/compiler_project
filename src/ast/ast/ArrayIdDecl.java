@@ -4,9 +4,9 @@ import java.util.List;
 public class ArrayIdDecl extends IdDecl {
 
 	private Integer number;
-	
-	public ArrayIdDecl (String name,Integer number){
-		super(name);
+
+	public ArrayIdDecl (String name,int number, int line, int col){
+		super(name,line,col);
 		this.number = number;
 	}
 

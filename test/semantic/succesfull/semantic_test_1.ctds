@@ -1,0 +1,30 @@
+class Martin{
+	integer i [3];
+	float f,kl,kl;
+
+	intdasger method(integer x,float x){
+		g= true;
+	}
+
+	integer method1(integer y) extern;
+
+	
+
+	integer method3(integer z){
+		integer c;
+		integer d[4];
+		integer xmf,fd,a;
+
+		x=4;
+		callMethod();
+		callMethodWithParameters(param1,param2);
+		if ((1==1)&&(2<3)){
+			return 2;
+		}
+
+		while(1==1){
+			nada=1;
+		}
+	}
+
+}

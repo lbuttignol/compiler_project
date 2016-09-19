@@ -4,8 +4,8 @@ import ir.ASTVisitor;
 
 public class ContinueStmt extends Statement {
 
-	public ContinueStmt(){
-
+	public ContinueStmt(int line, int col){
+		super(line,col);
 	}
 	
 	public String toString() {

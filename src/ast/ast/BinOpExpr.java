@@ -9,7 +9,8 @@ public abstract class BinOpExpr  extends Expression {
 	protected Expression lOperand; //left expression
 	protected Expression rOperand; //right expression
 	
-	public BinOpExpr(Expression l, BinOpType op, Expression r){
+	public BinOpExpr(Expression l, BinOpType op, Expression r, int line, int col){
+		super(line,col);
 		this.operator = op;
 		this.lOperand = l;
 		this.rOperand = r;

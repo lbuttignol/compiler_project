@@ -9,10 +9,11 @@ public class Block extends Statement {
 	private List<Statement> statements;
 	private int blockId;
 	
-	public Block(int bId) {
+	public Block(int bId, int line, int col){
+		super(line,col);
+		blockId = bId;
 		variables = new LinkedList<FieldDecl>();
 		statements = new LinkedList<Statement>();
-		blockId = bId;
 	}
 	
 	/*
@@ -27,7 +28,8 @@ public class Block extends Statement {
 	}
 	*/
 	
-	public Block(int bId, List<FieldDecl> v, List<Statement> s){
+	public Block(int bId, List<FieldDecl> v, List<Statement> s, int line, int col){
+		super(line,col);
 		variables = v;
 		statements = s;
 		blockId = bId;

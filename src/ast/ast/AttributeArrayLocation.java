@@ -8,8 +8,8 @@ public class AttributeArrayLocation extends Location {
 	private int blockId;
 	private Expression expr;
 	
-	public AttributeArrayLocation(List<String>ids, Expression expr) {
-		super(ids);
+	public AttributeArrayLocation(List<String>ids, Expression expr, int line, int col){
+		super(ids,line,col);
 		this.expr    = expr;
 		this.blockId = -1;
 	}
