@@ -1,22 +1,10 @@
 package ir.semcheck;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ir.ASTVisitor;
 import ir.ast.*;
-import ir.error.Error; // define class error
 
-
-// type checker, concrete visitor 
-public class TypeEvaluationVisitor implements ASTVisitor {
+public class BuilderVisitor implements ASTVisitor {
 	
-	private List<Error> errors;
-
-	public TypeEvaluationVisitor(){
-	}
-
-	// visit statements
 	@Override	
 	public void visit(ArithmeticBinOp stmt){}
 	
@@ -122,18 +110,4 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(WhileStmt stmt){}
 	
-
-	
-
-	private void addError(AST a, String desc) {
-		this.errors.add(new Error(a.getLineNumber(), a.getColumnNumber(), desc));
-	}
-
-	public List<Error> getErrors() {
-		return this.errors;
-	}
-
-	public void setErrors(List<Error> errors) {
-		this.errors = errors;
-	}
 }

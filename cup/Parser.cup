@@ -134,7 +134,7 @@ type					::= INT_TYPE 																{:RESULT = "INT";:}
 						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
 						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
 						| VOID_TYPE 																{:RESULT = "VOID";:}
-						| ID:id 																		{:RESULT = id;:}
+						| ID:id 																	{:RESULT = id;:}
 						;
 
 statement_list			::= statement_list:stmtList statement:stmt									{:stmtList.add(stmt);RESULT = stmtList;:}
