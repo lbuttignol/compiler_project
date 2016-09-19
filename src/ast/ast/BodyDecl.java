@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 public class BodyDecl extends AST{
 	private Boolean isExtern;
@@ -39,4 +39,8 @@ public class BodyDecl extends AST{
 		this.block = block;
 	}
 	
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
+	}
 }

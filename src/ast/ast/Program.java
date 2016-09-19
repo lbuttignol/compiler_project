@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 
 public class Program extends AST{
@@ -22,7 +22,8 @@ public class Program extends AST{
 		return "";
 	}
 
-	
-
-
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
+	}
 }

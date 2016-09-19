@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 public class MethodCallStmt extends Statement{
 	MethodCall methodC;
 
@@ -18,5 +18,10 @@ public class MethodCallStmt extends Statement{
 
 	public String toString(){
 		return this.methodC.toString();
+	}
+
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

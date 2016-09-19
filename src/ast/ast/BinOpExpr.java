@@ -49,4 +49,5 @@ public abstract class BinOpExpr  extends Expression {
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
+
 }

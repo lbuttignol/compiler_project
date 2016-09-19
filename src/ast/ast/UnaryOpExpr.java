@@ -37,8 +37,9 @@ public abstract class UnaryOpExpr extends Expression {
 		return operand + " " + operator ;
 	}
 
-	@Override
+/*	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
+*/
 }

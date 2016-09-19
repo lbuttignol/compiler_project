@@ -1,4 +1,4 @@
-		package ir.ast;
+package ir.ast;
 
 import ir.ASTVisitor;
 import java.util.List;

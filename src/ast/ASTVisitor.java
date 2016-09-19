@@ -14,7 +14,7 @@ public interface ASTVisitor {
 	public void visit(AttributeLocation stmt);
 	public void visit(Block stmt); 		//VER
 	public void visit(BodyDecl stmt);
-	public void visit(BoolenLiteral lit);
+	public void visit(BooleanLiteral lit);
 	public void visit(BreakStmt stmt);
 	public void visit(ClassDecl stmt);
 	public void visit(ContinueStmt stmt);

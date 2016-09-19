@@ -15,9 +15,10 @@ public abstract class Expression extends AST{
 	public void setType(String t) {
 		this.type = t;
 	}
-
+/*
 	@Override
 	public String toString(){
 		return this.id;
 	}
+*/
 }

@@ -1,7 +1,7 @@
 package ir.ast;
 import java.util.List;
 import java.util.LinkedList;
-
+import ir.ASTVisitor;
 public abstract class Location extends Expression {
 	protected List<String> ids;
 

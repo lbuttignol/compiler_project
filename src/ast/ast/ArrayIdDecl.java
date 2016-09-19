@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 public class ArrayIdDecl extends IdDecl {
 
@@ -23,11 +23,11 @@ public class ArrayIdDecl extends IdDecl {
 		return this.name+"-"+String.valueOf(number);
 	}
 
-	/*
+	
 	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
-	*/
+	
 }
 

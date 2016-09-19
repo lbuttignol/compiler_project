@@ -5,6 +5,7 @@ import ir.ast.*;
 
 public class BuilderVisitor implements ASTVisitor {
 	
+	public BuilderVisitor(){}
 	@Override	
 	public void visit(ArithmeticBinOp stmt){}
 	
@@ -33,7 +34,7 @@ public class BuilderVisitor implements ASTVisitor {
 	public void visit(BodyDecl stmt){}
 	
 	@Override
-	public void visit(BoolenLiteral lit){}
+	public void visit(BooleanLiteral lit){}
 	
 	@Override
 	public void visit(BreakStmt stmt){}

@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,5 +59,10 @@ public class MethodDecl extends AST{
 
 	public void setBody(BodyDecl b){
 		this.body = b;
+	}
+
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

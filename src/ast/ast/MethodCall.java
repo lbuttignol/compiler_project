@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -42,5 +42,9 @@ public class MethodCall extends Expression{
 		return this.ids.toString() +"-"+ this.params.toString();
 	}
 
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
+	}
 
 }

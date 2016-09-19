@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 public class ClassDecl extends AST{
 	private String name;
@@ -35,5 +35,10 @@ public class ClassDecl extends AST{
 
 	public void setMethods(List<MethodDecl> meth){
 		this.methods = meth;
+	}
+
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

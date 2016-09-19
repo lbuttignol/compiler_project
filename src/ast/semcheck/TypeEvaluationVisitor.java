@@ -45,7 +45,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(BodyDecl stmt){}
 	
 	@Override
-	public void visit(BoolenLiteral lit){}
+	public void visit(BooleanLiteral lit){}
 	
 	@Override
 	public void visit(BreakStmt stmt){}

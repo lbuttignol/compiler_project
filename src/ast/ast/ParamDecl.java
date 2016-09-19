@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.List;
 public class ParamDecl extends AST{
 	private String type;
@@ -25,5 +25,10 @@ public class ParamDecl extends AST{
 
 	public void setName(String n){
 		this.name = n;
+	}
+
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }
