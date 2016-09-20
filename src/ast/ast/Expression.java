@@ -1,5 +1,5 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 public abstract class Expression extends AST{
 	protected Expression expr;
 	protected String type;
@@ -15,10 +15,10 @@ public abstract class Expression extends AST{
 	public void setType(String t) {
 		this.type = t;
 	}
-/*
+
 	@Override
-	public String toString(){
-		return this.id;
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
-*/
+
 }

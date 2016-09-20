@@ -6,6 +6,10 @@ import ir.ast.*;
 public class BuilderVisitor implements ASTVisitor {
 	
 	public BuilderVisitor(){}
+	
+	@Override
+	public void visit(AST stmt){}
+
 	@Override	
 	public void visit(ArithmeticBinOp stmt){}
 	

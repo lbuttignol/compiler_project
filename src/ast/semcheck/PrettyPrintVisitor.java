@@ -14,6 +14,9 @@ public class PrettyPrintVisitor implements ASTVisitor {
 	public PrettyPrintVisitor(){
 	}
 	
+	@Override
+	public void visit(AST stmt){}
+	
 	@Override	
 	public void visit(ArithmeticBinOp stmt){}
 	

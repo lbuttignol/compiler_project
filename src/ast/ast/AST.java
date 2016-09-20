@@ -27,9 +27,9 @@ public abstract class AST {
 		colNumber = cn;
 	}
 	
-/*
+
 	public void accept(ASTVisitor v){
 		v.visit(this);
 	}
-*/
+
 }

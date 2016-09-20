@@ -37,4 +37,10 @@ public abstract class Location extends Expression {
 		return ids.toString();
 	}
 
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
+	}
+
+
 }

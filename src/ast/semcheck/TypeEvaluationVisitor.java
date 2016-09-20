@@ -17,6 +17,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	}
 
 	// visit statements
+	
+	@Override
+	public void visit(AST stmt){}
+
 	@Override	
 	public void visit(ArithmeticBinOp stmt){}
 	

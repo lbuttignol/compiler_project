@@ -5,6 +5,8 @@ import ir.ast.*;
 // Abstract visitor
 public interface ASTVisitor {
 // visit statements
+
+	public void visit(AST stmt);
 	public void visit(ArithmeticBinOp stmt);
 	public void visit(ArithmeticUnaryOp stmt);
 	public void visit(ArrayIdDecl stmt);
