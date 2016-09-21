@@ -4,8 +4,12 @@ import ir.ASTVisitor;
 import ir.ast.*;
 
 public class BuilderVisitor implements ASTVisitor {
+
+	private SymbolTable stack;
 	
-	public BuilderVisitor(){}
+	public BuilderVisitor(){
+		this.stack = new SymbolTable();
+	}
 	
 	@Override
 	public void visit(AST stmt){}
@@ -92,7 +96,10 @@ public class BuilderVisitor implements ASTVisitor {
 	public void visit(ParamDecl stmt){}
 	
 	@Override
-	public void visit(Program stmt){}
+	public void visit(Program prog){
+		List<ClassDecl> classDeclList = prog.getClassDeclare();
+		
+	}
 	
 	@Override
 	public void visit(RelationalBinOp stmt){}
