@@ -1,0 +1,19 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+	bool booleanvalue;
+
+	integer method(integer x,float y){
+		x = x + 25;
+		return x;
+	} 
+
+	bool method2(bool x){
+		return true || false || x;
+	}
+
+	float method3(integer val){
+		return 100.0;
+	}
+
+}

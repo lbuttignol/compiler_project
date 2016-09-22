@@ -1,0 +1,16 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+
+	integer method(integer x,float y){
+		x = x + 25;
+		return x;
+	} 
+
+	integer method3(integer z){
+		bool f;
+		x=4;
+		// x was no declarated on this block
+		return 12;
+	}
+}

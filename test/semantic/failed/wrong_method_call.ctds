@@ -1,0 +1,20 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+
+	integer method(integer x,float y){
+		return 3;
+	} 
+
+	integer method3(integer z){
+		integer c;
+		integer d[4];
+		integer xmf,fd,a;
+		// wrong method call! missing params
+		callMethod();
+		if ((1==1)&&(2<3)){
+			return 2;
+		}
+	}
+
+}

@@ -1,0 +1,24 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+	
+	integer method(integer x,float y){
+		return 3;
+	} 
+
+	bool esPar(integer val){
+		return val % 2 ==0;
+	}
+
+	integer method3(integer z){
+		integer c = 4;
+		float xmf,fd,a;
+		a = 25.6
+		callMethod(c,a);
+		if (esPar(z)){
+			return 2;
+		}else{
+			return 32;
+		}
+	}
+}

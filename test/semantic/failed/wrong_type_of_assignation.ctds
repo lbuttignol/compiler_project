@@ -1,0 +1,17 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+
+	integer method(integer x,float y){
+	// wrong type of assignation
+		x = true;
+		return 0;
+	} 
+
+	integer method3(integer z){
+		integer c;
+		integer d[4];
+		integer xmf,fd,a;
+	}
+
+}

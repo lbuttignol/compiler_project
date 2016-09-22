@@ -1,0 +1,9 @@
+class Martin{
+	integer i [3];
+	//duplicated name of variable kl 
+	float f,kl,kl; 
+
+	integer method(integer x,float y){
+		g= true;
+	}
+}
