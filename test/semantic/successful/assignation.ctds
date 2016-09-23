@@ -14,7 +14,7 @@ class Test{
 	}
 }
 
-class main{
+class Main{
 	void main(){
 		return;
 	}

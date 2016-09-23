@@ -1,4 +1,4 @@
-class main{
+class Main{
 	
 	integer x,y,z;
 	integer method(){
