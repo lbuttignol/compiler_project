@@ -25,5 +25,9 @@ class main{
 		return z;
 	}
 
-	
+	void main(){
+		return;
+	}
 }
+
+	

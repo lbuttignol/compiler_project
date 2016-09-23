@@ -19,5 +19,8 @@ class main{
 		return y;
 	}
 
+	void main(){
+		return;
+	}
 	
 }

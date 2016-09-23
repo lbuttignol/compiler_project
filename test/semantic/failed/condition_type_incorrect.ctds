@@ -23,3 +23,9 @@ class Martin{
 		}
 	}
 }
+
+class main{
+	void main(){
+		return;
+	}
+}

@@ -7,3 +7,9 @@ class Martin{
 		g= true;
 	}
 }
+
+class main{
+	void main(){
+		return;
+	}
+}

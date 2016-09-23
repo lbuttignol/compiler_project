@@ -13,3 +13,9 @@ class Test{
 		return a;
 	}
 }
+
+class main{
+	void main(){
+		return;
+	}
+}

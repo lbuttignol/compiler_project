@@ -14,3 +14,9 @@ class Martin{
 		return 12;
 	}
 }
+
+class main{
+	void main(){
+		return;
+	}
+}

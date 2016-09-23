@@ -14,3 +14,9 @@ class Martin{
 		integer xmf,fd,a;
 	}
 }
+
+class mian{
+	void main(){
+		return;
+	}
+}

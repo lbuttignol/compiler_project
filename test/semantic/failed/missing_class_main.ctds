@@ -1,0 +1,36 @@
+class Person{
+	integer years;
+
+	void setYears(integer y){
+		years = y;
+	}
+
+
+	integer getYears(){
+		return years;
+	}
+
+
+}
+
+class Mom{
+	integer number_childs;
+	integer years;
+	integer childs[50];
+	void setYears(integer y){
+		years = y;
+	}
+
+
+	integer getYears(){
+		return years;
+	}
+
+	void setChilds(integer c){
+		number_childs = c;
+	}
+
+	integer getChilds(){
+		return number_childs;
+	}
+}
