@@ -1,0 +1,16 @@
+class Person{
+	integer years;
+
+	void setYears(integer y){
+		years = y;
+	}
+
+	integer getYears(){
+		return years;
+	}
+
+}
+
+class Main{
+	void main(){}
+}

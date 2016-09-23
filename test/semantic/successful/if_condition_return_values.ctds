@@ -11,11 +11,13 @@ class Martin{
 	}
 
 	integer method3(integer z){
-		integer c = 4;
+		integer c;
 		float xmf,fd,a;
-		a = 25.6
-		callMethod(c,a);
-		if (esPar(z)){
+		bool val;
+		a = 25.6;
+		// can't call this method
+		//method(c,a);
+		if(val){
 			return 2;
 		}else{
 			return 32;

@@ -1,0 +1,6 @@
+class Main{
+	
+	integer x[true]; //syntax error 
+	integer x[65];
+	void main(){return;}
+}
