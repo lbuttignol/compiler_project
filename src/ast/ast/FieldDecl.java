@@ -4,7 +4,7 @@ import ir.ASTVisitor;
 import java.util.List;
 
 public class FieldDecl extends AST{
-	private String type;
+	protected String type;
 	private List<IdDecl> names;
 
 	public FieldDecl(String type, List<IdDecl> names, int line, int col){
@@ -21,11 +21,11 @@ public class FieldDecl extends AST{
 		this.type = t;
 	} 
 
-	public List<IdDecl> getName(){
+	public List<IdDecl> getNames(){
 		return this.names;
 	}
 
-	public void setName(List<IdDecl> n){
+	public void setNames(List<IdDecl> n){
 		this.names = n;
 	}
 

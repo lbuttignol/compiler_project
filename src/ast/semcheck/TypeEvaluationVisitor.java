@@ -62,6 +62,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(EqBinOp stmt){}
+
+	@Override
+	public void visit(Expression stmt){}
 	
 	@Override
 	public void visit(FieldDecl stmt){}

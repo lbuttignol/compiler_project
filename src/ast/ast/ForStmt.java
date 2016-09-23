@@ -16,6 +16,13 @@ public class ForStmt extends Statement {
 		this.body = b;
 	}
 
+	public String getCounterName(){
+		return this.counterName;
+	}
+
+	public void setCounterName(String name){
+		this.counterName = name;
+	}
 	public void setInit(Expression i){
 		this.initValue = i;
 	}

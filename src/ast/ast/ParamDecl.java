@@ -1,14 +1,12 @@
 package ir.ast;
 import ir.ASTVisitor;
 import java.util.List;
-public class ParamDecl extends AST{
+public class ParamDecl extends Declaration{
 	private String type;
-	private String name;
 
 	public ParamDecl(String type, String name, int line, int col){
-		super(line,col);
+		super(line,col,name);
 		this.type = type;
-		this.name = name;
 	}
 
 	public String getType(){
@@ -18,14 +16,6 @@ public class ParamDecl extends AST{
 	public void setType(String t){
 		this.type = t;
 	} 
-
-	public String getName(){
-		return this.name;
-	}
-
-	public void setName(String n){
-		this.name = n;
-	}
 
 	@Override
 	public void accept(ASTVisitor v) {

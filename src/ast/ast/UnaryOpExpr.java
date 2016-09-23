@@ -27,7 +27,7 @@ public abstract class UnaryOpExpr extends Expression {
 		return operand;
 	}
 
-	public void setLeftOperand(Expression operand) {
+	public void setOperand(Expression operand) {
 		this.operand = operand;
 	}
 

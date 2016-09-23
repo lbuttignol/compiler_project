@@ -3,17 +3,15 @@ import ir.ASTVisitor;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MethodDecl extends AST{
+public class MethodDecl extends Declaration{
 	private String type;
-	private String name;
 	private List<ParamDecl> params;
 	private BodyDecl body;
 
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
 					   BodyDecl body, int line, int col){
-		super(line,col);
+		super(line,col,name);
 		this.type      = type;
-		this.name      = name;
 		this.params    = params;
 		this.body      = body;
 
@@ -21,20 +19,11 @@ public class MethodDecl extends AST{
 
 	public MethodDecl( String type,String name, 
 					   BodyDecl body, int line, int col){
-		super(line,col);
+		super(line,col,name);
 		this.type      = type;
-		this.name      = name;
 		this.params    =  new LinkedList<ParamDecl>();
 		this.body      = body;
 
-	}
-
-	public String getName(){
-		return this.name;
-	}
-
-	public void setName(String n){
-		this.name = n;
 	}
 
 	public String getReturnType(){

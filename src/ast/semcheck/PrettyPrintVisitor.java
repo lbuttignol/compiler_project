@@ -79,13 +79,16 @@ public class PrettyPrintVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(EqBinOp stmt){}
+
+	@Override
+	public void visit(Expression stmt){}
 	
 	@Override
 	public void visit(FieldDecl loc){
 		System.out.println(" Type ");
 		System.out.println(loc.getType());
 		System.out.println(" Declared identifiers: ");
-		Iterator<IdDecl> ideIt = loc.getName().listIterator();
+		Iterator<IdDecl> ideIt = loc.getNames().listIterator();
 		while(ideIt.hasNext()){
 			ideIt.next().accept(this);
 		}

@@ -1,25 +1,16 @@
 package ir.ast;
 import ir.ASTVisitor;
 import java.util.List;
-public class ClassDecl extends AST{
-	private String name;
+public class ClassDecl extends Declaration{
 	private List<FieldDecl> attributes;
 	private List<MethodDecl> methods;
 
 	public ClassDecl (String name,List<FieldDecl> attributes, List<MethodDecl> methods, int line, int col){
-		super(line,col);
-		this.name       = name;
+		super(line,col,name);
 		this.attributes = attributes;
 		this.methods    = methods;
 	}
 
-	public String getName(){
-		return this.name;
-	}
-
-	public void setName(String n){
-		this.name = n;
-	}
 
 	public List<FieldDecl> getAttributes(){
 		return this.attributes;

@@ -21,6 +21,7 @@ public interface ASTVisitor {
 	public void visit(ClassDecl stmt);
 	public void visit(ContinueStmt stmt);
 	public void visit(EqBinOp stmt);
+	public void visit(Expression stmt);
 	public void visit(FieldDecl stmt);
 	public void visit(FloatLiteral lit);
 	public void visit(ForStmt stmt);
