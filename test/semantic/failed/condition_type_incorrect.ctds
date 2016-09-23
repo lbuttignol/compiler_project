@@ -11,10 +11,10 @@ class Martin{
 	}
 
 	integer method3(integer z){
-		integer c = 4;
+		integer c;
 		float xmf,fd,a;
-		a = 25.6
-		callMethod(c,a);
+		a = 25.6;
+		method(c,a);
 		// this condition should be a boolean value
 		if (20){
 			return 2;
@@ -24,7 +24,7 @@ class Martin{
 	}
 }
 
-class main{
+class Main{
 	void main(){
 		return;
 	}

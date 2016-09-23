@@ -18,7 +18,7 @@ class Martin{
 
 }
 
-class main{
+class Main{
 	void main(){
 		return;
 	}

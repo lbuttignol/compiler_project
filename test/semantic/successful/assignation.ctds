@@ -3,7 +3,7 @@ class Test{
 	float b;
 	bool c;
 
-	bool test1{
+	bool test1(){
 		a = 5;
 		b = 5.5;
 		c = true;
@@ -14,7 +14,7 @@ class Test{
 	}
 }
 
-class main{
+class Main{
 	void main(){
 		return;
 	}

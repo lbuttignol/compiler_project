@@ -12,9 +12,9 @@ class Martin{
 
 	// there is a branch without a return statement
 	integer method3(integer z){
-		integer c = 4;
+		integer c;
 		float xmf,fd,a;
-		a = 25.6
+		a = 25.6;
 		callMethod(c,a);
 		if (esPar(z)){
 			return 2;
@@ -23,7 +23,7 @@ class Martin{
 
 }
 
-class main{
+class Main{
 	void main(){
 		return;
 	}

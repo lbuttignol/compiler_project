@@ -26,7 +26,7 @@ class main{
 		return y;
 	}
 
-	void main(){
+	void Main(){
 		return;
 	}
 	

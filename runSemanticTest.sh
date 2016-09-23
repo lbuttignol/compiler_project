@@ -22,7 +22,7 @@ comp="dist/Compiler.jar" #nombre del jar..
 
 
 echo "//////////////////////////// SUCCESSFUL TESTS //////////////////////////////////////" 
-files=`ls test/successful/*.ctds`
+files=`ls test/semantic/successful/*.ctds`
 
 
 for file in $files ; do 
@@ -35,7 +35,7 @@ done
 
 echo "////////////////////////////// FAILED TESTS ////////////////////////////////////////" 
 
-files=`ls test/failed/*.ctds`
+files=`ls test/semantic/failed/*.ctds`
 
 for file in $files ; do 
         echo "---------------- Test $file ... -------------------" 

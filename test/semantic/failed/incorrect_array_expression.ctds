@@ -1,0 +1,5 @@
+class Main{
+	
+	integer x[0];
+	void main(){return;}
+}
