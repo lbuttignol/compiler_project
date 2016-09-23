@@ -4,7 +4,7 @@ import ir.ASTVisitor;
 import java.util.List;
 
 public class IdDecl extends Declaration {
-
+	String type;
 	
 	public IdDecl( int line, int col){
 		super(line,col,null);
@@ -12,6 +12,14 @@ public class IdDecl extends Declaration {
 
 	public IdDecl (String name, int line, int col){
 		super(line,col,name);
+	}
+
+	public String getType(){
+		return this.type;
+	}
+
+	public void setType(String type){
+		this.type = type;
 	}
 
 	@Override

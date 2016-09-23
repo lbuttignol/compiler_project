@@ -12,7 +12,7 @@ public class FloatLiteral extends Literal {
 	 */
 
 	public FloatLiteral(Float val, int line, int col){
-		super(line,col);
+		super(line,col,"FLOAT");
 		//this.rawValue = val; // Will convert to float value in semantic check
 		this.value = val;
 	}

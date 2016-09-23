@@ -21,7 +21,7 @@ public class VarLocation extends Location {
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return ids.toString();

@@ -6,7 +6,7 @@ public class ParamDecl extends Declaration{
 
 	public ParamDecl(String type, String name, int line, int col){
 		super(line,col,name);
-		this.type = type;
+		this.type = type.toUpperCase();
 	}
 
 	public String getType(){

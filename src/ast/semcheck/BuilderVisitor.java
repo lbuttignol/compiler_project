@@ -227,68 +227,6 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	@Override
 	public void visit(Expression expr){
-	/*	
-		if (expr instanceof VarLocation){
-			VarLocation loc = (VarLocation)expr;
-			loc.accept(this);
-		}else{
-			if (expr instanceof AttributeLocation){
-				AttributeLocation loc = (AttributeLocation) expr;
-				loc.accept(this);
-			}else{
-				if (expr instanceof ArrayLocation){
-					ArrayLocation loc = (ArrayLocation) expr;
-					loc.accept(this);
-				}else{
-					if (expr instanceof AttributeArrayLocation){
-						AttributeArrayLocation loc = (AttributeArrayLocation) expr;
-						loc.accept(this);
-					}else{
-						if (expr instanceof MethodCall){
-							MethodCall methodCall = (MethodCall) expr;
-							methodCall.accept(this);
-						}else{
-							if (expr instanceof LogicalBinOp){
-								LogicalBinOp logBinOp = (LogicalBinOp) expr;
-								logBinOp.accept(this);
-							}else{
-								if (expr instanceof ArithmeticBinOp){
-									ArithmeticBinOp arithBinOp = (ArithmeticBinOp) expr;
-									arithBinOp.accept(this);
-								}else{
-									if (expr instanceof RelationalBinOp){
-										RelationalBinOp relBinOp = (RelationalBinOp) expr;
-										relBinOp.accept(this);
-									}else{
-										if (expr instanceof EqBinOp){
-											EqBinOp eqBinOp = (EqBinOp) expr;
-											eqBinOp.accept(this);
-										}else{
-											if (expr instanceof ArithmeticUnaryOp){
-												ArithmeticUnaryOp arithUnaryOp = (ArithmeticUnaryOp) expr;
-												arithUnaryOp.accept(this);
-											}else{
-												if (expr instanceof LogicalUnaryOp){
-													LogicalUnaryOp logicalUnaryOp = (LogicalUnaryOp) expr;
-													logicalUnaryOp.accept(this);
-												}else{
-													expr.accept(this);
-												}
-											}
-										}
-									}
-								}
-							}
-						}	
-					}
-				
-				}	
-			}
-		}	
-		
-
-		
-	*/
 		
 	}
 	
@@ -457,51 +395,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(Statement stmt){
-	/*	if (stmt instanceof AssignStmt ){ 
-			AssignStmt assignStmt = (AssignStmt) stmt;
-			assignStmt.accept(this);
-		}
-		if (stmt instanceof MethodCallStmt){
-			MethodCallStmt methodCallStmt = (MethodCallStmt) stmt;
-			methodCallStmt.accept(this);
-		}
-		if (stmt instanceof IfThenStmt){
-			IfThenStmt ifThenStmt = (IfThenStmt) stmt;
-			ifThenStmt.accept(this);
-		}
-		if (stmt instanceof IfThenElseStmt){
-			IfThenElseStmt ifThenElseStmt = (IfThenElseStmt) stmt;
-			ifThenElseStmt.accept(this);
-		}
-		if (stmt instanceof ForStmt){
-			ForStmt forStmt = (ForStmt) stmt;
-			forStmt.accept(this);
-		}
-		if (stmt instanceof WhileStmt){
-			WhileStmt whileStmt = (WhileStmt) stmt;
-			whileStmt.accept(this);
-		}
-		if (stmt instanceof ReturnStmt){
-			ReturnStmt returnStmt = (ReturnStmt) stmt;
-			returnStmt.accept(this);
-		}
-		if (stmt instanceof ReturnVoidStmt){
-			ReturnVoidStmt returnVoidStmt = (ReturnVoidStmt) stmt;
-			stmt.accept(this);
-		}
-		if (stmt instanceof BreakStmt){
-			
-		}
-		if (stmt instanceof ContinueStmt){
 
-		}
-		if (stmt instanceof Skip){
-
-		}
-		if (stmt instanceof Block){
-			Block block = (Block) stmt;
-			block.accept(this);
-		}*/
 	}
 
 	public void checkStatement(Statement stmt){

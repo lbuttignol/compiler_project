@@ -34,6 +34,19 @@ public class SymbolTable {
 		}
 	}
 
+	public String getCurrentType(String id){
+		List<SymbolInfo> symList;
+		for(int i=top; i>=0; i--){
+			symList = this.symbolTable.get(i);
+			for (SymbolInfo sym: symList){
+				if (sym.getName().equals(id)){
+					return sym.getType();
+				}
+			}
+		}
+		return null;
+	}
+
 
 	public void newLevel(){
 		List<SymbolInfo> SymbolInfoList = new LinkedList<SymbolInfo>();
@@ -65,6 +78,19 @@ public class SymbolTable {
 			}
 		}
 		return false;
+	}
+
+	public String getMethodType(){
+		List<SymbolInfo> symList;
+		for(int i=top; i>=0; i--){
+			symList = this.symbolTable.get(i);
+			for (SymbolInfo sym: symList){
+				if (sym.isMethod()){
+					return sym.getType();
+				}
+			}
+		}
+		return null;
 	}
 
 }

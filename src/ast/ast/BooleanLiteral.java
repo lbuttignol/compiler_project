@@ -13,7 +13,7 @@ public class BooleanLiteral extends Literal {
 	 * @param: String integer
 	 */
 	public BooleanLiteral(Boolean val, int line, int col){
-		super(line,col);
+		super(line,col,"BOOLEAN");
 		//this.rawValue = val; // Will convert to boolean value in semantic check
 		this.value = val;
 	}

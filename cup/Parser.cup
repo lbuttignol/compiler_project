@@ -81,10 +81,10 @@ class_decl_list        	::= class_decl_list:classDeclList class_decl:classDecl		
 
 						;
 
-class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: RESULT = new ClassDecl(id,fieldDeclL,methodDeclL,idxleft.getLine(),idxleft.getColumn()); :}
-						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL,idxleft.getLine(),idxleft.getColumn()); :} 
-						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
-						| CLASS_DECL ID:id LBRACE RBRACE                                							{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
+class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: Type.add(id);RESULT = new ClassDecl(id,fieldDeclL,methodDeclL,idxleft.getLine(),idxleft.getColumn()); :}
+						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: Type.add(id);RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL,idxleft.getLine(),idxleft.getColumn()); :} 
+						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: Type.add(id);RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
+						| CLASS_DECL ID:id LBRACE RBRACE                                							{: Type.add(id);RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
 						;
 
 field_decl_list    		::= field_decl_list:fieldDeclL field_decl:fieldDecl                          				{: fieldDeclL.add(fieldDecl);RESULT=fieldDeclL;:}
@@ -130,7 +130,7 @@ block					::= LBRACE field_decl_list:fieldDeclL  statement_list:stmtList RBRACE 
 						| LBRACE:val RBRACE 												   		{:RESULT = new Block(0,valxleft.getLine(),valxleft.getColumn());:}
 						;
 
-type					::= INT_TYPE 																{:RESULT = "INT";:}
+type					::= INT_TYPE 																{:RESULT = "INTEGER";:}
 						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
 						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
 						| VOID_TYPE 																{:RESULT = "VOID";:}
@@ -187,9 +187,9 @@ attribute_access		::= DOC ID:id 																	{:RESULT = id;:}
 						;
 
 location 				::= ID:id 																		{:RESULT = new VarLocation(id,idxleft.getLine(),idxleft.getColumn());:}
-						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(id); RESULT = new AttributeLocation(attributeAccessL,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(0,id); RESULT = new AttributeLocation(attributeAccessL,idxleft.getLine(),idxleft.getColumn());:}
 						| ID:id LBRACKET expr:expr RBRACKET								  				{:List<String> ids = new LinkedList<String>(); ids.add(id); RESULT = new ArrayLocation(ids,expr,idxleft.getLine(),idxleft.getColumn());:}
-						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(id);RESULT = new AttributeArrayLocation(attributeAccessL,expr,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(0,id);RESULT = new AttributeArrayLocation(attributeAccessL,expr,idxleft.getLine(),idxleft.getColumn());:}
 						;
 
 expr					::= location:loc																{:RESULT = loc;:}													

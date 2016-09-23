@@ -7,6 +7,8 @@ import ir.ast.*;
 public class Main {
 
 	public static void main(String args[]) throws Exception {
+	Type type = new Type();
+
 	ComplexSymbolFactory sf = new ComplexSymbolFactory();
 	Parser parser;
 	Symbol symbol;
@@ -20,8 +22,13 @@ public class Main {
 
 	BuilderVisitor builderVisitor = new BuilderVisitor();
 	program.accept(builderVisitor);
-    }
+    
+    System.out.println("**********************************************************");
 
+    TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
+    program.accept(typeEV);
+
+	}	
     public void syntax_error(Symbol sym){ 
 	// Mute legacy Error Printing
     }

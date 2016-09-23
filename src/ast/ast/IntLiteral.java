@@ -11,19 +11,19 @@ public class IntLiteral extends Literal {
 	 * @param: String integer
 	 */
 	public IntLiteral(String val, int line, int col){
-		super(line,col);
+		super(line,col,"INTEGER");
 		rawValue = val; // Will convert to int value in semantic check
-		//value = val;
+		value = Integer.valueOf(val);
 	}
 	public IntLiteral(Integer val,int line, int col){
-		super(line,col);
+		super(line,col,"INTEGER");
 		rawValue = val.toString();
-		value = val;
+		value = Integer.valueOf(val);
 	}
 
 	@Override
 	public String getType() {
-		return "INT";
+		return "INTEGER";
 	}
 
 	public String getStringValue() {
@@ -32,6 +32,7 @@ public class IntLiteral extends Literal {
 
 	public void setStringValue(String stringValue) {
 		this.rawValue = stringValue;
+		this.value = Integer.valueOf(stringValue);
 	}
 
 	public Integer getValue() {
@@ -40,6 +41,8 @@ public class IntLiteral extends Literal {
 
 	public void setValue(int value) {
 		this.value = value;
+		this.rawValue = String.valueOf(value);
+
 	}
 	
 	public String getRawValue() {

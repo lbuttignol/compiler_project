@@ -6,6 +6,11 @@ public abstract class Expression extends AST{
 	private String id = "a";
 	public Expression( int line, int col){
 		super(line,col);
+		type = "UNDEFINED";
+	}
+	public Expression( int line, int col, String type){
+		super(line,col);
+		this.type = type;
 	}
 	
 	public String getType() {

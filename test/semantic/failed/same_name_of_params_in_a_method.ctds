@@ -1,0 +1,23 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+
+	// Same name in params of method
+	integer method(integer x,float x){
+		f= true;
+	} 
+
+	integer method3(integer z){
+		integer c;
+		integer d[4];
+		integer xmf,fd,a;
+
+	}
+
+}
+
+class main{
+	void main(){
+		return;
+	}
+}

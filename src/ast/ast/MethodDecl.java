@@ -11,7 +11,7 @@ public class MethodDecl extends Declaration{
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
 					   BodyDecl body, int line, int col){
 		super(line,col,name);
-		this.type      = type;
+		this.type      = type.toUpperCase();
 		this.params    = params;
 		this.body      = body;
 
@@ -20,13 +20,13 @@ public class MethodDecl extends Declaration{
 	public MethodDecl( String type,String name, 
 					   BodyDecl body, int line, int col){
 		super(line,col,name);
-		this.type      = type;
+		this.type      = type.toUpperCase();
 		this.params    =  new LinkedList<ParamDecl>();
 		this.body      = body;
 
 	}
 
-	public String getReturnType(){
+	public String getType(){
 		return this.type;
 	}
 

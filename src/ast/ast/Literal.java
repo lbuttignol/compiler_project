@@ -2,8 +2,8 @@ package ir.ast;
 import ir.ASTVisitor;
 public abstract class Literal extends Expression {
 
-	public Literal( int line, int col){
-		super(line,col);
+	public Literal( int line, int col, String type){
+		super(line,col,type);
 	}
 	/*
 	 * @return: returns Type of Literal instance
