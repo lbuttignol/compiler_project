@@ -1,41 +1,32 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MethodDecl extends AST{
+public class MethodDecl extends Declaration{
 	private String type;
-	private String name;
 	private List<ParamDecl> params;
 	private BodyDecl body;
 
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
-					   BodyDecl body){
-		this.type      = type;
-		this.name      = name;
+					   BodyDecl body, int line, int col){
+		super(line,col,name);
+		this.type      = type.toUpperCase();
 		this.params    = params;
 		this.body      = body;
 
 	}
 
 	public MethodDecl( String type,String name, 
-					   BodyDecl body){
-		this.type      = type;
-		this.name      = name;
+					   BodyDecl body, int line, int col){
+		super(line,col,name);
+		this.type      = type.toUpperCase();
 		this.params    =  new LinkedList<ParamDecl>();
 		this.body      = body;
 
 	}
 
-	public String getName(){
-		return this.name;
-	}
-
-	public void setName(String n){
-		this.name = n;
-	}
-
-	public String getReturnType(){
+	public String getType(){
 		return this.type;
 	}
 
@@ -57,5 +48,10 @@ public class MethodDecl extends AST{
 
 	public void setBody(BodyDecl b){
 		this.body = b;
+	}
+
+	@Override
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
 }

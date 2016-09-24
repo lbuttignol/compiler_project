@@ -1,5 +1,7 @@
 /bin/
 /dist/
 /src/Compiler/Parser.java
+/src/Compiler/Parser.java~
 /src/Compiler/Scanner.java
+/src/Compiler/Scanner.java~
 /src/Compiler/sym.java

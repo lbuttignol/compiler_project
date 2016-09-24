@@ -6,7 +6,7 @@ import ir.ast.*;
 import java.util.*;
 
 /*	keywords	*/
-terminal BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, FOR, IF, RET, WHILE; 
+terminal Object BOOL_TYPE, FLOAT_TYPE, INT_TYPE, VOID_TYPE, BREAK, CLASS_DECL, CONT, ELSE, EXTERN, FOR, IF, RET, WHILE; 
 
 /*	assign operators	*/
 terminal ASSIGN, ASSIGNP, ASSIGNM;
@@ -24,14 +24,14 @@ terminal SMALLER, BIGGER, LTOE, GTOE;
 terminal AND, OR, NOT;
 
 /*		*/
-terminal  LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
+terminal Object LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal Integer INTNUMBER;
 terminal Float REALNUMBER;
 terminal Boolean BOOL_LITERAL;
 terminal String ID;
 
-non terminal  return_st;
 
+non terminal AbstractReturn return_st;
 non terminal Program program;
 non terminal ClassDecl class_decl;
 non terminal List<ClassDecl> class_decl_list;
@@ -71,36 +71,36 @@ precedence left ELSE;
 
 start with program;
 
-//Inicializar type al principio del programa
-program             	::= class_decl_list:classDeclList                                   		{: RESULT = new Program(classDeclList); :}
+
+
+program             	::= class_decl_list:classDeclList                                   		{: RESULT = new Program(classDeclList,classDeclListxleft.getLine(),classDeclListxleft.getColumn()); :}
 						;
 
 class_decl_list        	::= class_decl_list:classDeclList class_decl:classDecl		        		{: classDeclList.add(classDecl); RESULT = classDeclList; :}
-						| class_decl:classDecl                                             			{: List<ClassDecl> classDeclList=new LinkedList<ClassDecl>();classDeclList.add(classDecl)
-																                         			; RESULT=classDeclList;:}
+						| class_decl:classDecl                                             			{: List<ClassDecl> classDeclList=new LinkedList<ClassDecl>(); classDeclList.add(classDecl); RESULT=classDeclList;:}
 
 						;
 
-class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: RESULT = new ClassDecl(id,fieldDeclL,methodDeclL); :}
-						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL); :} 
-						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>());:}
-						| CLASS_DECL ID:id LBRACE RBRACE                                							{: RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>());:}
+class_decl          	::= CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL method_decl_list:methodDeclL RBRACE  {: Type.add(id);RESULT = new ClassDecl(id,fieldDeclL,methodDeclL,idxleft.getLine(),idxleft.getColumn()); :}
+						| CLASS_DECL ID:id LBRACE method_decl_list:methodDeclL RBRACE           					{: Type.add(id);RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),methodDeclL,idxleft.getLine(),idxleft.getColumn()); :} 
+						| CLASS_DECL ID:id LBRACE field_decl_list:fieldDeclL RBRACE            						{: Type.add(id);RESULT = new ClassDecl(id,fieldDeclL,new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
+						| CLASS_DECL ID:id LBRACE RBRACE                                							{: Type.add(id);RESULT = new ClassDecl(id,new LinkedList<FieldDecl>(),new LinkedList<MethodDecl>(),idxleft.getLine(),idxleft.getColumn());:}
 						;
 
 field_decl_list    		::= field_decl_list:fieldDeclL field_decl:fieldDecl                          				{: fieldDeclL.add(fieldDecl);RESULT=fieldDeclL;:}
-						|  field_decl:fieldDecl                                             					   	{: List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fieldDecl);
+						|  field_decl:fieldDecl                                             					  	{: List<FieldDecl> fieldDeclL = new LinkedList<FieldDecl>();fieldDeclL.add(fieldDecl);
 																                          							   RESULT = fieldDeclL;:}
 						;
 
-field_decl          	::= type:type id_name_list:idList SEMI 		                     			{: RESULT = new FieldDecl(type,idList);:}
+field_decl          	::= type:type id_name_list:idList SEMI 		                     			{: RESULT = new FieldDecl(type,idList,typexleft.getLine(),typexleft.getColumn());:}
 						;
 
 id_name_list			::= id_name_list:idList COMMA id_name:id                         			{: idList.add(id);RESULT=idList;:}  
-						| id_name:id							                        			{: List<IdDecl> names = new LinkedList<IdDecl>();names.add(id);RESULT=names;:}
+						| id_name:id1							                        			{: List<IdDecl> names = new LinkedList<IdDecl>();names.add(id1);RESULT=names;:}
 						;
- 
-id_name		      		::= ID:id LBRACKET INTNUMBER:number RBRACKET                       			{: RESULT = new ArrayIdDecl(id,number);:}
-						| ID:id 								                        			{: RESULT = new IdDecl(id);:}
+
+id_name		      		::= ID:id LBRACKET INTNUMBER:number RBRACKET                       			{: RESULT = new ArrayIdDecl(id,number,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id 								                        			{: RESULT = new IdDecl(id,idxleft.getLine(),idxleft.getColumn());:}
 						;
 
 method_decl_list		::= method_decl_list:metnodDeclList method_decl:methodDecl		   			{: metnodDeclList.add(methodDecl); RESULT = metnodDeclList;:}
@@ -108,8 +108,8 @@ method_decl_list		::= method_decl_list:metnodDeclList method_decl:methodDecl		  
 																							 		  RESULT = methodDeclList;:}
 						;
 
-method_decl         	::= type:type ID:id LPAREN RPAREN body:body                        			{: RESULT = new MethodDecl(type,id,body);:}
-						| type:type ID:id LPAREN params_decl_list:paramsDeclList RPAREN body:body   {: RESULT = new MethodDecl(type,id,paramsDeclList,body);:}
+method_decl         	::= type:type ID:id LPAREN RPAREN body:body                        			{: RESULT = new MethodDecl(type,id,body,idxleft.getLine(),idxleft.getColumn());:}
+						| type:type ID:id LPAREN params_decl_list:paramsDeclList RPAREN body:body   {: RESULT = new MethodDecl(type,id,paramsDeclList,body,idxleft.getLine(),idxleft.getColumn());:}
 						; 
 
 params_decl_list		::= params_decl_list:paramsDeclList COMMA params_decl:paramsDecl   			{:paramsDeclList.add(paramsDecl); RESULT = paramsDeclList;:}
@@ -117,52 +117,46 @@ params_decl_list		::= params_decl_list:paramsDeclList COMMA params_decl:paramsDe
 																									 params.add(paramsDecl); RESULT=params; :}
 						;
 
-params_decl 			::= type:type ID:id 														{:RESULT = new ParamDecl(type,id);:}
+params_decl 			::= type:type ID:id 														{:RESULT = new ParamDecl(type,id,idxleft.getLine(),idxleft.getColumn());:}
 						;
 
-body 					::= block:block 															{:RESULT = new BodyDecl(block);:}
-						| EXTERN SEMI 																{:RESULT = new BodyDecl(true);:}
+body 					::= block:block 															{:RESULT = new BodyDecl(block,blockxleft.getLine(),blockxleft.getColumn());:}
+						| EXTERN:id SEMI 															{:RESULT = new BodyDecl(true,idxleft.getLine(),idxleft.getColumn());:}
 						;
 
-block					::= LBRACE field_decl_list:fieldDeclL  statement_list:stmtList RBRACE   	{:RESULT = new Block(0,fieldDeclL,stmtList);:}
-						| LBRACE field_decl_list:fieldDeclL RBRACE 									{:RESULT = new Block(0,fieldDeclL,new LinkedList<Statement>());:}
-						| LBRACE statement_list:stmtList RBRACE 									{:RESULT = new Block(0,new LinkedList<FieldDecl>(),stmtList);:}
-						| LBRACE RBRACE 													   		{:RESULT = new Block(0);:}
+block					::= LBRACE field_decl_list:fieldDeclL  statement_list:stmtList RBRACE   	{:RESULT = new Block(0,fieldDeclL,stmtList,fieldDeclLxleft.getLine(),fieldDeclLxleft.getColumn());:}
+						| LBRACE field_decl_list:fieldDeclL RBRACE 									{:RESULT = new Block(0,fieldDeclL,new LinkedList<Statement>(),fieldDeclLxleft.getLine(),fieldDeclLxleft.getColumn());:}
+						| LBRACE statement_list:stmtList RBRACE 									{:RESULT = new Block(0,new LinkedList<FieldDecl>(),stmtList,stmtListxleft.getLine(),stmtListxleft.getColumn());:}
+						| LBRACE:val RBRACE 												   		{:RESULT = new Block(0,valxleft.getLine(),valxleft.getColumn());:}
 						;
 
-type					::= INT_TYPE 																{:RESULT = "INT";:}
+type					::= INT_TYPE 																{:RESULT = "INTEGER";:}
 						| FLOAT_TYPE 																{:RESULT = "FLOAT";:}
 						| BOOL_TYPE 																{:RESULT = "BOOLEAN";:}
-								| ID:id 															{://ver	
-																										try{
-																											Type.add(id);RESULT = id;}
-																										catch(Exception e){
-																									
-																										}
-																									:} 
- 						| VOID_TYPE 																{:RESULT = "VOID";:}
+						| VOID_TYPE 																{:RESULT = "VOID";:}
+						| ID:id 																	{:RESULT = id;:}
 						;
 
 statement_list			::= statement_list:stmtList statement:stmt									{:stmtList.add(stmt);RESULT = stmtList;:}
 						| statement:stmt															{:List<Statement> statement = new LinkedList<Statement>();statement.add(stmt);RESULT = statement;:}
 						;
 
-statement				::=  location:loc assign_op:assignOp expr:expr SEMI							{:RESULT = new AssignStmt(loc,assignOp,expr);:}
-						| method_call:methodCall SEMI												{:RESULT = new MethodCallStmt(methodCall);:}
-						| IF LPAREN expr:expr RPAREN statement:stmt 								{:RESULT = new IfThenStmt(expr,stmt);:}
-						| IF LPAREN expr:expr RPAREN statement:stmtIf ELSE statement:stmtElse       {:RESULT = new IfThenElseStmt(expr,stmtIf,stmtElse);:}
-						| FOR ID:id ASSIGN expr:exprFor COMMA expr:exprTo statement:stmt          	{:RESULT = new ForStmt(id,exprFor,exprTo,stmt);:}
-						| WHILE expr:e3 statement:s5												{:RESULT = new WhileStmt(e3,s5);:}
-						| return_st														
-						| BREAK SEMI																{:RESULT = new BreakStmt();:}
-						| CONT SEMI																	{:RESULT = new ContinueStmt();:}
-						| SEMI															
-					 	| block:block 																{:RESULT = new Block(0);:}
+statement				::=  location:loc assign_op:assignOp expr:expr SEMI							{:RESULT = new AssignStmt(loc,assignOp,expr,assignOpxleft.getLine(),assignOpxleft.getColumn());:}
+						| method_call:methodCall SEMI												{:RESULT = new MethodCallStmt(methodCall,methodCallxleft.getLine(),methodCallxleft.getColumn());:}
+						| IF:st LPAREN expr:expr RPAREN statement:stmt 								{:RESULT = new IfThenStmt(expr,stmt,stxleft.getLine(),stxleft.getColumn());:}
+						| IF:st LPAREN expr:expr RPAREN statement:stmtIf ELSE statement:stmtElse	{:RESULT = new IfThenElseStmt(expr,stmtIf,stmtElse,stxleft.getLine(),stxleft.getColumn());:}
+						| FOR:st ID:id ASSIGN expr:exprFor COMMA expr:exprTo statement:stmt      	{:RESULT = new ForStmt(id,exprFor,exprTo,stmt,stxleft.getLine(),stxleft.getColumn());:}
+						| WHILE:stmt expr:e3 statement:s5											{:RESULT = new WhileStmt(e3,s5,stmtxleft.getLine(),stmtxleft.getColumn());:}
+						| return_st:s																{:RESULT = s;:}
+						| BREAK:stmt SEMI															{:RESULT = new BreakStmt(stmtxleft.getLine(),stmtxleft.getColumn());:}
+						| CONT:stmt SEMI															{:RESULT = new ContinueStmt(stmtxleft.getLine(),stmtxleft.getColumn());:}
+						| SEMI:stmt																	{:RESULT = new Skip(stmtxleft.getLine(),stmtxleft.getColumn());:}
+					 	| block:block 																{:RESULT = new Block(0,blockxleft.getLine(),blockxleft.getColumn());:}
 					 	;
 
 
-return_st 				::= RET expr:expre SEMI														{:RESULT = new ReturnStmt(expre);:}
-						| RET SEMI 																	{:RESULT = new ReturnVoidStmt();:}
+return_st 				::= RET:rt expr:expre SEMI													{:RESULT = new ReturnStmt(expre,rtxleft.getLine(),rtxleft.getColumn());:}
+						| RET:rt SEMI 																{:RESULT = new ReturnVoidStmt(rtxleft.getLine(),rtxleft.getColumn());:}
 
 						;
 
@@ -173,10 +167,11 @@ assign_op  				::= ASSIGN 																	{:RESULT = AssignOpType.ASSIGN;:}
 
 
 
-method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params);:}
-						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params);:}
-						| ID:id LPAREN params:params RPAREN												{:List<String> ids = new LinkedList<String>();ids.add(id); RESULT = new MethodCall(ids,params);:}
-						| ID:id LPAREN  RPAREN 															{:List<String> ids = new LinkedList<String>();ids.add(id); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params);:}
+
+method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
+						| ID:id LPAREN params:params RPAREN												{:List<String> ids = new LinkedList<String>();ids.add(id); RESULT = new MethodCall(ids,params,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id LPAREN  RPAREN 															{:List<String> ids = new LinkedList<String>();ids.add(id); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params,idxleft.getLine(),idxleft.getColumn());:}
 						; 
 
 params					::= params:params COMMA expr:expr											    {:params.add(expr);RESULT=params;:}
@@ -187,38 +182,39 @@ attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1						
 						| attribute_access:aa2															{:List<String> ids = new LinkedList<String>();ids.add(aa2);RESULT = ids;:}
 						;
 
-attribute_access		::= DOC ID:id 																	{:RESULT = new String(id);:}
+
+attribute_access		::= DOC ID:id 																	{:RESULT = id;:}
 						;
 
-location 				::= ID:id 																		{:RESULT = new VarLocation(id);:}
-						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(id); RESULT = new AttributeLocation(attributeAccessL);:}
-						| ID:id LBRACKET expr:expr RBRACKET								  				{:List<String> ids = new LinkedList<String>(); ids.add(id); RESULT = new ArrayLocation(ids,expr);:}
-						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(id);RESULT = new AttributeArrayLocation(attributeAccessL,expr);:}
+location 				::= ID:id 																		{:RESULT = new VarLocation(id,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(0,id); RESULT = new AttributeLocation(attributeAccessL,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id LBRACKET expr:expr RBRACKET								  				{:List<String> ids = new LinkedList<String>(); ids.add(id); RESULT = new ArrayLocation(ids,expr,idxleft.getLine(),idxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(0,id);RESULT = new AttributeArrayLocation(attributeAccessL,expr,idxleft.getLine(),idxleft.getColumn());:}
 						;
 
 expr					::= location:loc																{:RESULT = loc;:}													
 						| method_call:methodCall														{:RESULT = methodCall;:}
 						| literal:lit																	{:RESULT = lit;:}
 						| LPAREN expr:expr RPAREN														{:RESULT = expr;:}
-						| expr:exprLeft AND:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.AND,exprRigth);:}
-						| expr:exprLeft OR:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.OR,exprRigth);:}
-						| expr:exprLeft PLUS:op expr:exprRigth 											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.PLUS,exprRigth);:}
-						| expr:exprLeft MINUS:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MINUS,exprRigth);:}
-						| expr:exprLeft TIMES:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.TIMES,exprRigth);:}
-						| expr:exprLeft DIV:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.DIV,exprRigth);:}
-						| expr:exprLeft MOD:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MOD,exprRigth);:}
-						| expr:exprLeft SMALLER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.SMALL,exprRigth);:}
-						| expr:exprLeft BIGGER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.BIGGER,exprRigth);:}
-						| expr:exprLeft LTOE:op expr:exprRigth						   					{:RESULT = new RelationalBinOp(exprLeft,BinOpType.LTOE,exprRigth);:}
-						| expr:exprLeft GTOE expr:exprRigth												{:RESULT = new RelationalBinOp(exprLeft,BinOpType.GTOE,exprRigth);:}
-						| expr:exprLeft EQUAL expr:exprRigth											{:RESULT = new EqBinOp(exprLeft,BinOpType.EQUAL,exprRigth);:}
-						| expr:exprLeft DISTINCT expr:exprRigth											{:RESULT = new EqBinOp(exprLeft,BinOpType.DISTINCT,exprRigth);:}
-						| MINUS:op expr:expr 															{:RESULT = new ArithmeticUnaryOp(UnaryOpType.MINUS,expr);:}	 %prec UMINUS	
-						| NOT:op expr:expr																{:RESULT = new LogicalUnaryOp(UnaryOpType.NOT,expr);:}
+						| expr:exprLeft AND:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.AND,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft OR:op expr:exprRigth											{:RESULT = new LogicalBinOp(exprLeft,BinOpType.OR,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft PLUS:op expr:exprRigth 											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.PLUS,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft MINUS:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MINUS,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft TIMES:op expr:exprRigth 										{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.TIMES,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft DIV:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.DIV,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft MOD:op expr:exprRigth											{:RESULT = new ArithmeticBinOp(exprLeft,BinOpType.MOD,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft SMALLER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.SMALL,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft BIGGER:op expr:exprRigth										{:RESULT = new RelationalBinOp(exprLeft,BinOpType.BIGGER,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft LTOE:op expr:exprRigth						   					{:RESULT = new RelationalBinOp(exprLeft,BinOpType.LTOE,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft GTOE:op expr:exprRigth											{:RESULT = new RelationalBinOp(exprLeft,BinOpType.GTOE,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft EQUAL:op expr:exprRigth											{:RESULT = new EqBinOp(exprLeft,BinOpType.EQUAL,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| expr:exprLeft DISTINCT:op expr:exprRigth										{:RESULT = new EqBinOp(exprLeft,BinOpType.DISTINCT,exprRigth,opxleft.getLine(),opxleft.getColumn());:}
+						| MINUS:op expr:expr 															{:RESULT = new ArithmeticUnaryOp(UnaryOpType.MINUS,expr,opxleft.getLine(),opxleft.getColumn());:}	 %prec UMINUS	
+						| NOT:op expr:expr																{:RESULT = new LogicalUnaryOp(UnaryOpType.NOT,expr,opxleft.getLine(),opxleft.getColumn());:}
 						;
 
-literal  				::= INTNUMBER:val														{:RESULT = new IntLiteral(val);:}								
-						| REALNUMBER:val 														{:RESULT = new FloatLiteral(val);:}
-						| BOOL_LITERAL:val 														{:RESULT = new BooleanLiteral(val);:}
-
+literal  				::= INTNUMBER:val																{: RESULT = new IntLiteral(val,valxleft.getLine(),valxleft.getColumn());:}								
+						| REALNUMBER:val 																{: RESULT = new FloatLiteral(val,valxleft.getLine(),valxleft.getColumn());:}
+						| BOOL_LITERAL:val 																{: RESULT = new BooleanLiteral(val,valxleft.getLine(),valxleft.getColumn());:}
 						;
+

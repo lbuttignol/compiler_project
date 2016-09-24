@@ -1,0 +1,31 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+	
+	integer method(integer x,float y){
+		return 3;
+	} 
+
+	bool esPar(integer val){
+		return val % 2 ==0;
+	}
+
+	integer method3(integer z){
+		integer c;
+		float xmf,fd,a;
+		a = 25.6;
+		method(c,a);
+		// this condition should be a boolean value
+		if (20){
+			return 2;
+		}else{
+			return 32;
+		}
+	}
+}
+
+class Main{
+	void main(){
+		return;
+	}
+}

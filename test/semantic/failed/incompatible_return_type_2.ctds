@@ -1,0 +1,22 @@
+class Martin{
+	integer i [3];
+	float f,kl;
+
+	integer method(integer x,float y){
+		x = x + 25;
+		// Incompatible return type, should be return <same integer expression> 
+		return true;
+	} 
+
+	integer method3(integer z){
+		integer c;
+		integer d[4];
+		integer xmf,fd,a;
+	}
+}
+
+class Main{
+	void main(){
+		return;
+	}
+}

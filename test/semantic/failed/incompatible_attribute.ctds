@@ -1,0 +1,76 @@
+class Person{
+	integer years;
+
+	void setYears(integer y){
+		years = y;
+	}
+
+
+	integer getYears(){
+		return years;
+	}
+
+
+}
+
+class Mom{
+	integer number_childs;
+	integer years;
+	integer childs[50];
+	void setYears(integer y){
+		years = y;
+	}
+
+
+	integer getYears(){
+		return years;
+	}
+
+	void setChilds(integer c){
+		number_childs = c;
+	}
+
+	integer getChilds(){
+		return number_childs;
+	}
+}
+
+class Main{
+	
+	integer x,y,z;
+	
+	integer method(){
+		boolean exist;
+		float f;
+		z=x+y;
+		x=-y;
+		y=z-x;
+		z=(x+y)/x;
+		exists= ! false;
+		f = 2.35;
+		return x-z;
+	}
+
+	bool method1(bool x,float z){
+		bool z;
+		Person juanita;
+		Mom mami;
+		x = true;
+		z = 3.5;
+		mami.setYears(32);
+		mami.setChilds(5);
+		juanita.setYears(43);
+		// the class Person don't have the attribute number_childs
+		if (juanita.number_childs > 3){
+			z = true;
+		}else{
+			z = false; 
+		}
+		return z;
+	}
+
+	void main(){
+		return;
+	}
+}
+

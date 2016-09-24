@@ -2,11 +2,10 @@ package ir.ast;
 
 import ir.ASTVisitor;
 
-public class ReturnVoidStmt extends Statement {
-	private Expression expression;
+public class ReturnVoidStmt extends AbstractReturn {
 
-	public ReturnVoidStmt() {
-		this.expression = null;
+	public ReturnVoidStmt(int line, int col){
+		super(line,col);
 	}
 
 	@Override

@@ -8,7 +8,8 @@ public abstract class UnaryOpExpr extends Expression {
 	protected Expression operand;
 
 	
-	public UnaryOpExpr(UnaryOpType operator, Expression operand ){
+	public UnaryOpExpr(UnaryOpType operator, Expression operand , int line, int col){
+		super(line,col);
 		this.operator = operator;
 		this.operand  = operand;
 	}
@@ -26,7 +27,7 @@ public abstract class UnaryOpExpr extends Expression {
 		return operand;
 	}
 
-	public void setLeftOperand(Expression operand) {
+	public void setOperand(Expression operand) {
 		this.operand = operand;
 	}
 
@@ -40,4 +41,5 @@ public abstract class UnaryOpExpr extends Expression {
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
+
 }

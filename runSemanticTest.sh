@@ -18,32 +18,31 @@ echo "**************************************************************************
 echo "     " 
 echo "     " 
 
-comp="dist/Compiler.jar"        #nombre del jar.. 
-main="src/Compiler/Main.java"   #noombre clase main
+comp="dist/Compiler.jar" #nombre del jar.. 
+
 
 echo "//////////////////////////// SUCCESSFUL TESTS //////////////////////////////////////" 
-files=`ls test/successful/*.ctds`
+files=`ls test/semantic/successful/*.ctds`
 
 
 for file in $files ; do 
-	echo "---------------- Test $file ... -------------------" 
-        java -classpath $comp $main $file 
-	echo "---------------------------------------------------" 
+        echo "---------------- Test $file ... -------------------" 
+        java -jar $comp $file 
+        echo "---------------------------------------------------" 
         echo "  "
         echo "  "
 done
 
 echo "////////////////////////////// FAILED TESTS ////////////////////////////////////////" 
 
-files=`ls test/failed/*.ctds`
+files=`ls test/semantic/failed/*.ctds`
 
 for file in $files ; do 
-	echo "---------------- Test $file ... -------------------" 
-        java -classpath $comp $main $file  
-	echo "---------------------------------------------------" 
+        echo "---------------- Test $file ... -------------------" 
+        java -jar $comp $file  
+        echo "---------------------------------------------------" 
         echo "  "
         echo "  "
 done
 
 exit 0
-

@@ -7,9 +7,11 @@ import java.util.LinkedList;
 public class VarLocation extends Location {
 	private int blockId;
 
-	public VarLocation(String id) {
-		List<String> ids = new LinkedList<String> ();
-		super(ids.add(id));
+	public VarLocation(String id, int line, int col){
+		super(id,line,col);
+		//List<String> ids = new LinkedList<String> ();
+		//super(ids.add(id));
+		this.blockId = -1;
 	}
 	
 	public int getBlockId() {
@@ -19,7 +21,7 @@ public class VarLocation extends Location {
 	public void setBlockId(int blockId) {
 		this.blockId = blockId;
 	}
-	
+
 	@Override
 	public String toString() {
 		return ids.toString();

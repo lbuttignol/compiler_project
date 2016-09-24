@@ -16,10 +16,23 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 	public Symbol symbol(String plaintext,int code){
 	    return sf.newSymbol(plaintext,code,new Location("",yyline+1, yycolumn +1,yychar), new Location("",yyline+1,yycolumn+yylength(),yychar));
 	}
-	public Symbol symbol(String plaintext,int code,Integer number){
-	    return sf.newSymbol(plaintext,code,new Location("",yyline+1, yycolumn +1,yychar), new Location("",yyline+1,yycolumn+yylength(),yychar),number);
+	public Symbol symbol(String plaintext,int code, Object value){
+	    return sf.newSymbol(plaintext,code,new Location("",yyline+1, yycolumn +1,yychar), new Location("",yyline+1,yycolumn+yylength(),yychar),value);
 	}
 	private ComplexSymbolFactory sf;
+
+		/* To create a new java_cup.runtime.Symbol with information about
+       the current token, the token will have no value in this
+       case. */
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn);
+    }
+    
+    /* Also creates a new java_cup.runtime.Symbol with information
+       about the current token, but this object has a value. */
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
 %}
 %eofval{
     return sf.newSymbol("EOF",sym.EOF);
@@ -30,7 +43,7 @@ LineTerminator 		= \r|\n|\r\n
 
 IntegerLiteral 		= 0 | [1-9][0-9]*
 RealLiteral			= {IntegerLiteral} "." {IntegerLiteral} ("e" "-"? {IntegerLiteral} )?
-Identifier			= [a-zA-Z][a-zA-Z0-9_]*																	
+Identifier			= [a-zA-Z][a-zA-Z0-9_]*															
 
 %state COMMENTSMULTILINE
 %state COMMENTSENDOFLINE
@@ -49,13 +62,13 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 "continue"			{ return symbol("Continue", sym.CONT); }
 "else"				{ return symbol("Else", sym.ELSE); }
 "extern"			{ return symbol("Extern", sym.EXTERN); }
-"false"				{ return symbol("False", sym.BOOL_LITERAL); }
+"false"				{ return symbol("False", sym.BOOL_LITERAL, new Boolean(false)); }
 "float"				{ return symbol("Float declaration", sym.FLOAT_TYPE); }
 "for"				{ return symbol("For", sym.FOR); }
 "if"				{ return symbol("If", sym.IF); }
 "integer"			{ return symbol("Integer declaration", sym.INT_TYPE); }
 "return"			{ return symbol("Return", sym.RET); }
-"true"				{ return symbol("True", sym.BOOL_LITERAL); }
+"true"				{ return symbol("True", sym.BOOL_LITERAL, new Boolean(true)); }
 "void"				{ return symbol("Void declaration", sym.VOID_TYPE); }
 "while"				{ return symbol("While", sym.WHILE); }
 
@@ -102,9 +115,9 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 "]"					{ return symbol("]", sym.RBRACKET); }
 
 /*	literals	*/
-{IntegerLiteral} 	{ return symbol("INTEGER NUMBER", sym.INTNUMBER); }
-{RealLiteral}		{ return symbol("REAL NUMBER", sym.REALNUMBER); }
-{Identifier}		{ return symbol("IDENTIFIER", sym.ID); }
+{IntegerLiteral} 	{ return symbol("INTEGER NUMBER", sym.INTNUMBER, new Integer(yytext())); }
+{RealLiteral}		{ return symbol("REAL NUMBER", sym.REALNUMBER,new Float(yytext())); }
+{Identifier}		{ return symbol("IDENTIFIER", sym.ID,yytext()); }
 
 [ \t\r\n\f] 		{ /* ignore white space. */ }
 
@@ -123,5 +136,3 @@ Identifier			= [a-zA-Z][a-zA-Z0-9_]*
 . 					{  }
 }
 
-/* error fallback */
-[^]  				{  System.err.print("Illegal character: "+yytext()); }

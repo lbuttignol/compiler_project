@@ -6,7 +6,8 @@ public class IfThenStmt extends Statement {
 	private Expression condition;
 	private Statement ifBlock;
 
-	public IfThenStmt(Expression cond, Statement ifBl) {
+	public IfThenStmt(Expression cond, Statement ifBl,int line, int col){
+		super(line,col);
 		this.condition = cond;
 		this.ifBlock = ifBl;
 	}

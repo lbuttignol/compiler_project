@@ -1,10 +1,16 @@
 package ir.ast;
-
+import ir.ASTVisitor;
 public abstract class Expression extends AST{
 	protected Expression expr;
 	protected String type;
 	private String id = "a";
-	public Expression(){
+	public Expression( int line, int col){
+		super(line,col);
+		type = "UNDEFINED";
+	}
+	public Expression( int line, int col, String type){
+		super(line,col);
+		this.type = type;
 	}
 	
 	public String getType() {
@@ -16,7 +22,8 @@ public abstract class Expression extends AST{
 	}
 
 	@Override
-	public String toString(){
-		return this.id;
+	public void accept(ASTVisitor v) {
+		v.visit(this);
 	}
+
 }

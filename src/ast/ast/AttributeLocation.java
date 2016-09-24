@@ -9,8 +9,8 @@ public class AttributeLocation extends Location {
 	private int blockId;
 
 
-	public AttributeLocation(List<String>ids) {
-		super(ids);
+	public AttributeLocation(List<String>ids, int line, int col){
+		super(ids,line,col);
 		this.blockId = -1;
 	}
 

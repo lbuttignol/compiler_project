@@ -8,7 +8,7 @@ public class Type{
 
 	public Type(){
 		this.types = new LinkedList<String>();
-		this.types.add("INT");
+		this.types.add("INTEGER");
 		this.types.add("VOID");
 		this.types.add("FLOAT");
 		this.types.add("BOOLEAN");
@@ -19,11 +19,27 @@ public class Type{
 	}
 
 	public static void add (String type){
-		if (!(types.contains(type.toUpperCase()))){
-			add(type.toUpperCase());
+		if (types==null){
+			types = new LinkedList<String>();
+			types.add("INTEGER");
+			types.add("VOID");
+			types.add("FLOAT");
+			types.add("BOOLEAN");
+			types.add("UNDEFINED");
+			types.add("INTARRAY");
+			types.add("BOOLARRAY");
+			types.add("FLOATARRAY");
 		}else{
-			// throw new Exception("Ya existe "+type);
+			if (!(types.contains(type.toUpperCase()))){
+				types.add(type.toUpperCase());
+			}else{
+				// throw new Exception("Ya existe "+type);
+			}
 		}
+	}
+
+	public static boolean contains(String type){
+		return types.contains(type.toUpperCase());
 	}
 
 	public static void delete(String type){

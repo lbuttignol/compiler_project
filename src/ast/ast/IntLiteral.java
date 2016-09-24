@@ -10,14 +10,20 @@ public class IntLiteral extends Literal {
 	 * Constructor for int literal that takes a string as an input
 	 * @param: String integer
 	 */
-	public IntLiteral(Integer val){
-		//rawValue = val; // Will convert to int value in semantic check
-		value = val;
+	public IntLiteral(String val, int line, int col){
+		super(line,col,"INTEGER");
+		rawValue = val; // Will convert to int value in semantic check
+		value = Integer.valueOf(val);
+	}
+	public IntLiteral(Integer val,int line, int col){
+		super(line,col,"INTEGER");
+		rawValue = val.toString();
+		value = Integer.valueOf(val);
 	}
 
 	@Override
 	public String getType() {
-		return "INT";
+		return "INTEGER";
 	}
 
 	public String getStringValue() {
@@ -26,6 +32,7 @@ public class IntLiteral extends Literal {
 
 	public void setStringValue(String stringValue) {
 		this.rawValue = stringValue;
+		this.value = Integer.valueOf(stringValue);
 	}
 
 	public Integer getValue() {
@@ -34,6 +41,8 @@ public class IntLiteral extends Literal {
 
 	public void setValue(int value) {
 		this.value = value;
+		this.rawValue = String.valueOf(value);
+
 	}
 	
 	public String getRawValue() {
