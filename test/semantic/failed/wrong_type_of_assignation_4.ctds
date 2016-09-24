@@ -19,7 +19,7 @@ class main{
 		if (x){
 			bool z;
 			// wrong type of asignation
-			z = 5;
+			z = false;
 		}else{
 			z = 120391; 
 		}
