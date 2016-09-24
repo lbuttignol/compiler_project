@@ -52,22 +52,23 @@ class main{
 	}
 
 	bool method1(bool x,float z){
-		bool z;
+		bool a;
 		Person juanita;
 		Mom mami;
 		x = true;
 		z = 3.5;
-		mami.setYears(32);
+		// can'n access to methods 
+/*		mami.setYears(32);
 		mami.setChilds(5);
 		juanita.setYears(43);
-		if (mami.number_childs > 3){
+*/		if (x){
 			bool arr[44];
 			float arr2[32];
-			mami.setYears(juanita.setYears());
+//			mami.setYears(juanita.setYears());
 			mami.childs[0] = 0;
 			mami.childs[1] = 9;
 			mami.childs[2] = -31;
-			z = true;
+			a = true;
 			arr[0] = true;
 			arr[1] = false;
 			arr2[0] = 0.0;
@@ -77,9 +78,9 @@ class main{
 			arr2[5] -= arr2[0];
 
 		}else{
-			z = false; 
+			a = false; 
 		}
-		return z;
+		return a;
 	}
 
 	void Main(){

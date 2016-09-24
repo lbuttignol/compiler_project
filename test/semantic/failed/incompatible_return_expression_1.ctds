@@ -1,5 +1,5 @@
 class Martin{
-	integer i [3];
+	integer i[3];
 	float f,kl;
 
 	integer method(integer x,float y){
