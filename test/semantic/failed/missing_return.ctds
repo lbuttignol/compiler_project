@@ -18,6 +18,8 @@ class Martin{
 //		callMethod(c,a);
 		if (esPar(z)){
 			return 2;
+		}else{
+		
 		}
 	}
 

@@ -1,5 +1,5 @@
 class Main{
-	
+	//the array size should be grater than 0
 	integer x[0];
 	void main(){return;}
 }

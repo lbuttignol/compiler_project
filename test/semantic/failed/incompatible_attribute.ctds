@@ -57,12 +57,11 @@ class Main{
 		Mom mami;
 		x = true;
 		z = 3.5;
-/*		mami.setYears(32);
+		mami.setYears(32);
 		mami.setChilds(5);
 		juanita.setYears(43);
-//		if (juanita.number_childs > 3){
-*/		// the class Person don't have the attribute number_childs
-		if (true){
+		// the class Person don't have the attribute number_childs
+		if (juanita.number_childs > 3){
 			a = true;
 		}else{
 			a = false; 

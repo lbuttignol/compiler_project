@@ -17,7 +17,7 @@ class main{
 		x = true;
 		z = 3.5;
 		if (x){
-			bool z;
+			//bool z;
 			// wrong type of asignation
 			z = false;
 		}else{

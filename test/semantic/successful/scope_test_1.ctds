@@ -8,7 +8,7 @@ class Main{
 		x=-y;
 		y=z-x;
 		z=(x+y)/x;
-		exists= ! false;
+		exist= ! false;
 		f = 2.35;
 		return x-z;
 	}
