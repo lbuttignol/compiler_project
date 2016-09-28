@@ -1,0 +1,20 @@
+class Main{
+	void main(){
+		integer a,b;
+		float d,c;
+		bool e,f;
+		a = a+b;
+		a = a-b;
+		a = a*b;
+		a = a/b;
+		a = a%b;
+
+		d = d+c;
+		d = d-c;
+		d = d*c;
+		d = d/c;
+		d = d%c;
+		 
+		return;
+	}
+}

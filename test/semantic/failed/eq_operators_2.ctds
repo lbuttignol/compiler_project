@@ -1,0 +1,32 @@
+class Main{
+	void main(){
+		integer a,b;
+		float d,c;
+		bool e,f;
+		if (a==b)
+		{
+			if (c==d)
+			{
+				if (a==f)
+				{
+					if (a!=b)
+					{
+						if (d!=c)
+						{
+							if (e!=f)
+							{
+								a = 65;
+							}
+						}
+					}
+				}
+			}
+		}
+		// d and f shuld have the same type
+		if (d==f)
+		{
+			a = 654;
+		}
+		return;
+	}
+}

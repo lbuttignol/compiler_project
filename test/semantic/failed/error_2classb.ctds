@@ -1,0 +1,24 @@
+
+class test_class{
+   float c;
+   void alo(integer x){
+      x= x + 1;
+   }
+
+   void alo2(integer x){
+      alo();
+      x=  alo() + 1;
+   }
+
+/* error clases anidadas */
+  class main{
+      float c;
+      void alo(integer x){
+      x= x + 1;
+      }
+
+  }
+
+}
+
+
