@@ -14,6 +14,11 @@ public class IdDecl extends Declaration {
 		super(line,col,name);
 	}
 
+	public IdDecl(String name, int line, int col, String type){
+		super(line,col,name);
+		this.type=type;
+	}
+
 	public String getType(){
 		return this.type;
 	}

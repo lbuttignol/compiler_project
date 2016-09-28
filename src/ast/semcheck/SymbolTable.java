@@ -19,10 +19,8 @@ public class SymbolTable {
 
 	public void addDeclare(SymbolInfo decl){
 		if (this.contains(decl, this.top)){
-			//System.out.println("Decl - ERROR");
 			new ir.error.Error(decl.getLineNumber(),decl.getColumnNumber(),"Repeated identifier "+decl.getName());
 		}else{
-			//System.out.println("Decl - OK");
 			this.symbolTable.get(this.top).add(decl);
 		}
 	}

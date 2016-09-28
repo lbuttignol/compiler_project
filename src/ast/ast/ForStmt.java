@@ -3,24 +3,24 @@ package ir.ast;
 import ir.ASTVisitor;
 
 public class ForStmt extends Statement {
-	String counterName;
+	IdDecl counterName;
 	Expression initValue;
 	Expression endValue;
 	Statement body;
 
 	public ForStmt(String name,Expression init, Expression end, Statement b,int line, int col){
 		super(line,col);
-		this.counterName = name;
+		this.counterName = new IdDecl(name, line, col, "INTEGER");
 		this.initValue = init;
 		this.endValue = end;
 		this.body = b;
 	}
 
-	public String getCounterName(){
+	public IdDecl getCounterName(){
 		return this.counterName;
 	}
 
-	public void setCounterName(String name){
+	public void setCounterName(IdDecl name){
 		this.counterName = name;
 	}
 	public void setInit(Expression i){

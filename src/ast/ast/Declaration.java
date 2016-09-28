@@ -16,7 +16,6 @@ public abstract class Declaration extends AST{
 		this.name = name;
 	}
 
-
 	public String toString(){
 		return name;
 	}

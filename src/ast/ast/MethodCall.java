@@ -1,4 +1,5 @@
 package ir.ast;
+
 import ir.ASTVisitor;
 import java.util.List;
 import java.util.LinkedList;
@@ -6,28 +7,33 @@ import java.util.LinkedList;
 
 public class MethodCall extends Expression{
 
-	private List<String> ids;
+	private List<IdDecl> ids;
 	private List<Expression> params;
 
 	public MethodCall(List<String> ids, List<Expression> params, int line, int col){
 		super(line,col);
-		this.ids    = ids;
+		for(String id: ids){
+			this.ids.add(new IdDecl(id, line, col, this.getType()));
+		}
 		this.params = params;
 	}
 
 
 	public MethodCall(int line, int col){
 		super(line,col);
-		this.ids    = new LinkedList<String>();
+		this.ids    = new LinkedList<IdDecl>();
 		this.params = new LinkedList<Expression>();
 	}
 	
-	public List<String> getIds(){
+	public List<IdDecl> getIds(){
 		return this.ids;
 	}
 
-	public void setIds(List<String> ids){
-		this.ids = ids;
+	public void setIds(List<IdDecl> ids){
+		this.ids = new LinkedList<IdDecl>();
+		for(IdDecl id: ids){
+			this.ids.add(id);
+		}
 	}
 
 	public List<Expression> getParams () {

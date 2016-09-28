@@ -10,16 +10,15 @@ import ir.error.*;
 public class BuilderVisitor implements ASTVisitor {
 
 	private SymbolTable stack;
-
-
-
 	
 	public BuilderVisitor(){
 		this.stack = new SymbolTable();
 	}
 	
 	@Override
-	public void visit(AST stmt){}
+	public void visit(AST stmt){
+
+	}
 
 	@Override	
 	public void visit(ArithmeticBinOp expr){
@@ -36,17 +35,19 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(ArrayIdDecl stmt){}
+	public void visit(ArrayIdDecl stmt){
+
+	}
 	
 	@Override
 	public void visit(ArrayLocation loc){
-		List<String> ids = loc.getIds();
+		List<IdDecl> ids = loc.getIds();
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		for (String id : ids){
-			if (!(this.stack.reachable(new SymbolInfo(id,col,line)))){
-				new ir.error.Error(line,col,"Unreachable identifier "+id);
+		for (IdDecl id : ids){
+			if (!(this.stack.reachable(new SymbolInfo(id)))) {
+				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
 		}
 		Expression exprArray = loc.getExpression();
@@ -79,13 +80,13 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeArrayLocation loc){
-		List<String> ids = loc.getIds();
+		List<IdDecl> ids = loc.getIds();
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		for (String id : ids){
-			if (!(this.stack.reachable(new SymbolInfo(id,col,line)))){
-				new ir.error.Error(line,col,"Unreachable identifier "+id);
+		for (IdDecl id : ids){
+			if (!(this.stack.reachable(new SymbolInfo(id)))){
+				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
 		}
 		Expression exprArray = loc.getExpr();
@@ -94,13 +95,13 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeLocation loc){
-		List<String> ids = loc.getIds();
+		List<IdDecl> ids = loc.getIds();
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		for (String id : ids){
-			if (!(this.stack.reachable(new SymbolInfo(id,col,line)))){
-				new ir.error.Error(line,col,"Unreachable identifier "+id);
+		for (IdDecl id : ids){
+			if (!(this.stack.reachable(new SymbolInfo(id)))){
+				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
 		}
 	}
@@ -140,24 +141,27 @@ public class BuilderVisitor implements ASTVisitor {
 	@Override
 	public void visit(ClassDecl classDecl){
 		//System.out.println("Class "+classDecl.getName());
+		this.stack.newLevel();
 		List<FieldDecl> fieldDeclList = classDecl.getAttributes();
-		List<SymbolInfo> symbolInfoList  = new LinkedList<SymbolInfo>();
 
 		/*************************************************/
+		
 		for (FieldDecl fieldDecl : fieldDeclList){
-			for (IdDecl idDecl : fieldDecl.getNames()){
-				//System.out.println("New field declared: "+idDecl.getName());
-				symbolInfoList.add(new SymbolInfo(idDecl));
-			}
+			fieldDecl.accept(this);
 		}
+		
 		List<MethodDecl> methodDeclList = classDecl.getMethods();
+		
+		List<SymbolInfo>methodsIds = new LinkedList<SymbolInfo>();
+		SymbolInfo methPar;
 		for (MethodDecl methodDecl : methodDeclList){
-			symbolInfoList.add(new SymbolInfo(methodDecl));
+			methPar = new SymbolInfo(methodDecl);
+			methPar.addAttList(methodDecl.getParams());
+			methodsIds.add(methPar);
 		}
-		this.stack.newLevel();
-		this.stack.addDeclareList(symbolInfoList);
+		this.stack.addDeclareList(methodsIds);
 
-		//ys tenemos los metodos y variables globales
+		//ya tenemos los metodos y variables globales
 
 		for (MethodDecl methodDecl : methodDeclList){
 			methodDecl.accept(this);
@@ -226,26 +230,26 @@ public class BuilderVisitor implements ASTVisitor {
 		}
 	}
 	@Override
-	public void visit(Expression expr){
-		
-	}
+	public void visit(Expression expr){}
 	
 	
 	@Override
-	public void visit(FieldDecl stmt){}
+	public void visit(FieldDecl fieldDecl){
+		for (IdDecl idDecl : fieldDecl.getNames()){
+			idDecl.accept(this);
+		}
+	}
 	
 	@Override
 	public void visit(FloatLiteral lit){}
 	
 	@Override
 	public void visit(ForStmt stmt){
-		String counterName = stmt.getCounterName();
-		int col = stmt.getColumnNumber();
-		int line = stmt.getLineNumber();
-		SymbolInfo symbolInfo = new SymbolInfo(counterName,col,line);
+		IdDecl counterName = stmt.getCounterName();
+		SymbolInfo symbolInfo = new SymbolInfo(counterName);
 		this.stack.newLevel();
 		this.stack.addDeclare(symbolInfo);
-		
+
 		Expression initValue = stmt.getInit();
 		Expression endValue  = stmt.getEnd();
 		Statement body = stmt.getBody();	
@@ -258,7 +262,9 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(IdDecl loc){}
+	public void visit(IdDecl id){
+		this.stack.addDeclare(new SymbolInfo(id));
+	}
 	
 	@Override
 	public void visit(IfThenElseStmt stmt){
@@ -297,19 +303,18 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodCall methodCall){
-		List<String> ids = methodCall.getIds();
+		List<IdDecl> ids = methodCall.getIds();
 		List<Expression> params = methodCall.getParams();
 		int col = methodCall.getColumnNumber();
 		int line   = methodCall.getLineNumber();
-		for (String id : ids){
-			if (!(this.stack.reachable(new SymbolInfo(id,col,line)))){
-				new ir.error.Error(line,col,"Unreachable identifier "+id);
+		for (IdDecl id : ids){
+			if (!(this.stack.reachable(new SymbolInfo(id)))){
+				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}	
 		}
 		for (Expression param : params){
 			checkExpression(param);
 		}
-		
 	}
 	
 	@Override
@@ -321,22 +326,19 @@ public class BuilderVisitor implements ASTVisitor {
 	@Override
 	public void visit(MethodDecl method){
 		//System.out.println("Method Decl "+method.getName());
+		this.stack.newLevel();
 		List<ParamDecl> paramDeclList = method.getParams();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		symbolInfoList.add(new SymbolInfo(method));
 		for (ParamDecl paramDecl : paramDeclList){
-			symbolInfoList.add(new SymbolInfo(paramDecl));
+			paramDecl.accept(this);
 		}
 		if (!method.getBody().isExtern()){
-
 			List<FieldDecl> fieldDeclList = method.getBody().getBlock().getVariable();
 			for (FieldDecl fieldDecl : fieldDeclList){
-				for (IdDecl idDecl : fieldDecl.getNames()){
-					symbolInfoList.add(new SymbolInfo(idDecl));
-				}
+				fieldDecl.accept(this);
 			}
 		}
-		this.stack.newLevel();
 		this.stack.addDeclareList(symbolInfoList);
 		if (!method.getBody().isExtern()){
 			List<Statement> stmtList = method.getBody().getBlock().getStatements();
@@ -344,14 +346,13 @@ public class BuilderVisitor implements ASTVisitor {
 				checkStatement(stmt);
 			}
 		}
-		/****************************************************/
 		this.stack.closeLevel();
-
-
 	}
 	
 	@Override
-	public void visit(ParamDecl stmt){}
+	public void visit(ParamDecl paramDecl){
+		this.stack.addDeclare(new SymbolInfo(paramDecl));
+	}
 	
 	@Override
 	public void visit(Program prog){
@@ -448,13 +449,13 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(VarLocation loc){
-		List<String> ids = loc.getIds();
+		List<IdDecl> ids = loc.getIds();
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		for (String id : ids){
-			if (!(this.stack.reachable(new SymbolInfo(id,col,line)))){
-				new ir.error.Error(line,col,"Unrecheable identifier "+id);
+		for (IdDecl id : ids){
+			if (!(this.stack.reachable(new SymbolInfo(id)))){
+				new ir.error.Error(line,col,"Unrecheable identifier "+id.getName());
 			}			
 		}
 	}

@@ -28,14 +28,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	@Override	
 	public void visit(ArithmeticBinOp stmt){
-		Expression exprLeft = stmt.getLeftOperand();
+		Expression exprLeft  = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
 		checkExpressionType(exprLeft);
 		checkExpressionType(exprRight);
-
-		//System.out.println("Tipo operand izq -"+exprLeft.getType());
-		//System.out.println("Tipo operand der -"+exprRight.getType());
-
 		if (!( (exprLeft.getType().equals("INTEGER")&&(exprRight.getType().equals("INTEGER")))||
 			((exprLeft.getType().equals("FLOAT")&&(exprRight.getType().equals("FLOAT")) )))){
 			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Operacion aritmetica binaria no valida");
@@ -61,16 +57,18 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayLocation loc){
-		List<String> ids = loc.getIds();
-		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-		//System.out.println("ARRAYLOCATION --- "+type);
+		List<IdDecl> ids = loc.getIds();
+		int last 		 = ids.size()-1;
+		String type 	 = this.stack.getCurrentType(ids.get(last).getName());
 		if (type!=null)
 			loc.setType(type);
 	}
 	
 	@Override
 	public void visit(AssignStmt assignStmt){
-		Location loc =assignStmt.getLocation();
+
+		Location loc = assignStmt.getLocation();
+		
 		if (loc instanceof VarLocation){
 			VarLocation varLocation = (VarLocation) loc;
 			varLocation.accept(this);
@@ -87,12 +85,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			AttributeArrayLocation attributeArrayLocation = (AttributeArrayLocation) loc;
 			attributeArrayLocation.accept(this);
 		}
+
 		Expression expr = assignStmt.getExpression();
 		checkExpressionType(expr);
-
-
-		//System.out.println("LOC-"	+loc.getType());
-		//System.out.println("EXPR-"+expr.getType());
 		if (!loc.getType().equals(expr.getType())){
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected");
 		}
@@ -101,9 +96,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeArrayLocation loc){
-		List<String> ids = loc.getIds();
+		List<IdDecl> ids = loc.getIds();
 		//System.out.println("SIZE-"+String.valueOf(ids.size()));
-		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
+		int last = ids.size()-1;
+		String lastName = ids.get(last).getName();
+		String type = this.stack.getCurrentType(lastName);
 		//System.out.println("TYPE-"+type);
 		if (type!=null)
 			loc.setType(type);
@@ -111,12 +108,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeLocation loc){
-		List<String> ids = loc.getIds();
-		//System.out.println("SIZE-"+String.valueOf(ids.size()-1));
-
-		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-		//System.out.println("TYPE-"+type);
-
+		List<IdDecl> ids = loc.getIds();
+		int last = ids.size()-1;
+		String lastName = ids.get(last).getName();
+		String type = this.stack.getCurrentType(lastName);
 		if (type!=null)
 			loc.setType(type);
 	}
@@ -151,22 +146,29 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ClassDecl classDecl){
-		//System.out.println("ClassDecl - "+classDecl.getName());
 		List<FieldDecl> fieldDeclList = classDecl.getAttributes();
 		List<MethodDecl> methodDeclList = classDecl.getMethods();
 		this.stack.newLevel();
+		
 		for (FieldDecl fieldDecl : fieldDeclList){
 			fieldDecl.accept(this);
 		}
+
+		for (MethodDecl methodDecl : methodDeclList){
+			this.stack.addDeclare(new SymbolInfo(methodDecl));
+		}
+
 		for (MethodDecl methodDecl : methodDeclList){
 			methodDecl.accept(this);
 		}
+		
 		this.stack.closeLevel();
-
 	}
 	
 	@Override
-	public void visit(ContinueStmt stmt){}
+	public void visit(ContinueStmt stmt){
+
+	}
 	
 	@Override
 	public void visit(EqBinOp stmt){
@@ -191,65 +193,55 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	}
 
 	@Override
-	public void visit(Expression stmt){}
+	public void visit(Expression stmt){
+
+	}
 
 	public void checkExpressionType(Expression expr){
 		if (expr instanceof VarLocation){
-			//System.out.println("VARLOCATION");
 			VarLocation loc = (VarLocation)expr;
 			loc.accept(this);
 		}	
 		if (expr instanceof AttributeLocation){
-			//System.out.println("ATTRIBUTELOCATION");
 			AttributeLocation loc = (AttributeLocation) expr;
 			loc.accept(this);
 		}	
 		if (expr instanceof ArrayLocation){
-			//System.out.println("ArrayLocation");
 			ArrayLocation loc = (ArrayLocation) expr;
 			loc.accept(this);
 		}
 		if (expr instanceof AttributeArrayLocation){
-			//System.out.println("AttributeArrayLocation");
 			AttributeArrayLocation loc = (AttributeArrayLocation) expr;
 			loc.accept(this);
 		}
 		if (expr instanceof MethodCall){
-			//System.out.println("MethodCall");
 			MethodCall methodCall = (MethodCall) expr;
 			methodCall.accept(this);
 		}
 		if (expr instanceof LogicalBinOp){
-			//System.out.println("LogicalBinOp");
 			LogicalBinOp logBinOp = (LogicalBinOp) expr;
 			logBinOp.accept(this);
 		}
 		if (expr instanceof ArithmeticBinOp){
-			//System.out.println("ArithmeticBinOp");
 			ArithmeticBinOp arithBinOp = (ArithmeticBinOp) expr;
 			arithBinOp.accept(this);
 		}
 		if (expr instanceof RelationalBinOp){
-			//System.out.println("RelationalBinOp");
 			RelationalBinOp relBinOp = (RelationalBinOp) expr;
 			relBinOp.accept(this);
 		}
 		if (expr instanceof EqBinOp){
-			//System.out.println("EqBinOp");
 			EqBinOp eqBinOp = (EqBinOp) expr;
 			eqBinOp.accept(this);
 		}
 		if (expr instanceof ArithmeticUnaryOp){
-			//System.out.println("ArithmeticUnaryOp");
 			ArithmeticUnaryOp arithUnaryOp = (ArithmeticUnaryOp) expr;
 			arithUnaryOp.accept(this);
 		}
 		if (expr instanceof LogicalUnaryOp){
-			//System.out.println("LogicalUnaryOp");
 			LogicalUnaryOp logicalUnaryOp = (LogicalUnaryOp) expr;
 			logicalUnaryOp.accept(this);
 		}
-			//System.out.println("SALIDA EXPR");
 
 	}
 	
@@ -262,12 +254,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<IdDecl> idDeclList = fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
-			type = idDecl.getType();
-			String name = idDecl.getName();
-			int col 	= idDecl.getColumnNumber();
-			int line 	= idDecl.getLineNumber();
-			//System.out.println("IdDecl - "+name+"-"+type);
-			symbolInfoList.add(new SymbolInfo(type,name,col,line));
+			symbolInfoList.add(new SymbolInfo(idDecl));
 		}
 		this.stack.addDeclareList(symbolInfoList);
 	}
@@ -277,11 +264,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ForStmt stmt){
-		String name = stmt.getCounterName();
-		String type = "INTEGER";
-		int    col = stmt.getColumnNumber();
-		int    line = stmt.getLineNumber();
-		this.stack.addDeclare(new SymbolInfo(type,name,col,line));
+		IdDecl counterName = stmt.getCounterName();
+		this.stack.addDeclare(new SymbolInfo(counterName));
 
 		Expression initValue = stmt.getInit();
 		Expression endValue  = stmt.getEnd();
@@ -359,8 +343,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodCall methodCall){
-		List<String> ids = methodCall.getIds();
-		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
+		List<IdDecl> ids = methodCall.getIds();
+		int last = ids.size()-1;
+		String lastName = ids.get(last).getName();
+		String type = this.stack.getCurrentType(lastName);
 		if (type!=null){
 			methodCall.setType(type);
 			List<Expression> paramList = methodCall.getParams();
@@ -384,21 +370,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
 		}
 		this.stack.newLevel();
-		List<SymbolInfo> symbolInfoList= new LinkedList<SymbolInfo>();
-		String name = methodDecl.getName();
-		int col 	= methodDecl.getColumnNumber();
-		int line 	= methodDecl.getLineNumber();
-		symbolInfoList.add(new SymbolInfo(true,type,name,col,line));
-
+		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
 		for (ParamDecl paramDecl : paramDeclList){
-			type = paramDecl.getType();
-			name = paramDecl.getName();
-			col = paramDecl.getColumnNumber();
-			line = paramDecl.getLineNumber();
-			//System.out.println("ParamDecl - "+name+"-"+type);
-			symbolInfoList.add(new SymbolInfo(true,type,name,col,line));
+			symbolInfoList.add(new SymbolInfo(paramDecl));
 		}
+
 		this.stack.addDeclareList(symbolInfoList);
 		for (ParamDecl paramDecl : paramDeclList){
 			paramDecl.accept(this);
@@ -516,8 +493,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(VarLocation loc){
 		//System.out.println("VARLOCATION");
-		List<String> ids = loc.getIds();
-		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
+		List<IdDecl> ids = loc.getIds();
+		int last = ids.size()-1;
+		String lastName = ids.get(last).getName();
+		String type = this.stack.getCurrentType(lastName);
 		if(type!=null)
 			loc.setType(type);
 	}
