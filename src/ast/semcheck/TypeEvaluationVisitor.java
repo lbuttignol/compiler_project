@@ -33,18 +33,15 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		checkExpressionType(exprLeft);
 		checkExpressionType(exprRight);
 
-		System.out.println("Tipo operand izq -"+exprLeft.getType());
-		System.out.println("Tipo operand der -"+exprRight.getType());
+		//System.out.println("Tipo operand izq -"+exprLeft.getType());
+		//System.out.println("Tipo operand der -"+exprRight.getType());
 
 		if (!( (exprLeft.getType().equals("INTEGER")&&(exprRight.getType().equals("INTEGER")))||
 			((exprLeft.getType().equals("FLOAT")&&(exprRight.getType().equals("FLOAT")) )))){
-			System.out.println("Operacion aritmetica binaria no valida") ;
-			// new Error ...
+			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Operacion aritmetica binaria no valida");
 		}else{
 			stmt.setType(exprLeft.getType());
 		}
-
-
 		
 	}
 	
@@ -53,8 +50,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression expr = stmt.getOperand();
 		checkExpressionType(expr);
 		if (!((expr.getType().equals("INTEGER"))||(expr.getType().equals("FLOAT")))){
-			System.out.println("Operacion aritmetica unaria no valida");
-			// new Error .......
+			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Operacion aritmetica unaria no valida");
 		}else{
 			stmt.setType(expr.getType());
 		}
@@ -67,7 +63,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ArrayLocation loc){
 		List<String> ids = loc.getIds();
 		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-		System.out.println("ARRAYLOCATION --- "+type);
+		//System.out.println("ARRAYLOCATION --- "+type);
 		if (type!=null)
 			loc.setType(type);
 	}
@@ -95,10 +91,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		checkExpressionType(expr);
 
 
-		System.out.println("LOC-"	+loc.getType());
-		System.out.println("EXPR-"+expr.getType());
+		//System.out.println("LOC-"	+loc.getType());
+		//System.out.println("EXPR-"+expr.getType());
 		if (!loc.getType().equals(expr.getType())){
-			System.out.println("ERROR");
+			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected");
 		}
 
 	}
@@ -106,9 +102,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(AttributeArrayLocation loc){
 		List<String> ids = loc.getIds();
-		System.out.println("SIZE-"+String.valueOf(ids.size()));
+		//System.out.println("SIZE-"+String.valueOf(ids.size()));
 		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-		System.out.println("TYPE-"+type);
+		//System.out.println("TYPE-"+type);
 		if (type!=null)
 			loc.setType(type);
 	}
@@ -116,10 +112,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(AttributeLocation loc){
 		List<String> ids = loc.getIds();
-				System.out.println("SIZE-"+String.valueOf(ids.size()-1));
+		//System.out.println("SIZE-"+String.valueOf(ids.size()-1));
 
 		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-				System.out.println("TYPE-"+type);
+		//System.out.println("TYPE-"+type);
 
 		if (type!=null)
 			loc.setType(type);
@@ -155,7 +151,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ClassDecl classDecl){
-		System.out.println("ClassDecl - "+classDecl.getName());
+		//System.out.println("ClassDecl - "+classDecl.getName());
 		List<FieldDecl> fieldDeclList = classDecl.getAttributes();
 		List<MethodDecl> methodDeclList = classDecl.getMethods();
 		this.stack.newLevel();
@@ -179,16 +175,13 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		checkExpressionType(exprLeft);
 		checkExpressionType(exprRight);
 		if ((exprLeft.getType().equals("INTEGER")^(exprRight.getType().equals("INTEGER")))){
-			System.out.println("Operacion EQBINOP no valida");
-			// new Error ...
+			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "EQBINOP operation not valid");
 		}else{
 			if ((exprLeft.getType().equals("FLOAT")^(exprRight.getType().equals("FLOAT")))){
-				System.out.println("Operacion EQBINOP no valida");
-				// new Error ...
+				new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "EQBINOP operation not valid");
 			}else{
 				if (((exprLeft.getType().equals("BOOLEAN"))^(exprRight.getType().equals("BOOLEAN")))){
-					System.out.println("Operacion EQBINOP no valida");
-					// new Error ...
+					new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "EQBINOP operation not valid");
 				}else{
 					stmt.setType("BOOLEAN");
 				}
@@ -202,67 +195,61 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	public void checkExpressionType(Expression expr){
 		if (expr instanceof VarLocation){
-			System.out.println("VARLOCATION");
+			//System.out.println("VARLOCATION");
 			VarLocation loc = (VarLocation)expr;
 			loc.accept(this);
 		}	
 		if (expr instanceof AttributeLocation){
-			System.out.println("ATTRIBUTELOCATION");
-
+			//System.out.println("ATTRIBUTELOCATION");
 			AttributeLocation loc = (AttributeLocation) expr;
 			loc.accept(this);
 		}	
 		if (expr instanceof ArrayLocation){
-			System.out.println("ArrayLocation");
-
+			//System.out.println("ArrayLocation");
 			ArrayLocation loc = (ArrayLocation) expr;
 			loc.accept(this);
 		}
 		if (expr instanceof AttributeArrayLocation){
-			System.out.println("AttributeArrayLocation");
-
+			//System.out.println("AttributeArrayLocation");
 			AttributeArrayLocation loc = (AttributeArrayLocation) expr;
 			loc.accept(this);
 		}
 		if (expr instanceof MethodCall){
-			System.out.println("MethodCall");
-
+			//System.out.println("MethodCall");
 			MethodCall methodCall = (MethodCall) expr;
 			methodCall.accept(this);
 		}
 		if (expr instanceof LogicalBinOp){
-			System.out.println("LogicalBinOp");
-
+			//System.out.println("LogicalBinOp");
 			LogicalBinOp logBinOp = (LogicalBinOp) expr;
 			logBinOp.accept(this);
 		}
 		if (expr instanceof ArithmeticBinOp){
-						System.out.println("ArithmeticBinOp");
-
+			//System.out.println("ArithmeticBinOp");
 			ArithmeticBinOp arithBinOp = (ArithmeticBinOp) expr;
 			arithBinOp.accept(this);
 		}
 		if (expr instanceof RelationalBinOp){
-			System.out.println("RelationalBinOp");
+			//System.out.println("RelationalBinOp");
 			RelationalBinOp relBinOp = (RelationalBinOp) expr;
 			relBinOp.accept(this);
 		}
 		if (expr instanceof EqBinOp){
-			System.out.println("EqBinOp");
+			//System.out.println("EqBinOp");
 			EqBinOp eqBinOp = (EqBinOp) expr;
 			eqBinOp.accept(this);
 		}
 		if (expr instanceof ArithmeticUnaryOp){
-			System.out.println("ArithmeticUnaryOp");
+			//System.out.println("ArithmeticUnaryOp");
 			ArithmeticUnaryOp arithUnaryOp = (ArithmeticUnaryOp) expr;
 			arithUnaryOp.accept(this);
 		}
 		if (expr instanceof LogicalUnaryOp){
-			System.out.println("LogicalUnaryOp");
+			//System.out.println("LogicalUnaryOp");
 			LogicalUnaryOp logicalUnaryOp = (LogicalUnaryOp) expr;
 			logicalUnaryOp.accept(this);
 		}
-			System.out.println("SALIDA EXPR");
+			//System.out.println("SALIDA EXPR");
 
 	}
 	
@@ -270,8 +257,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(FieldDecl fieldDecl){
 		String type = fieldDecl.getType();
 		if (!Type.contains(type)){
-		System.out.println("Tipo de field decl no existe");
-		 //	new Error
+			new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(), "Unexistent field declaration type");
 		}
 		List<IdDecl> idDeclList = fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
@@ -280,7 +266,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			String name = idDecl.getName();
 			int col 	= idDecl.getColumnNumber();
 			int line 	= idDecl.getLineNumber();
-			System.out.println("IdDecl - "+name+"-"+type);
+			//System.out.println("IdDecl - "+name+"-"+type);
 			symbolInfoList.add(new SymbolInfo(type,name,col,line));
 		}
 		this.stack.addDeclareList(symbolInfoList);
@@ -306,12 +292,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			IntLiteral init = (IntLiteral) initValue;
 			IntLiteral end  = (IntLiteral) endValue;
 			if (init.getValue()>end.getValue()){
-				System.out.println("For- init value no es menor a igual a end value");
-				// new Error -...
+				new ir.error.Error(initValue.getLineNumber(),initValue.getColumnNumber(), "Init value should be less or equal than end value");
 			}
 		}else{
-			System.out.println("For- condicion no valida");
-			//Error
+			new ir.error.Error(initValue.getLineNumber(),initValue.getColumnNumber(), "Both init and end value should be Integers");
 		}
 
 		Statement statement = stmt.getBody();
@@ -326,8 +310,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		checkExpressionType(condition);
 		if (!condition.getType().equals("BOOLEAN")){
-			System.out.println("IF then else - COndicino no valida");
-			//new Error...
+			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
 		}
 
 		Statement ifBlock = stmt.getIfBlock();
@@ -341,10 +324,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		checkExpressionType(condition);
 		if (!condition.getType().equals("BOOLEAN")){
-			System.out.println("If then - Condicion no valida");
-			//new Error...
+			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
 		}
-
 		Statement ifBlock = stmt.getIfBlock();
 		checkStatementType(ifBlock);
 	}
@@ -359,8 +340,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		checkExpressionType(exprLeft);
 		checkExpressionType(exprRight);
 		if (!((exprLeft.getType().equals("BOOLEAN"))&&(exprRight.getType().equals("BOOLEAN")))){
-			System.out.println("Logical Bin Op - No valido");
-			// new Error ...
+			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be booleans");
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -371,8 +351,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression expr =stmt.getOperand();
 		checkExpressionType(expr);
 		if (!expr.getType().equals("BOOLEAN")){
-			System.out.println("Logical Unary Op- No valdo");
-			// new Error...
+			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Boolean expression expected");
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -382,7 +361,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(MethodCall methodCall){
 		List<String> ids = methodCall.getIds();
 		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
-		if (type!=null){ //VEEEEEEERRRRRRRRRRRRRRRRR ERROR YA CONTROLADO EN BUILDER
+		if (type!=null){
 			methodCall.setType(type);
 			List<Expression> paramList = methodCall.getParams();
 			for (Expression param : paramList){
@@ -399,15 +378,13 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
-		System.out.println("MethodDecl - "+methodDecl.getName()+"-"+methodDecl.getType());
+		//System.out.println("MethodDecl - "+methodDecl.getName()+"-"+methodDecl.getType());
 		String type = methodDecl.getType();
 		if (!Type.contains(type)){
-			System.out.println("Tupo de metodo no valido");
-			// new Error ...
+			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
 		}
 		this.stack.newLevel();
 		List<SymbolInfo> symbolInfoList= new LinkedList<SymbolInfo>();
-		//type = methodDecl.getType();
 		String name = methodDecl.getName();
 		int col 	= methodDecl.getColumnNumber();
 		int line 	= methodDecl.getLineNumber();
@@ -419,7 +396,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			name = paramDecl.getName();
 			col = paramDecl.getColumnNumber();
 			line = paramDecl.getLineNumber();
-			System.out.println("ParamDecl - "+name+"-"+type);
+			//System.out.println("ParamDecl - "+name+"-"+type);
 			symbolInfoList.add(new SymbolInfo(true,type,name,col,line));
 		}
 		this.stack.addDeclareList(symbolInfoList);
@@ -437,8 +414,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ParamDecl paramDecl){
 		String type = paramDecl.getType();
 		if (!Type.contains(type)){
-			System.out.println("Tipo de parametro no valido");
-			// new Error ....
+			new ir.error.Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type");
 		}
 	}
 	
@@ -458,8 +434,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		checkExpressionType(exprRight);
 		if (!( (exprLeft.getType().equals("INTEGER")&&(exprRight.getType().equals("INTEGER")))||
 			((exprLeft.getType().equals("FLOAT")&&(exprRight.getType().equals("FLOAT")) )))){
-			System.out.println("Relation Bin Op - No valido") ;
-			// new Error ...
+			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of an integer or float type");
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -467,15 +442,14 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ReturnStmt stmt){
-		Expression exp = stmt.getExpression();
-		checkExpressionType(exp);
-		System.out.println(this.stack.getMethodType());
-		if ((this.stack.getMethodType()==null) || !(exp.getType().equals(this.stack.getMethodType()))) {
-			System.out.println("Return stmt  no valido.");
-			//new Error...
+		Expression expr = stmt.getExpression();
+		checkExpressionType(expr);
+		//System.out.println(this.stack.getMethodType());
+		if (this.stack.getMethodType()!=null){
+			if(!(expr.getType().equals(this.stack.getMethodType()))) 
+				new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "This method should return an expression of type: "+this.stack.getMethodType());
 		}
 	}
-	
 	@Override
 	public void visit(ReturnVoidStmt stmt){}
 	
@@ -486,10 +460,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(Statement stmt){}
 
 	public void checkStatementType(Statement stmt){
-					System.out.println("ENTRO STATEMENTS");
+		//System.out.println("ENTRO STATEMENTS");
 
 		if (stmt instanceof AssignStmt ){ 
-			System.out.println("ASSIGSTM");
+			//System.out.println("ASSIGSTM");
 			AssignStmt assignStmt = (AssignStmt) stmt;
 			assignStmt.accept(this);
 		}
@@ -531,7 +505,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 		}
 		if (stmt instanceof Block){
-			System.out.println("BLOCK");
+			//System.out.println("BLOCK");
 			Block block = (Block) stmt;
 			block.accept(this);
 		}
@@ -541,7 +515,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(VarLocation loc){
-		System.out.println("VARLOCATION");
+		//System.out.println("VARLOCATION");
 		List<String> ids = loc.getIds();
 		String type = this.stack.getCurrentType(ids.get(ids.size()-1));
 		if(type!=null)
@@ -553,10 +527,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		checkExpressionType(condition);
 		if (!condition.getType().equals("BOOLEAN")){
-			System.out.println("ERROR en while - condicion no es bool");
-			//new Error...
+			//System.out.println("ERROR en while - condicion no es bool");
+			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Condition should be a boolean");
 		}
-
 		Statement body = stmt.getBody();
 		checkStatementType(body);
 	}

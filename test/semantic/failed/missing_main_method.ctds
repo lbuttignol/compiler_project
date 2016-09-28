@@ -46,28 +46,29 @@ class Main{
 		x=-y;
 		y=z-x;
 		z=(x+y)/x;
-		exists = ! false;
+		exist = ! false;
 		f = 2.35;
 		return x-z;
 	}
 
 	bool method1(bool x,float z){
-		bool z;
+		bool a;
 		Person juanita;
 		Mom mami;
 		x = true;
 		z = 3.5;
-		mami.setYears(32);
+/*		mami.setYears(32);
 		mami.setChilds(5);
 		juanita.setYears(43);
 		if (mami.number_childs > 3){
+*/		if (true){
 			bool arr[44];
 			float arr2[32];
-			mami.setYears(juanita.setYears());
-			mami.childs[0] = 0;
+/*			mami.setYears(juanita.setYears());
+*/			mami.childs[0] = 0;
 			mami.childs[1] = 9;
 			mami.childs[2] = -31;
-			z = true;
+			a = true;
 			arr[0] = true;
 			arr[1] = false;
 			arr2[0] = 0.0;
@@ -75,9 +76,9 @@ class Main{
 			arr2[3] = -6556.54;
 
 		}else{
-			z = false; 
+			a = false; 
 		}
-		return z;
+		return a;
 	}
 
 }

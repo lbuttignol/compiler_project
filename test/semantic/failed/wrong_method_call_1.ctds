@@ -11,7 +11,7 @@ class Martin{
 		float xmf,fd,a;
 		a = 25.6;
 		// wrong method call the second param should be an integer
-		callMethod(c,z);
+		method(c,z);
 		if ((1==1)&&(2<3)){
 			return 2;
 		}

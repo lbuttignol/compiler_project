@@ -15,9 +15,11 @@ class Martin{
 		integer c;
 		float xmf,fd,a;
 		a = 25.6;
-		callMethod(c,a);
+//		callMethod(c,a);
 		if (esPar(z)){
 			return 2;
+		}else{
+		
 		}
 	}
 

@@ -139,14 +139,14 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ClassDecl classDecl){
-		System.out.println("Class "+classDecl.getName());
+		//System.out.println("Class "+classDecl.getName());
 		List<FieldDecl> fieldDeclList = classDecl.getAttributes();
 		List<SymbolInfo> symbolInfoList  = new LinkedList<SymbolInfo>();
 
 		/*************************************************/
 		for (FieldDecl fieldDecl : fieldDeclList){
 			for (IdDecl idDecl : fieldDecl.getNames()){
-				System.out.println("New field declared: "+idDecl.getName());
+				//System.out.println("New field declared: "+idDecl.getName());
 				symbolInfoList.add(new SymbolInfo(idDecl));
 			}
 		}
@@ -320,7 +320,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl method){
-		System.out.println("Method Decl "+method.getName());
+		//System.out.println("Method Decl "+method.getName());
 		List<ParamDecl> paramDeclList = method.getParams();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		symbolInfoList.add(new SymbolInfo(method));
@@ -355,7 +355,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(Program prog){
-		System.out.println("program");
+		//System.out.println("program");
 		List<ClassDecl> classDeclList = prog.getClassDeclare();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (ClassDecl classDecl : classDeclList){

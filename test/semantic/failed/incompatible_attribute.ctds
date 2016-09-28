@@ -46,13 +46,13 @@ class Main{
 		x=-y;
 		y=z-x;
 		z=(x+y)/x;
-		exists= ! false;
+		exist= ! false;
 		f = 2.35;
 		return x-z;
 	}
 
 	bool method1(bool x,float z){
-		bool z;
+		bool a;
 		Person juanita;
 		Mom mami;
 		x = true;
@@ -62,11 +62,11 @@ class Main{
 		juanita.setYears(43);
 		// the class Person don't have the attribute number_childs
 		if (juanita.number_childs > 3){
-			z = true;
+			a = true;
 		}else{
-			z = false; 
+			a = false; 
 		}
-		return z;
+		return a;
 	}
 
 	void main(){

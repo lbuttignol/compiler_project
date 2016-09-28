@@ -10,7 +10,7 @@ class Test{
 		c = false;
 		a = -30;
 		a = 0;
-		return a;
+		return c;
 	}
 }
 

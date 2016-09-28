@@ -46,13 +46,13 @@ class Main{
 		x=-y;
 		y=z-x;
 		z=(x+y)/x;
-		exists= ! false;
+		exist= ! false;
 		f = 2.35;
 		return x-z;
 	}
 
 	bool method1(bool x,float z){
-		bool z;
+		bool a;
 		Person juanita;
 		Mom mami;
 		x = true;
@@ -61,11 +61,11 @@ class Main{
 		mami.setChilds(5);
 		juanita.setYears(43);
 		if (x){
-			z = true;
+			a = true;
 		}else{
-			z = false; 
+			a = false; 
 		}
-		return z;
+		return a;
 	}
 
 	void main(){
