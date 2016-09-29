@@ -87,7 +87,7 @@ public class SymbolInfo <T extends Declaration> {
 		for(FieldDecl att: fieldList){
 			List<IdDecl> ids = att.getNames();
 			for(IdDecl id: ids){
-				this.methodList.add(id);
+				this.attList.add(id);
 			}
 		}
 	}
@@ -95,8 +95,16 @@ public class SymbolInfo <T extends Declaration> {
 	public void addParamList(List<ParamDecl> paramL ){
 		this.attList = new LinkedList<IdDecl>();
 		for(ParamDecl param: paramL){
-			this.methodList.add(new IdDecl(param.getName(), param.getLineNumber(), param.getColumnNumber()));
+			this.attList.add(new IdDecl(param.getName(), param.getLineNumber(), param.getColumnNumber()));
 		}
+	}
+
+	public List<IdDecl> getAttList(){
+		return this.attList;
+	}
+
+	public List<IdDecl> getMethodList(){
+		return this.methodList;
 	}
 
 }
