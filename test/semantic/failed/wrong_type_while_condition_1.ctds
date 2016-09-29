@@ -10,16 +10,19 @@ class Martin{
 		return val % 2 ==0;
 	}
 
-	// there is a branch without a return statement
+
 	integer method3(integer z){
 		integer c;
 		float xmf,fd,a;
 		a = 25.6;
 //		callMethod(c,a);
-		if (esPar(z)){
-			return 2;
-		}else{
-		
+		// the condition of the while should have a boolean type
+		while (1.02 + 1.01658 - 6.014 * 8.848 / 8.8){
+			if (a > 5.0){
+				return 2;
+			}else{
+				return 1;
+			}
 		}
 	}
 

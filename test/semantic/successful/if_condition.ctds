@@ -10,16 +10,16 @@ class Martin{
 		return val % 2 ==0;
 	}
 
-	// there is a branch without a return statement
+
 	integer method3(integer z){
 		integer c;
 		float xmf,fd,a;
 		a = 25.6;
 //		callMethod(c,a);
-		if (esPar(z)){
+		if (a > 5.0){
 			return 2;
 		}else{
-		
+			return 1;
 		}
 	}
 

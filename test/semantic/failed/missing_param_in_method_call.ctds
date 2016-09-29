@@ -57,7 +57,7 @@ class Main{
 		x = true;
 		z = 3.5;
 		// Missing param 
-//		juanita.setChilds();
+		juanita.setChilds();
 		if (x){
 			a = true;
 		}else{

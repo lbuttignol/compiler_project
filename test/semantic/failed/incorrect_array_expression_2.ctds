@@ -1,5 +1,4 @@
 class Main{
-	
 	integer x[3.561]; //syntax error
 	void main(){return;}
 }
