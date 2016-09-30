@@ -315,7 +315,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(IntLiteral lit){}
+	public void visit(IntLiteral lit){
+	
+	}
 	
 	@Override
 	public void visit(LogicalBinOp stmt){
@@ -340,7 +342,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			stmt.setType("BOOLEAN");
 		}
 	}
-	
+
 	@Override
 	public void visit(MethodCall methodCall){
 		List<IdDecl> ids = methodCall.getIds();
@@ -364,7 +366,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
-		//System.out.println("MethodDecl - "+methodDecl.getName()+"-"+methodDecl.getType());
 		String type = methodDecl.getType();
 		if (!Type.contains(type)){
 			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
@@ -380,7 +381,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		for (ParamDecl paramDecl : paramDeclList){
 			paramDecl.accept(this);
 		}
-
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
 
@@ -421,7 +421,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ReturnStmt stmt){
 		Expression expr = stmt.getExpression();
 		checkExpressionType(expr);
-		//System.out.println(this.stack.getMethodType());
 		if (this.stack.getMethodType()!=null){
 			if(!(expr.getType().equals(this.stack.getMethodType()))) 
 				new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "This method should return an expression of type: "+this.stack.getMethodType());
@@ -437,10 +436,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(Statement stmt){}
 
 	public void checkStatementType(Statement stmt){
-		//System.out.println("ENTRO STATEMENTS");
 
 		if (stmt instanceof AssignStmt ){ 
-			//System.out.println("ASSIGSTM");
 			AssignStmt assignStmt = (AssignStmt) stmt;
 			assignStmt.accept(this);
 		}
@@ -512,9 +509,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Statement body = stmt.getBody();
 		checkStatementType(body);
 	}
-	
-
-	
 
 	private void addError(AST a, String desc) {
 		this.errors.add(new Error(a.getLineNumber(), a.getColumnNumber(), desc));

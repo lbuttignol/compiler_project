@@ -45,14 +45,12 @@ public class BuilderVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		if (!(this.stack.reachable(ids))) {
-			new ir.error.Error(line,col,"Unreachable identifier ");
-		}	
-		/*for (IdDecl id : ids){
+		System.out.println("ArrayLocation");
+		for (IdDecl id : ids){
 			if (!(this.stack.reachable(new SymbolInfo(id)))) {
 				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
-		}*/
+		}
 		Expression exprArray = loc.getExpression();
 		checkExpression(exprArray);
 	}
@@ -60,6 +58,7 @@ public class BuilderVisitor implements ASTVisitor {
 	@Override
 	public void visit(AssignStmt stmt){
 		//Location loc = stmt.getLocation();
+		System.out.println("AssignStmt");
 		Expression expr = stmt.getExpression();
 		if (stmt.getLocation() instanceof VarLocation){
 			VarLocation loc = (VarLocation)stmt.getLocation();
@@ -87,6 +86,8 @@ public class BuilderVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
+				System.out.println("AttributeArrayLocation");	
+
 		if (!(this.stack.reachable(ids))) {
 			new ir.error.Error(line,col,"Unreachable identifier ");
 		}	
@@ -105,6 +106,7 @@ public class BuilderVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
+		System.out.println("AttributeLocation");	
 		if (!(this.stack.reachable(ids))) {
 			new ir.error.Error(line,col,"Unreachable identifier ");
 		}	
@@ -117,6 +119,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(Block block){
+		System.out.println("Block");
 		List<FieldDecl> fieldDeclList = block.getVariable();
 		List<SymbolInfo> symbolInfoList  = new LinkedList<SymbolInfo>();
 
@@ -133,7 +136,7 @@ public class BuilderVisitor implements ASTVisitor {
 		for (Statement stmt : statements){
 			checkStatement(stmt);
 		}
-
+		System.out.println("Block finishhing");
 		this.stack.closeLevel();
 
 	} 		
@@ -246,7 +249,9 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(FieldDecl fieldDecl){
+		String type = fieldDecl.getType();
 		for (IdDecl idDecl : fieldDecl.getNames()){
+			idDecl.setType(type);
 			idDecl.accept(this);
 		}
 	}
@@ -274,7 +279,8 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl id){
-		this.stack.addDeclare(new SymbolInfo(id));
+		System.out.println("ID DECL TYPE- "+id.getType());
+		this.stack.addDeclare(new SymbolInfo(id.getType(),id));
 	}
 	
 	@Override
@@ -283,8 +289,12 @@ public class BuilderVisitor implements ASTVisitor {
 		Statement ifBlock    = stmt.getIfBlock();
 		Statement elseBlock  = stmt.getElseBlock();
 		checkExpression(condition);
+		System.out.println(stmt.toString());
+		System.out.println("If");
 		checkStatement(ifBlock);
+		System.out.println("Else");
 		checkStatement(elseBlock);
+		System.out.println("FIN IFELSE");
 	}
 	
 	@Override
@@ -314,10 +324,15 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodCall methodCall){
+
 		List<IdDecl> ids = methodCall.getIds();
+		System.out.print("METHODCALL ");
+		System.out.println(ids);
 		List<Expression> params = methodCall.getParams();
 		int col = methodCall.getColumnNumber();
 		int line   = methodCall.getLineNumber();
+						System.out.println(ids);	
+
 		if (!(this.stack.reachable(ids))) {
 			new ir.error.Error(line,col,"Unreachable identifier ");
 		}	
@@ -348,6 +363,7 @@ public class BuilderVisitor implements ASTVisitor {
 			paramDecl.accept(this);
 		}
 		if (!method.getBody().isExtern()){
+			System.out.println("FIELD_DEC_METH");
 			List<FieldDecl> fieldDeclList = method.getBody().getBlock().getVariable();
 			for (FieldDecl fieldDecl : fieldDeclList){
 				fieldDecl.accept(this);
@@ -374,7 +390,10 @@ public class BuilderVisitor implements ASTVisitor {
 		List<ClassDecl> classDeclList = prog.getClassDeclare();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (ClassDecl classDecl : classDeclList){
-			symbolInfoList.add(new SymbolInfo(classDecl));
+			SymbolInfo classSymb = new SymbolInfo(classDecl);
+			classSymb.addAttList(classDecl.getAttributes());
+			classSymb.addMethodList(classDecl.getMethods());
+			symbolInfoList.add(classSymb);
 		}
 		this.stack.newLevel();
 		this.stack.addDeclareList(symbolInfoList);
@@ -415,50 +434,63 @@ public class BuilderVisitor implements ASTVisitor {
 
 	public void checkStatement(Statement stmt){
 		if (stmt instanceof AssignStmt ){ 
+			System.out.println("A");
 			AssignStmt assignStmt = (AssignStmt) stmt;
 			assignStmt.accept(this);
 		}
 		if (stmt instanceof MethodCallStmt){
+			System.out.println("B");
 			MethodCallStmt methodCallStmt = (MethodCallStmt) stmt;
 			methodCallStmt.accept(this);
 		}
 		if (stmt instanceof IfThenStmt){
-			IfThenStmt ifThenStmt = (IfThenStmt) stmt;
-			ifThenStmt.accept(this);
+			if (stmt instanceof IfThenElseStmt){
+				System.out.println("D");
+				IfThenElseStmt ifThenElseStmt = (IfThenElseStmt) stmt;
+				ifThenElseStmt.accept(this);
+			}else{
+				System.out.println("C");
+				IfThenStmt ifThenStmt = (IfThenStmt) stmt;
+				ifThenStmt.accept(this);
+			}
 		}
-		if (stmt instanceof IfThenElseStmt){
-			IfThenElseStmt ifThenElseStmt = (IfThenElseStmt) stmt;
-			ifThenElseStmt.accept(this);
-		}
+		
 		if (stmt instanceof ForStmt){
+			System.out.println("E");
 			ForStmt forStmt = (ForStmt) stmt;
 			forStmt.accept(this);
 		}
 		if (stmt instanceof WhileStmt){
+						System.out.println("F");
+
 			WhileStmt whileStmt = (WhileStmt) stmt;
 			whileStmt.accept(this);
 		}
 		if (stmt instanceof ReturnStmt){
+			System.out.println("G");
 			ReturnStmt returnStmt = (ReturnStmt) stmt;
 			returnStmt.accept(this);
 		}
 		if (stmt instanceof ReturnVoidStmt){
+			System.out.println("H");
 			ReturnVoidStmt returnVoidStmt = (ReturnVoidStmt) stmt;
 			stmt.accept(this);
 		}
 		if (stmt instanceof BreakStmt){
-			
+			System.out.println("i");
 		}
 		if (stmt instanceof ContinueStmt){
-
+			System.out.println("J");
 		}
 		if (stmt instanceof Skip){
-
+			System.out.println("K");
 		}
 		if (stmt instanceof Block){
+			System.out.println("L");
 			Block block = (Block) stmt;
 			block.accept(this);
 		}
+		System.out.println("M");
 	}
 	
 	@Override
@@ -467,14 +499,13 @@ public class BuilderVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfo = new LinkedList<SymbolInfo>();
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
-		if (!(this.stack.reachable(ids))) {
-			new ir.error.Error(line,col,"Unreachable identifier ");
-		}	
-		/*for (IdDecl id : ids){
+						System.out.println("VarLocation");	
+
+		for (IdDecl id : ids){
 			if (!(this.stack.reachable(new SymbolInfo(id)))) {
 				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
-		}*/
+		}
 	}
 	
 	@Override

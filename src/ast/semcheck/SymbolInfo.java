@@ -14,7 +14,7 @@ public class SymbolInfo <T extends Declaration> {
 	private List<IdDecl> methodList;	//Se incluyen las 3 listas en symbol info 
 	private List<IdDecl> attList;		//independientemente de que sean o no necesarias
 	//private List<ParamDecl> paramList; 
-	
+	private List<SymbolInfo> methodListS;
 	public  SymbolInfo(T ast){
 		this.name 		= ast.getName();
 		this.column 	= ast.getColumnNumber();

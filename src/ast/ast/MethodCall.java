@@ -12,6 +12,7 @@ public class MethodCall extends Expression{
 
 	public MethodCall(List<String> ids, List<Expression> params, int line, int col){
 		super(line,col);
+		this.ids = new LinkedList<IdDecl>();
 		for(String id: ids){
 			this.ids.add(new IdDecl(id, line, col, this.getType()));
 		}

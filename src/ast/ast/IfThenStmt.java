@@ -10,6 +10,8 @@ public class IfThenStmt extends Statement {
 		super(line,col);
 		this.condition = cond;
 		this.ifBlock = ifBl;
+				System.out.println("SE INSTANCIO IF THEN ELSE");
+
 	}
 
 	public Expression getCondition() {

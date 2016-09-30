@@ -12,7 +12,7 @@ public class Main {
 	ComplexSymbolFactory sf = new ComplexSymbolFactory();
 	Parser parser;
 	Symbol symbol;
-
+	//String nameFile = 
 	if (args.length==0) parser = new Parser(new Scanner(System.in,sf),sf);
 	else parser = new Parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf);
 	
@@ -21,7 +21,7 @@ public class Main {
 	Program program = (Program) symbol.value; 
 
 	BuilderVisitor builderVisitor = new BuilderVisitor();
-	program.accept(builderVisitor);
+	//program.accept(builderVisitor);
     
     System.out.println("**********************************************************");
 

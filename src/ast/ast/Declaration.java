@@ -3,7 +3,6 @@ package ir.ast;
 public abstract class Declaration extends AST{
 	
 	protected String name;
-
 	public Declaration(int lineNumber, int columnNumber, String name){
 		super(lineNumber,columnNumber);
 		this.name = name;

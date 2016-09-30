@@ -81,25 +81,28 @@ public class SymbolTable {
 
 	public boolean reachable(List<IdDecl> idList){
 		boolean result = true;
-
+		System.out.println(idList);
 		if (idList.size()>0){
+			System.out.println("");
 			IdDecl firstElem = idList.remove(0);
-			SymbolInfo symb = getCurrentSymbolInfo(firstElem.getType());
-			if (symb!=null){
+			System.out.println(firstElem.getName());
+			SymbolInfo symb = getCurrentSymbolInfo(firstElem.toString());
+			System.out.println(symb.getType());
+			SymbolInfo typeSymb = getCurrentSymbolInfo(symb.getType());
+			System.out.println("Firs Element - "+symb.getName());
+			System.out.println(typeSymb);
+			System.out.println("Type Element - "+typeSymb.getName());
+			if (typeSymb!=null){
 				if (idList.size()>0){
-					System.out.println("Repeated identifier ");
-					List <IdDecl> attList = symb.getAttList();	
-					List <IdDecl> methodList = symb.getMethodList();
+					List <IdDecl> attList = typeSymb.getAttList();	
+					List <IdDecl> methodList = typeSymb.getMethodList();
+
+					System.out.println(attList);
+					System.out.println(methodList);
+
 					IdDecl lastElem = idList.get(0);
 					result = result && 
 							(((attList!=null)?contains(attList,lastElem):false)||((methodList!=null)?contains(methodList,lastElem):false));
-					if (result){
-						SymbolInfo symbNavigated = getCurrentSymbolInfo(lastElem.getName());
-						//Chequear si se setea si es method o no en Builder
-						if (symbNavigated.isMethod()){
-							//Check params
-						}
-					}
 				}
 			}else{
 				return false;
