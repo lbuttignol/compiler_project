@@ -20,7 +20,7 @@ public class Main {
 
 	Program program = (Program) symbol.value; 
 
-	BuilderVisitor builderVisitor = new BuilderVisitor();
+	//BuilderVisitor builderVisitor = new BuilderVisitor();
 	//program.accept(builderVisitor);
     
     System.out.println("**********************************************************");
