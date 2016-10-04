@@ -18,8 +18,9 @@ public class Main {
 	else parser = new Parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf);
 	symbol = parser.parse();
 
-	String programName = args[0];
+	//String programName = args[0];
 	Program program = (Program) symbol.value; 
+	program.setProgramName(args[0]);
 
 	BuilderVisitor builderVisitor = new BuilderVisitor();
 	program.accept(builderVisitor);
@@ -30,7 +31,7 @@ public class Main {
     program.accept(typeEV);
 
     System.out.println("START INTERMEDIATE CODE CREATION ************************************");
-    AsmIntermediate intermediateCode = new AsmIntermediate(programName);
+    AsmIntermediate intermediateCode = new AsmIntermediate();
     program.accept(intermediateCode);
     System.out.println(intermediateCode.toString());
 	}	

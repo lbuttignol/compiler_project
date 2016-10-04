@@ -14,13 +14,12 @@ PARÁMETROS DE CADA StatementCode???
 
 */
 public class AsmIntermediate implements ASTVisitor {
-	private String programName;
+//	private String programName;
 	private List<StatementCode> code;
 	private AST temporal;
 	private Integer ifCounter, whileCounter, forCounter;
 
-	public AsmIntermediate(String pName){
-		this.programName = pName ;
+	public AsmIntermediate(){
 		this.code = new LinkedList<StatementCode>();
 		this.ifCounter 	= 0;
 		this.whileCounter = 0;
@@ -81,7 +80,9 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(BooleanLiteral lit){}
+	public void visit(BooleanLiteral lit){
+		this.temporal = lit;
+	}
 	
 	@Override
 	public void visit(BreakStmt stmt){}
@@ -126,7 +127,9 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(FloatLiteral lit){}
+	public void visit(FloatLiteral lit){
+		this.temporal = lit;
+	}
 	
 	@Override
 	public void visit(ForStmt stmt){
@@ -140,29 +143,32 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(IfThenElseStmt stmt){
 		Integer ifNum = this.getIfCounter();
-		this.addStatement(new StatementCode(OperationCode.BEGINIF,"BeginIfThenElseStatement",ifNum.toString(), null));
+		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
+		this.addStatement(new StatementCode(OperationCode.BEGINIF,stmt,intLit, null));
 		stmt.getCondition().accept(this);
-
-		this.addStatement(new StatementCode(OperationCode.JNZ,temporal.toString(), "EndIf"+ifNum.toString(),null));
+		this.addStatement(new StatementCode(OperationCode.JMPFALSE,stmt.getCondition(), intLit,null));
 		stmt.getIfBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ELSEBLOCK,"ElseBlock", ifNum.toString(),null));
+		this.addStatement(new StatementCode(OperationCode.ELSEBLOCK,stmt.getIfBlock(), intLit,null));
 		stmt.getElseBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ENDIF, "EndIfThenElseStatement", ifNum.toString(),null));
+		this.addStatement(new StatementCode(OperationCode.ENDIF, stmt, intLit,null));
 	}
 	
 	@Override
 	public void visit(IfThenStmt stmt){
 		//condition, ifBlock
 		Integer ifNum = this.getIfCounter();
-		this.addStatement(new StatementCode(OperationCode.BEGINIF,"BeginIfThenStatement",ifNum.toString(), null));
+		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
+		this.addStatement(new StatementCode(OperationCode.BEGINIF,stmt,intLit, null));
 		stmt.getCondition().accept(this);
-		this.addStatement(new StatementCode(OperationCode.JNZ,temporal.toString(), "EndIf"+ifNum.toString(),null));
+		this.addStatement(new StatementCode(OperationCode.JMPFALSE,temporal, intLit,null)); //saltar al fin de if
 		stmt.getIfBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ENDIF, "EndIfThenStatement", ifNum.toString(),null));
+		this.addStatement(new StatementCode(OperationCode.ENDIF, stmt, intLit,null));
 	}
 	
 	@Override
-	public void visit(IntLiteral lit){}
+	public void visit(IntLiteral lit){
+		this.temporal = lit;
+	}
 	
 	@Override
 	public void visit(LogicalBinOp stmt){
@@ -170,7 +176,7 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		this.addStatement(new StatementCode(c,null,null,null)); // See CECI an PANCHO		!!!!!!!!!!!!!
+		this.addStatement(new StatementCode(c,exprL,exprR,temporal));
 	}
 	
 	@Override
@@ -186,31 +192,31 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(MethodDecl methodDecl){
 		String type = methodDecl.getType();
 		String name = methodDecl.getName();
-		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD, name, type, null));
+		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD, methodDecl, null, null));
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
 		for (ParamDecl paramDecl : paramDeclList) {
 			paramDecl.accept(this);
 		}
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
-		this.addStatement(new StatementCode(OperationCode.ENDMETHOD, name, type, null));
+		this.addStatement(new StatementCode(OperationCode.ENDMETHOD, methodDecl, null, null));
 	}
 	
 	@Override
 	public void visit(ParamDecl paramDecl){
 		String name = paramDecl.getName();
 		String type = paramDecl.getType();
-		this.addStatement(new StatementCode(OperationCode.PARAMDECL, name, type, null));
+		this.addStatement(new StatementCode(OperationCode.PARAMDECL, paramDecl, null, null));
 	}
 	
 	@Override
 	public void visit(Program prog){
 		List<ClassDecl> classDeclList = prog.getClassDeclare();
-		this.addStatement(new StatementCode(OperationCode.BEGINPROGRAM, programName, null, null));
+		this.addStatement(new StatementCode(OperationCode.BEGINPROGRAM, prog, null, null));
 		for (ClassDecl classDecl : classDeclList ) {
 			classDecl.accept(this);
 		}
-		this.addStatement(new StatementCode(OperationCode.ENDPROGRAM, programName, null, null));
+		this.addStatement(new StatementCode(OperationCode.ENDPROGRAM, prog, null, null));
 	}
 	
 	@Override
@@ -219,7 +225,7 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		this.addStatement(new StatementCode(c,null,null,null)); // See CECI an PANCHO		!!!!!!!!!!!!!
+		this.addStatement(new StatementCode(c,exprL,exprR,temporal)); 
 	}
 	
 	@Override
