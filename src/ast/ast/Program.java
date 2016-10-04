@@ -6,6 +6,11 @@ public class Program extends AST{
 	private String programName;
 	private List<ClassDecl> classDecl;
 
+	public Program(List<ClassDecl> classDecl,int line, int col){
+		super(line,col);
+		this.classDecl = classDecl;
+	}
+
 	public Program (List<ClassDecl> classDecl,String progName,int line, int col){
 		super(line,col);
 		this.classDecl = classDecl;

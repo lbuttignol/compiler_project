@@ -1,6 +1,6 @@
 package ir.intermediateCode;
 
-public enum Operands {
+public enum OperandsType {
 	
 	II, // Int op Int
 	IF, // Int op Float

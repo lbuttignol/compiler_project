@@ -35,7 +35,7 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		this.addStatement(new StatementCode(c,exprL,exprR,temporal));
+		this.addStatement(new StatementCode(c,new Operand(exprL),new Operand(exprR),new Operand(temporal)));
 	}
 	
 	@Override
@@ -277,35 +277,35 @@ public class AsmIntermediate implements ASTVisitor {
 		return aux;
 	}
 
-	private Operands operandsType(Expression l, Expression r){
+	private OperandsType operandsType(Expression l, Expression r){
 		String leftType = l.getType();
 		String rightType = r.getType();
 		if ((leftType.equals("INTEGER")) && (rightType.equals("INTEGER"))) {
-			return Operands.II;
+			return OperandsType.II;
 		}
 		if ((leftType.equals("INTEGER")) && (rightType.equals("FLOAT"))) {
-			return Operands.IF;
+			return OperandsType.IF;
 		}
 		if ((leftType.equals("INTEGER")) && (rightType.equals("BOOLEAN"))) {
-			return Operands.IB;
+			return OperandsType.IB;
 		}
 		if ((leftType.equals("FLOAT")) 	&& (rightType.equals("FLOAT"))) {
-			return Operands.FF;
+			return OperandsType.FF;
 		}
 		if ((leftType.equals("FLOAT")) 	&& (rightType.equals("INTEGER"))) {
-			return Operands.FI;
+			return OperandsType.FI;
 		}
 		if ((leftType.equals("FLOAT")) 	&& (rightType.equals("BOOLEAN"))) {
-			return Operands.FB;
+			return OperandsType.FB;
 		}
 		if ((leftType.equals("BOOLEAN")) && (rightType.equals("BOOLEAN"))) {
-			return Operands.BB;
+			return OperandsType.BB;
 		}
 		if ((leftType.equals("BOOLEAN")) && (rightType.equals("INTEGER"))) {
-			return Operands.BI;
+			return OperandsType.BI;
 		}
 		if ((leftType.equals("BOOLEAN")) && (rightType.equals("FLOAT"))) {
-			return Operands.BF;
+			return OperandsType.BF;
 		}else {
 			return null;
 		}
@@ -313,9 +313,7 @@ public class AsmIntermediate implements ASTVisitor {
 
 	private OperationCode createBinOpCode(Expression l, BinOpType op, Expression r){ 
 		OperationCode result = null;
-		Operands opType = operandsType(l,r);
-		//String leftId = l.getId();
-		//String rightId = r.getId();  
+		OperandsType opType = operandsType(l,r); 
 		switch (op){
 			// Arithmetic
 			case PLUS:
