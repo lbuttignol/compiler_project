@@ -168,8 +168,8 @@ assign_op  				::= ASSIGN 																	{:RESULT = AssignOpType.ASSIGN;:}
 
 
 
-method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(id);RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
-						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
+method_call         	::= ID:id attribute_access_list:attributeAccessL LPAREN params:params RPAREN	{:attributeAccessL.add(0,id);RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
+						| ID:id attribute_access_list:attributeAccessL LPAREN RPAREN					{:attributeAccessL.add(0,id);List<Expression> params = new LinkedList<Expression>();RESULT = new MethodCall(attributeAccessL,params,attributeAccessLxleft.getLine(),attributeAccessLxleft.getColumn());:}
 						| ID:id LPAREN params:params RPAREN												{:List<String> ids = new LinkedList<String>();ids.add(id); RESULT = new MethodCall(ids,params,idxleft.getLine(),idxleft.getColumn());:}
 						| ID:id LPAREN  RPAREN 															{:List<String> ids = new LinkedList<String>();ids.add(id); List<Expression> params = new LinkedList<Expression>(); RESULT = new MethodCall(ids,params,idxleft.getLine(),idxleft.getColumn());:}
 						; 

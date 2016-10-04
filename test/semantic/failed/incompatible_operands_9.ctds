@@ -1,14 +1,14 @@
 class Main{
 	void main(){
 		integer a,b;
-		float d,c;
+		float c,d;
 		bool e,f;
 		a = a+b;
 		a = a-b;
 		a = a*b;
 		a = a/b;
 		a = a%b;
-
+		//compatible operands type
 		d = d+c;
 		d = d-c;
 		d = d*c;
@@ -16,8 +16,7 @@ class Main{
 		d = d%c;
 		// incompatible operator type
 		d = d+a;
-		 
-		 
+
 		return;
 	}
 }

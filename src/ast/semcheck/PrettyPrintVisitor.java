@@ -8,8 +8,8 @@ import ir.ASTVisitor;
 import ir.ast.*;
 
 //Concrete visitor class
-public class PrettyPrintVisitor implements ASTVisitor {
-	private String formula;
+//public class PrettyPrintVisitor implements ASTVisitor {
+	/*private String formula;
 
 	public PrettyPrintVisitor(){
 	}
@@ -188,5 +188,5 @@ public class PrettyPrintVisitor implements ASTVisitor {
 		stmt.getBody().accept(this);
 		System.out.println(" ) ");
 	}
-	
-}
+	*/
+//}

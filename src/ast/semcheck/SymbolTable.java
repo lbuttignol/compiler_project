@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
-import ir.*;
+import ir.ast.*;
 
 
 public class SymbolTable {
@@ -19,10 +19,8 @@ public class SymbolTable {
 
 	public void addDeclare(SymbolInfo decl){
 		if (this.contains(decl, this.top)){
-			//System.out.println("Decl - ERROR");
 			new ir.error.Error(decl.getLineNumber(),decl.getColumnNumber(),"Repeated identifier "+decl.getName());
 		}else{
-			//System.out.println("Decl - OK");
 			this.symbolTable.get(this.top).add(decl);
 		}
 	}
@@ -47,6 +45,18 @@ public class SymbolTable {
 		return null;
 	}
 
+	public SymbolInfo getCurrentSymbolInfo(String id){
+		List<SymbolInfo> symList;
+		for(int i=top; i>=0; i--){
+			symList = this.symbolTable.get(i);
+			for (SymbolInfo sym: symList){
+				if (sym.getName().equals(id)){
+					return sym;
+				}
+			}
+		}
+		return null;
+	}
 
 	public void newLevel(){
 		List<SymbolInfo> SymbolInfoList = new LinkedList<SymbolInfo>();
@@ -69,6 +79,47 @@ public class SymbolTable {
 
 	}
 
+	public boolean reachable(List<IdDecl> idList){
+		boolean result = true;
+		System.out.println(idList);
+		if (idList.size()>0){
+			System.out.println("");
+			IdDecl firstElem = idList.remove(0);
+			System.out.println(firstElem.getName());
+			SymbolInfo symb = getCurrentSymbolInfo(firstElem.toString());
+			System.out.println(symb.getType());
+			SymbolInfo typeSymb = getCurrentSymbolInfo(symb.getType());
+			System.out.println("Firs Element - "+symb.getName());
+			System.out.println(typeSymb);
+			System.out.println("Type Element - "+typeSymb.getName());
+			if (typeSymb!=null){
+				if (idList.size()>0){
+					List <IdDecl> attList = typeSymb.getAttList();	
+					List <IdDecl> methodList = typeSymb.getMethodList();
+
+					System.out.println(attList);
+					System.out.println(methodList);
+
+					IdDecl lastElem = idList.get(0);
+					result = result && 
+							(((attList!=null)?contains(attList,lastElem):false)||((methodList!=null)?contains(methodList,lastElem):false));
+				}
+			}else{
+				return false;
+			}
+		}
+		return result;
+	}
+
+
+	private boolean contains(List<IdDecl> ids, IdDecl id){
+		for (IdDecl idC : ids){
+			if (idC.getName().equals(id.getName())){
+				return true;
+			}
+		}
+		return false;
+	}
 	private boolean contains(SymbolInfo sym, int i){
 		List<SymbolInfo> symList = this.symbolTable.get(i);
 		Iterator<SymbolInfo> itSym = symList.iterator();
