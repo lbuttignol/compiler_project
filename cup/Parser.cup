@@ -186,7 +186,7 @@ attribute_access_list 	::= attribute_access_list:aal1 attribute_access:aa1						
 attribute_access		::= DOC ID:id 																	{:RESULT = id;:}
 						;
 
-location 				::= ID:id 																		{:RESULT = new VarLocation(id,idxleft.getLine(),idxleft.getColumn());:}
+location 				::= ID:id 																		{:List<String> ids = new LinkedList<String>(); ids.add(id);RESULT = new VarLocation(ids,idxleft.getLine(),idxleft.getColumn());:}
 						| ID:id attribute_access_list:attributeAccessL 									{:attributeAccessL.add(0,id); RESULT = new AttributeLocation(attributeAccessL,idxleft.getLine(),idxleft.getColumn());:}
 						| ID:id LBRACKET expr:expr RBRACKET								  				{:List<String> ids = new LinkedList<String>(); ids.add(id); RESULT = new ArrayLocation(ids,expr,idxleft.getLine(),idxleft.getColumn());:}
 						| ID:id attribute_access_list:attributeAccessL LBRACKET expr:expr RBRACKET		{:attributeAccessL.add(0,id);RESULT = new AttributeArrayLocation(attributeAccessL,expr,idxleft.getLine(),idxleft.getColumn());:}

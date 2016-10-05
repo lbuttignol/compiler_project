@@ -7,13 +7,13 @@ class Martin{
 	} 
 
 	bool esPar(integer val){
-		return val % 2 ==0;
+		return (val % 2) == 0;
 	}
 
 
 	integer method3(integer z){
 		integer c;
-		float xmf,fd,a;
+		float xmf,fd, a;
 		a = 25.6;
 //		callMethod(c,a);
 		// the condition of the if should have a boolean type

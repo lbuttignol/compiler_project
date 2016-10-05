@@ -7,8 +7,8 @@ import java.util.LinkedList;
 public class VarLocation extends Location {
 	private int blockId;
 
-	public VarLocation(String id, int line, int col){
-		super(id,line,col);
+	public VarLocation(List<String> ids, int line, int col){
+		super(ids,line,col);
 		//List<String> ids = new LinkedList<String> ();
 		//super(ids.add(id));
 		this.blockId = -1;

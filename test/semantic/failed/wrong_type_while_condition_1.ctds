@@ -17,7 +17,7 @@ class Martin{
 		a = 25.6;
 //		callMethod(c,a);
 		// the condition of the while should have a boolean type
-		while (1.02 + 1.01658 - 6.014 * 8.848 / 8.8){
+		while (a){
 			if (a > 5.0){
 				return 2;
 			}else{
