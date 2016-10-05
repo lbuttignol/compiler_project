@@ -23,7 +23,7 @@ public enum OperationCode {
 	ENDWHILE	, // WhileStat	- intLitNumber	- null
 	
 // Unary Aruthmetic
-	SUBUI		, // 
+	SUBUI		, // value null result
 	SUBUF		, // 
 
 // UnaryLogic

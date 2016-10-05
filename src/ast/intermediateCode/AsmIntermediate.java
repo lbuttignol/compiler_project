@@ -103,11 +103,11 @@ public class AsmIntermediate implements ASTVisitor {
 		Literal aux;
 		if (stmt.getOperand().getType().compareTo("INTEGER")==0) {
 			aux = (IntLiteral) temporal; 
-			this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,null));
+			this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
 		} else {
 			if (stmt.getOperand().getType().compareTo("FLOAT")==0) {
 				aux = (FloatLiteral) temporal;
-				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,null));
+				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,new Operand(temporal)));
 			}else{
 				throw new IllegalStateException("Wrong arithmetic unary type");
 			}
@@ -121,7 +121,44 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(ArrayLocation stmt){}
 	
 	@Override
-	public void visit(AssignStmt stmt){}
+	public void visit(AssignStmt stmt){
+		Literal aux;
+		switch (stmt.getOperator()) {
+			case INCREMENT:
+				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+						stmt.getExpression().accept(this);
+						aux = (IntLiteral) temporal; 
+						this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
+					} else {
+						if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+							stmt.getExpression().accept(this);
+							aux = (FloatLiteral) temporal;
+							this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						}else{
+							throw new IllegalStateException("Wrong assignation type");
+						}
+					}
+				break;
+			case DECREMENT:
+					if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+						stmt.getExpression().accept(this);
+						aux = (IntLiteral) temporal; 
+						this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
+					} else {
+						if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+							stmt.getExpression().accept(this);
+							aux = (FloatLiteral) temporal;
+							this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						}else{
+							throw new IllegalStateException("Wrong assignation type");
+						}
+					}
+				break;
+			case ASSIGN:
+				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(stmt.getExpression()),null, new Operand(stmt.getLocation())));
+				break;
+		}
+	}
 	
 	@Override
 	public void visit(AttributeArrayLocation stmt){}
@@ -394,7 +431,7 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(MethodCall stmt){}
+	public void visit(MethodCall stmt){} // math(p1, p2,p3)
 	
 	@Override
 	public void visit(MethodCallStmt stmt){}
