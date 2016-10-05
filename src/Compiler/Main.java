@@ -22,6 +22,7 @@ public class Main {
 
 	BuilderVisitor builderVisitor = new BuilderVisitor();
 	program.accept(builderVisitor);
+
     
     System.out.println("**********************************************************");
 

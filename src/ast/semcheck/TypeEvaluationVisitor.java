@@ -32,9 +32,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression exprRight = stmt.getRightOperand();
 		checkExpressionType(exprLeft);
 		checkExpressionType(exprRight);
-		if (!( (exprLeft.getType().equals("INTEGER")&&(exprRight.getType().equals("INTEGER")))||
+		System.out.println("Left expression type: " + exprLeft.getType());
+		System.out.println("Right expression type: " + exprLeft.getType());
+		if (!( ( exprLeft.getType().equals("INTEGER")&&(exprRight.getType().equals("INTEGER")) ) ||
 			((exprLeft.getType().equals("FLOAT")&&(exprRight.getType().equals("FLOAT")) )))){
-			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Operacion aritmetica binaria no valida");
+			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Invalid artihmetic operation, both expressions should be INTEGER or FLOAT");
 		}else{
 			stmt.setType(exprLeft.getType());
 		}
@@ -45,8 +47,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ArithmeticUnaryOp stmt){
 		Expression expr = stmt.getOperand();
 		checkExpressionType(expr);
+		System.out.println("Unary expression type: " + stmt.getType());
 		if (!((expr.getType().equals("INTEGER"))||(expr.getType().equals("FLOAT")))){
-			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Operacion aritmetica unaria no valida");
+			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Invalid aritmetic operation, "+expr.getType()+" expression expected");
 		}else{
 			stmt.setType(expr.getType());
 		}
