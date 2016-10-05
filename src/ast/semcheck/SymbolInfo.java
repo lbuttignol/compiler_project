@@ -23,7 +23,7 @@ public class SymbolInfo <T extends Declaration> {
 			//System.out.println("akataval");
 		this.column 	= ast.getColumnNumber();
 		this.line  		= ast.getLineNumber();
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.method 	= false;
@@ -36,7 +36,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.column 	= ast.getColumnNumber();
 		this.line 		= ast.getLineNumber();
 		this.method 	= false;
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
@@ -48,7 +48,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.column 	= ast.getColumnNumber();
 		this.line 		= ast.getLineNumber();
 		this.method 	= false;
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= index;
@@ -61,7 +61,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.column 	= ast.getColumnNumber();
 		this.line 		= ast.getLineNumber();
 		this.method 	= method;
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
@@ -73,7 +73,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.column 	= ast.getColumnNumber();
 		this.line 		= ast.getLineNumber();
 		this.method 	= method;
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
@@ -108,8 +108,10 @@ public class SymbolInfo <T extends Declaration> {
 		this.type = type;
 	}
 
-	public void addMethod(IdDecl meth){
-		this.methodList.add(meth);
+	public void addMethod(MethodDecl meth){
+		SymbolInfo symAux=new SymbolInfo(true,meth.getType(),meth);
+		symAux.addAttList(meth.getParams());
+		this.methodList.add(symAux);
 	}
 
 	public void addAttribute(IdDecl att){
@@ -119,9 +121,7 @@ public class SymbolInfo <T extends Declaration> {
 	public void addMethodList(List<MethodDecl> methL ){
 		this.methodList = new LinkedList<SymbolInfo>();
 		for(MethodDecl meth: methL){
-			SymbolInfo symAux=new SymbolInfo(true,meth.getType(),meth));
-			symAux.addAttList(meth.getParams());
-			this.methodList.add(symAux);
+			this.addMethod(meth);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class SymbolInfo <T extends Declaration> {
 		return this.attList;
 	}
 
-	public List<IdDecl> getMethodList(){
+	public List<SymbolInfo> getMethodList(){
 		return this.methodList;
 	}
 

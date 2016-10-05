@@ -419,7 +419,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			SymbolInfo classSymbol = new SymbolInfo(classDecl.getName(),classDecl);
 			classSymbol.addAttList(classDecl.getAttributes());
 			classSymbol.addMethodList(classDecl.getMethods());
-			this.stack.addDeclare(classDecl);
+			this.stack.addDeclare(classSymbol);
 		}
 		for (ClassDecl classDecl : classDeclList){
 			classDecl.accept(this);
@@ -473,7 +473,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		//System.out.println("Type of var location("+lastName+"): "+type);
 		if(type!=null)
 			loc.setType(type);
-		SymbolInfo class = this.stack.getCurrentSymbolInfo(ids.get(0).getType());//obtengo symbol info clase
+		SymbolInfo classDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getType());//obtengo symbol info clase
 		List<SymbolInfo> meth;
 
 	}
