@@ -1,4 +1,4 @@
-class main{
+class Main{
 
 integer A[5] ;
 float B[56];

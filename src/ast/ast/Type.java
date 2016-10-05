@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class Type{
 
 	private static List<String> types;
-
+	private final  static int NATIVE_TYPE_SIZE = 8;
 	public Type(){
 		this.types = new LinkedList<String>();
 		this.types.add("INTEGER");
@@ -13,8 +13,8 @@ public class Type{
 		this.types.add("FLOAT");
 		this.types.add("BOOLEAN");
 		this.types.add("UNDEFINED");
-		this.types.add("INTARRAY");
-		this.types.add("BOOLARRAY");
+		this.types.add("INTEGERARRAY");
+		this.types.add("BOOLEANARRAY");
 		this.types.add("FLOATARRAY");
 	}
 
@@ -26,8 +26,8 @@ public class Type{
 			types.add("FLOAT");
 			types.add("BOOLEAN");
 			types.add("UNDEFINED");
-			types.add("INTARRAY");
-			types.add("BOOLARRAY");
+			types.add("INTEGERARRAY");
+			types.add("BOOLEANARRAY");
 			types.add("FLOATARRAY");
 		}else{
 			if (!(types.contains(type.toUpperCase()))){
@@ -48,7 +48,9 @@ public class Type{
 		}
 	}
 
-
+	public static boolean isNativeType(String type){
+		return types.subList(0,NATIVE_TYPE_SIZE).contains(type.toUpperCase());
+	}
 	public String toString(){
 		return types.toString();
 	}

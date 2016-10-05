@@ -1,4 +1,4 @@
-class test{
+class Main{
    float c;
 
    void alo(bool b, integer x){

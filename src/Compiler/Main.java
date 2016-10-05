@@ -23,8 +23,9 @@ public class Main {
 	Program program = (Program) symbol.value; 
 	program.setProgramName(programName);
 
-	//BuilderVisitor builderVisitor = new BuilderVisitor();
-	//program.accept(builderVisitor);
+	BuilderVisitor builderVisitor = new BuilderVisitor();
+	program.accept(builderVisitor);
+
     
     System.out.println("**********************************************************");
 

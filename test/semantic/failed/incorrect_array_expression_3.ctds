@@ -1,4 +1,4 @@
-class Main{
+class main{
 	
 	integer x[true]; //syntax error 
 	integer x[65];

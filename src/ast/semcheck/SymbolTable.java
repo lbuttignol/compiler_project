@@ -70,47 +70,51 @@ public class SymbolTable {
 
 	}
 
-	public boolean reachable(SymbolInfo sym){
+
+	public boolean reachable(SymbolInfo sym, boolean isMethod){
 		boolean result = false;
 		for(int i=top; i>=0; i--){
-			result= result || this.contains(sym ,i);
+			result= result || this.contains(sym ,i,isMethod);
 		}
 		return result;
 
 	}
 
-	public boolean reachable(List<IdDecl> idList){
+	public void reachable(List<IdDecl> idList,boolean isMethod,boolean isArray){
 		boolean result = true;
-		System.out.println(idList);
 		if (idList.size()>0){
-			System.out.println("");
 			IdDecl firstElem = idList.remove(0);
-			System.out.println(firstElem.getName());
 			SymbolInfo symb = getCurrentSymbolInfo(firstElem.toString());
-			System.out.println(symb.getType());
 			SymbolInfo typeSymb = getCurrentSymbolInfo(symb.getType());
-			System.out.println("Firs Element - "+symb.getName());
-			System.out.println(typeSymb);
-			System.out.println("Type Element - "+typeSymb.getName());
 			if (typeSymb!=null){
 				if (idList.size()>0){
 					List <IdDecl> attList = typeSymb.getAttList();	
 					List <IdDecl> methodList = typeSymb.getMethodList();
-
-					System.out.println(attList);
-					System.out.println(methodList);
-
+					List <IdDecl> arrayList = typeSymb.getArrayList();
 					IdDecl lastElem = idList.get(0);
-					result = result && 
-							(((attList!=null)?contains(attList,lastElem):false)||((methodList!=null)?contains(methodList,lastElem):false));
+					if (isMethod){
+						result = result && ((methodList!=null)?contains(methodList,lastElem):false);
+					}else{
+						if (isArray){
+							result = result && ((arrayList!=null)?contains(arrayList,lastElem):false);
+						}else{
+							result = result && ((attList!=null)?contains(attList,lastElem):false);
+						}
+					};
+					if (!result){
+						int line = lastElem.getLineNumber();
+						int col  = lastElem.getColumnNumber();
+						new ir.error.Error(line,col,"Unreachable identifier "+lastElem.getName());
+
+					}
 				}
 			}else{
-				return false;
+				int line = symb.getLineNumber();
+				int col  = symb.getColumnNumber();
+				new ir.error.Error(line,col,"The class "+symb.getName()+" not exist");
 			}
 		}
-		return result;
 	}
-
 
 	private boolean contains(List<IdDecl> ids, IdDecl id){
 		for (IdDecl idC : ids){
@@ -120,16 +124,35 @@ public class SymbolTable {
 		}
 		return false;
 	}
-	private boolean contains(SymbolInfo sym, int i){
+	private boolean contains(SymbolInfo sym, int i,boolean isMethod){
 		List<SymbolInfo> symList = this.symbolTable.get(i);
-		Iterator<SymbolInfo> itSym = symList.iterator();
-		while (itSym.hasNext()){
-			if (itSym.next().getName().equals(sym.getName())){
-				return true;
+		for (SymbolInfo symbolInfo : symList){
+			if (((symbolInfo.getName().equals(sym.getName())))&&(symbolInfo.isMethod()==isMethod)) 
+			{
+				if (!isMethod){
+					if (symbolInfo.isArray()==sym.isArray()){
+						return true;
+					}
+				}else{
+					return true;	
+				}
 			}
 		}
 		return false;
 	}
+
+	private boolean contains(SymbolInfo sym, int i){
+		List<SymbolInfo> symList = this.symbolTable.get(i);
+		for (SymbolInfo symbolInfo : symList){
+			if ((symbolInfo.getName().equals(sym.getName()))) 
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 
 	public String getMethodType(){
 		List<SymbolInfo> symList;

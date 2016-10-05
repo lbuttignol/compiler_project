@@ -24,6 +24,7 @@ class Martin{
 				return 1;
 			}
 		}
+		return 4;
 	}
 
 }

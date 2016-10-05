@@ -22,8 +22,9 @@ integer pruArreglos(integer b, integer c ){
 
         
 }
+	
 
-
+ 
 void printI(integer i)extern;
 
 integer main(){

@@ -1,4 +1,4 @@
-class main{
+class Main{
 
 /* Sumatoria de flotantes, 
    ej: sumatoria(4) = 4.0 + 3.0 + 2.0 + 1.0
