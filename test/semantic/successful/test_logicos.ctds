@@ -1,6 +1,4 @@
-
-
-class main{
+class Main{
 
 /*
 Saca el promedio entre las dos notas mas altas.

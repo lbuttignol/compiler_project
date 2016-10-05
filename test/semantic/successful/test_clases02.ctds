@@ -33,7 +33,7 @@ class persona{
  
 }
 
-class main{
+class Main{
 
    void printI(integer i)extern;
 

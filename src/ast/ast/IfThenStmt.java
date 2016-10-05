@@ -9,9 +9,7 @@ public class IfThenStmt extends Statement {
 	public IfThenStmt(Expression cond, Statement ifBl,int line, int col){
 		super(line,col);
 		this.condition = cond;
-		this.ifBlock = ifBl;
-				System.out.println("SE INSTANCIO IF THEN ELSE");
-
+		this.ifBlock = ifBl;				
 	}
 
 	public Expression getCondition() {
@@ -34,7 +32,6 @@ public class IfThenStmt extends Statement {
 	public String toString(){
 		return "if " + condition.toString() + '\n' + ifBlock.toString();
 	}
-
 	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);

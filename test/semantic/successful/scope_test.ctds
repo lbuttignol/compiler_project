@@ -1,4 +1,4 @@
-class main{
+class Main{
 	
 	integer x,y,z;
 	integer method(){
@@ -19,7 +19,7 @@ class main{
 		return y;
 	}
 
-	void Main(){
+	void main(){
 		return;
 	}
 	

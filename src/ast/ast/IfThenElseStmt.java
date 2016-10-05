@@ -25,7 +25,6 @@ public class IfThenElseStmt extends IfThenStmt {
 
 	@Override
 	public void accept(ASTVisitor v) {
-		System.out.println("MARIANO");
 		v.visit(this);
 	}
 }

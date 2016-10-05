@@ -97,11 +97,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(AttributeArrayLocation loc){
 		List<IdDecl> ids = loc.getIds();
-		//System.out.println("SIZE-"+String.valueOf(ids.size()));
 		int last = ids.size()-1;
 		String lastName = ids.get(last).getName();
 		String type = this.stack.getCurrentType(lastName);
-		//System.out.println("TYPE-"+type);
 		if (type!=null)
 			loc.setType(type);
 	}
@@ -479,7 +477,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 		}
 		if (stmt instanceof Block){
-			//System.out.println("BLOCK");
 			Block block = (Block) stmt;
 			block.accept(this);
 		}
@@ -489,7 +486,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(VarLocation loc){
-		//System.out.println("VARLOCATION");
 		List<IdDecl> ids = loc.getIds();
 		int last = ids.size()-1;
 		String lastName = ids.get(last).getName();
@@ -503,7 +499,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		checkExpressionType(condition);
 		if (!condition.getType().equals("BOOLEAN")){
-			//System.out.println("ERROR en while - condicion no es bool");
 			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Condition should be a boolean");
 		}
 		Statement body = stmt.getBody();

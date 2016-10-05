@@ -1,4 +1,4 @@
-class main{
+class Main{
 
 integer breaks(integer g){
       integer  i;
