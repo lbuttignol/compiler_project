@@ -30,12 +30,12 @@ public class Main {
 
     TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
     program.accept(typeEV);
-/*
+
     System.out.println("START INTERMEDIATE CODE CREATION ************************************");
     AsmIntermediate intermediateCode = new AsmIntermediate();
     program.accept(intermediateCode);
     System.out.println(intermediateCode.toString());
-*/
+
 	}	
     public void syntax_error(Symbol sym){ 
 	// Mute legacy Error Printing

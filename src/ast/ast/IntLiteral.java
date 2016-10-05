@@ -55,7 +55,7 @@ public class IntLiteral extends Literal {
 
 	@Override
 	public String toString() {
-		return rawValue;
+		return value.toString();
 	}
 
 	@Override

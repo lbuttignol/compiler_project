@@ -24,6 +24,12 @@ public class Operand {
 		this.labelNumber = 0;
 	}
 
+	public Operand(Integer number){
+		this.expression = null;
+		this.labelName = "";
+		this.labelNumber = number;
+	}
+
 	public void setName(String name){
 		this.labelName = name;	
 	}
