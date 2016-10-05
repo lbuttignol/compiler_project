@@ -1,6 +1,6 @@
-class main{
+class Main { 
 
-integer A[-5] ;// error la declaracion de un arreglo debe tener un entero mayor a CERO
+integer A[5] ;// error la declaracion de un arreglo debe tener un entero mayor a CERO
 bool  C[0];// error la declaracion de un arreglo debe tener un entero mayor a CERO
 
 integer pruArreglos(integer a, integer b ){

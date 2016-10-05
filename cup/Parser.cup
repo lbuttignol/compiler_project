@@ -137,7 +137,7 @@ type					::= INT_TYPE 																{:RESULT = "INTEGER";:}
 						| ID:id 																	{:RESULT = id;:}
 						;
 
-statement_list			::= statement_list:stmtList statement:stmt									{:stmtList.add(stmt);RESULT = stmtList;:}
+statement_list			::= statement:stmt statement_list:stmtList 									{:stmtList.add(0,stmt);RESULT = stmtList;:}
 						| statement:stmt															{:List<Statement> statement = new LinkedList<Statement>();statement.add(stmt);RESULT = statement;:}
 						;
 

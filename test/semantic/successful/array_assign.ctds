@@ -3,6 +3,7 @@ class Person{
 
 	void setYears(integer y){
 		years = y;
+		return;
 	}
 
 
@@ -35,7 +36,7 @@ class Mom{
 	}
 }
 
-class main{
+class Main{
 	
 	integer x,y,z;
 	
@@ -83,7 +84,7 @@ class main{
 		return a;
 	}
 
-	void Main(){
+	void main(){
 		return;
 	}
 }

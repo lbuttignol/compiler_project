@@ -1,4 +1,4 @@
-class Martin{
+	class Martin{
 	integer i [3];
 	float f,kl;
 

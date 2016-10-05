@@ -13,8 +13,10 @@ public class SymbolInfo <T extends Declaration> {
 	private int line;
 	private List<SymbolInfo> methodList;	//Se incluyen las 3 listas en symbol info 
 	private List<IdDecl> attList;		//independientemente de que sean o no necesarias
+	private Integer index;                  //Se utiliza cuando se desea encapsular un SymbolInfo
+	private List<IdDecl> arrayList;
 	//private List<ParamDecl> paramList; 
-	private List<SymbolInfo> methodListS;
+	
 	public  SymbolInfo(T ast){
 		this.name 		= ast.getName();
 		//if (this.name.equalsIgnoreCase("val"))
@@ -23,6 +25,9 @@ public class SymbolInfo <T extends Declaration> {
 		this.line  		= ast.getLineNumber();
 		this.methodList = new LinkedList<IdDecl>();
 		this.attList	= new LinkedList<IdDecl>();
+		this.arrayList  = new LinkedList<IdDecl>();
+		this.method 	= false;
+		this.index		= null;
 	}
 
 	public SymbolInfo(String type, T ast){
@@ -33,8 +38,35 @@ public class SymbolInfo <T extends Declaration> {
 		this.method 	= false;
 		this.methodList = new LinkedList<IdDecl>();
 		this.attList	= new LinkedList<IdDecl>();
+		this.arrayList  = new LinkedList<IdDecl>();
+		this.index		= null;
+
+	}
+	public SymbolInfo(String type, T ast,int index){
+		this.type 		= type;
+		this.name 		= ast.getName();
+		this.column 	= ast.getColumnNumber();
+		this.line 		= ast.getLineNumber();
+		this.method 	= false;
+		this.methodList = new LinkedList<IdDecl>();
+		this.attList	= new LinkedList<IdDecl>();
+		this.arrayList  = new LinkedList<IdDecl>();
+		this.index		= index;
+
 	}
 
+	public SymbolInfo(boolean method,T ast){
+		this.type 		= "UNDEFINED";
+		this.name 		= ast.getName();
+		this.column 	= ast.getColumnNumber();
+		this.line 		= ast.getLineNumber();
+		this.method 	= method;
+		this.methodList = new LinkedList<IdDecl>();
+		this.attList	= new LinkedList<IdDecl>();
+		this.arrayList  = new LinkedList<IdDecl>();
+		this.index		= null;
+
+	}
 	public SymbolInfo(boolean method, String type,T ast){
 		this.type 		= type;
 		this.name 		= ast.getName();
@@ -43,6 +75,13 @@ public class SymbolInfo <T extends Declaration> {
 		this.method 	= method;
 		this.methodList = new LinkedList<IdDecl>();
 		this.attList	= new LinkedList<IdDecl>();
+		this.arrayList  = new LinkedList<IdDecl>();
+		this.index		= null;
+
+	}
+
+	public boolean isArray(){
+		return (this.index!=null);
 	}
 
 	public boolean isMethod(){
@@ -91,7 +130,11 @@ public class SymbolInfo <T extends Declaration> {
 		for(FieldDecl att: fieldList){
 			List<IdDecl> ids = att.getNames();
 			for(IdDecl id: ids){
-				this.attList.add(id);
+				if (id instanceof ArrayIdDecl){
+					this.arrayList.add(id);
+				}else{
+					this.attList.add(id);
+				}
 			}
 		}
 	}
@@ -109,6 +152,18 @@ public class SymbolInfo <T extends Declaration> {
 
 	public List<IdDecl> getMethodList(){
 		return this.methodList;
+	}
+
+	public List<IdDecl> getArrayList(){
+		return this.arrayList;
+	}
+
+	public void setArrayList(List<IdDecl> arrayList){
+		this.arrayList=arrayList;
+	}
+
+	public void setIndex(Integer index){
+		this.index=index;
 	}
 
 }

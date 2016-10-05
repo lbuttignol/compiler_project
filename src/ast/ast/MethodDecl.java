@@ -7,6 +7,7 @@ public class MethodDecl extends Declaration{
 	private String type;
 	private List<ParamDecl> params;
 	private BodyDecl body;
+	private boolean forceReturn = false;
 
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
 					   BodyDecl body, int line, int col){
@@ -16,6 +17,15 @@ public class MethodDecl extends Declaration{
 		this.body      = body;
 
 	}
+	public MethodDecl( String type,String name,List<ParamDecl> params, 
+					   BodyDecl body, int line, int col, boolean forceReturn){
+		super(line,col,name);
+		this.type      = type.toUpperCase();
+		this.params    = params;
+		this.body      = body;
+		this.forceReturn = forceReturn;
+
+	}
 
 	public MethodDecl( String type,String name, 
 					   BodyDecl body, int line, int col){
@@ -23,6 +33,16 @@ public class MethodDecl extends Declaration{
 		this.type      = type.toUpperCase();
 		this.params    =  new LinkedList<ParamDecl>();
 		this.body      = body;
+
+	}
+
+	public MethodDecl( String type,String name, 
+					   BodyDecl body, int line, int col, boolean forceReturn){
+		super(line,col,name);
+		this.type      = type.toUpperCase();
+		this.params    =  new LinkedList<ParamDecl>();
+		this.body      = body;
+		this.forceReturn = forceReturn;
 
 	}
 

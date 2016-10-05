@@ -1,4 +1,4 @@
-class main{
+class Main{
 
 /* test_potencia :funcion que calcula la x ^ n , x elevado a la n  */
 

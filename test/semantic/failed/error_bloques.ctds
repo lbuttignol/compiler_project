@@ -10,15 +10,14 @@ integer breaks(integer g){
         
              { //bloque 2
                   bool a;
-                  
-	          if(g < 0){
-	                break;
-                   }
-	           else{
-	                continue;
-                   }
+                    
+      	          if(g < 0){
+      	                break;
+                         }
+      	           else{
+      	                continue;
+                         }
              } //fin bloque 2
-
              { //bloque 2
                   a =true; //a no esta declarada, ese nivel en la tabla ya no debe estar.
 	         
