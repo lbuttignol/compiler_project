@@ -89,11 +89,11 @@ public class SymbolTable {
 			if (typeSymb!=null){
 				if (idList.size()>0){
 					List <IdDecl> attList = typeSymb.getAttList();	
-					List <IdDecl> methodList = typeSymb.getMethodList();
+					List <SymbolInfo> methodList = typeSymb.getMethodList();
 					List <IdDecl> arrayList = typeSymb.getArrayList();
 					IdDecl lastElem = idList.get(0);
 					if (isMethod){
-						result = result && ((methodList!=null)?contains(methodList,lastElem):false);
+						result = result && ((methodList!=null)?containsMeth(methodList,lastElem):false);
 					}else{
 						if (isArray){
 							result = result && ((arrayList!=null)?contains(arrayList,lastElem):false);
@@ -124,6 +124,16 @@ public class SymbolTable {
 		}
 		return false;
 	}
+
+	private boolean containsMeth(List<SymbolInfo> ids, IdDecl id){
+		for (SymbolInfo idC : ids){
+			if (idC.getName().equals(id.getName())){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean contains(SymbolInfo sym, int i,boolean isMethod){
 		List<SymbolInfo> symList = this.symbolTable.get(i);
 		for (SymbolInfo symbolInfo : symList){
