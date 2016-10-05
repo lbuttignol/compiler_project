@@ -101,7 +101,20 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(ArithmeticUnaryOp stmt){
 		stmt.getOperand().accept(this);
 		Literal aux;
-		if (stmt.getOperand().getType().compareTo("INTEGER")==0) {
+		switch (stmt.getOperand().getType()) {
+			case "INTEGER":
+				aux = (IntLiteral) temporal; 
+				this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
+				break;
+			case "FLOAT":
+				aux = (FloatLiteral) temporal;
+				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,new Operand(temporal)));
+				break;
+			default:
+				throw new IllegalStateException("Wrong arithmetic unary type");
+
+		}
+/*		if (stmt.getOperand().getType().compareTo("INTEGER")==0) {
 			aux = (IntLiteral) temporal; 
 			this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
 		} else {
@@ -112,10 +125,24 @@ public class AsmIntermediate implements ASTVisitor {
 				throw new IllegalStateException("Wrong arithmetic unary type");
 			}
 		}
-	}
+*/	}
 	
 	@Override
-	public void visit(ArrayIdDecl stmt){}
+	public void visit(ArrayIdDecl stmt){
+		switch (stmt.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.ARRAYDECLF,new Operand(stmt),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.ARRAYDECLB,new Operand(stmt),null,null));
+				break;
+			default:
+				throw new IllegalStateException("Some error in array type");
+		}
+	}
 	
 	@Override
 	public void visit(ArrayLocation stmt){}

@@ -37,7 +37,7 @@ public class Main {
     program.accept(intermediateCode);
     System.out.println(intermediateCode.toString());
 
-	}	
+	}		
     public void syntax_error(Symbol sym){ 
 	// Mute legacy Error Printing
     }

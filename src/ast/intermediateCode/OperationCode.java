@@ -12,6 +12,9 @@ public enum OperationCode {
 	PARAMDECL 	, // ParamDecl 	- type			- null
 	LOADPARAM	, // ParamNAME	- type			- null  
 	IDDECL		, // IdDecl 	- null			- null				// ver si hay que dividir o no!!!!!11
+	ARRAYDECLI	, // ArrayDecl 	- null 			- null
+	ARRAYDECLF	, // ArrayDecl 	- null			- null
+	ARRAYDECLB 	, // ArrayDecl 	- null			- null
 
 // Statements
 	BEGINIF		, // IfStatement- intLitNumber	- null
