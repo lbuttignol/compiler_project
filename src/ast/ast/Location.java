@@ -5,12 +5,6 @@ import ir.ASTVisitor;
 public abstract class Location extends Expression {
 	protected List<IdDecl> ids;
 
-	public Location(String id, int line, int col){
-		super(line,col);
-		this.ids = new LinkedList<IdDecl>();
-		this.ids.add(new IdDecl(id, line, col, this.getType() ));
-	}
-
 	public Location(List<String> ids, int line, int col){
 		super(line,col);
 		this.ids = new LinkedList<IdDecl>();

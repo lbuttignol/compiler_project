@@ -36,7 +36,7 @@ class main{
         t.alo(true,y);
         
         c = 8.0;
-        y = t.alo2(y); 
+        y = t.alo2(y);
         printI(t.alo2((3)*y)); 
         return;
    }

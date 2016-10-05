@@ -17,7 +17,7 @@ integer pruArreglos(integer b, integer c ){
 
 }
 
-void printB(bool b) extern;
+void printB(bool b) {}
 void printF(float f) extern;
 void printI(integer i) extern;
 

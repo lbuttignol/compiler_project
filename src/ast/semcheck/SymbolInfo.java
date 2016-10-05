@@ -11,12 +11,14 @@ public class SymbolInfo <T extends Declaration> {
 	private String name;
 	private int column;
 	private int line;
-	private List<IdDecl> methodList;	//Se incluyen las 3 listas en symbol info 
+	private List<SymbolInfo> methodList;	//Se incluyen las 3 listas en symbol info 
 	private List<IdDecl> attList;		//independientemente de que sean o no necesarias
 	//private List<ParamDecl> paramList; 
 	private List<SymbolInfo> methodListS;
 	public  SymbolInfo(T ast){
 		this.name 		= ast.getName();
+		//if (this.name.equalsIgnoreCase("val"))
+			//System.out.println("akataval");
 		this.column 	= ast.getColumnNumber();
 		this.line  		= ast.getLineNumber();
 		this.methodList = new LinkedList<IdDecl>();
@@ -76,9 +78,11 @@ public class SymbolInfo <T extends Declaration> {
 	}
 
 	public void addMethodList(List<MethodDecl> methL ){
-		this.methodList = new LinkedList<IdDecl>();
+		this.methodList = new LinkedList<SymbolInfo>();
 		for(MethodDecl meth: methL){
-			this.methodList.add(new IdDecl(meth.getName(), meth.getLineNumber(), meth.getColumnNumber()));
+			SymbolInfo symAux=new SymbolInfo(true,meth.getType(),meth));
+			symAux.addAttList(meth.getParams());
+			this.methodList.add(symAux);
 		}
 	}
 
@@ -95,7 +99,7 @@ public class SymbolInfo <T extends Declaration> {
 	public void addParamList(List<ParamDecl> paramL ){
 		this.attList = new LinkedList<IdDecl>();
 		for(ParamDecl param: paramL){
-			this.attList.add(new IdDecl(param.getName(), param.getLineNumber(), param.getColumnNumber()));
+			this.attList.add(new IdDecl(param.getName(), param.getLineNumber(), param.getColumnNumber(), param.getType()));
 		}
 	}
 
