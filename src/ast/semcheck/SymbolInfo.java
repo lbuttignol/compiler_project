@@ -110,7 +110,7 @@ public class SymbolInfo <T extends Declaration> {
 
 	public void addMethod(MethodDecl meth){
 		SymbolInfo symAux=new SymbolInfo(true,meth.getType(),meth);
-		symAux.addAttList(meth.getParams());
+		symAux.addParamList(meth.getParams());
 		this.methodList.add(symAux);
 	}
 
