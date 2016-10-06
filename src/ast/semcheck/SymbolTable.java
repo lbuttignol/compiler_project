@@ -9,12 +9,17 @@ import ir.ast.*;
 
 public class SymbolTable {
 	
-	ArrayList <List<SymbolInfo>> symbolTable; 
+	private ArrayList <List<SymbolInfo>> symbolTable; 
 	private int top;
+	private IdDecl current;
 
 	public SymbolTable(){
 		this.symbolTable = new ArrayList<List<SymbolInfo>>();
 		this.top = -1;
+	}
+
+	public IdDecl currentId(){
+		return this.current;
 	}
 
 	public void addDeclare(SymbolInfo decl){
@@ -116,9 +121,10 @@ public class SymbolTable {
 		}
 	}
 
-	private boolean contains(List<IdDecl> ids, IdDecl id){
+	public boolean contains(List<IdDecl> ids, IdDecl id){
 		for (IdDecl idC : ids){
 			if (idC.getName().equals(id.getName())){
+				this.current = idC;
 				return true;
 			}
 		}
@@ -137,8 +143,7 @@ public class SymbolTable {
 	private boolean contains(SymbolInfo sym, int i,boolean isMethod){
 		List<SymbolInfo> symList = this.symbolTable.get(i);
 		for (SymbolInfo symbolInfo : symList){
-			if (((symbolInfo.getName().equals(sym.getName())))&&(symbolInfo.isMethod()==isMethod)) 
-			{
+			if (((symbolInfo.getName().equals(sym.getName())))&&(symbolInfo.isMethod()==isMethod)) {
 				if (!isMethod){
 					if (symbolInfo.isArray()==sym.isArray()){
 						return true;
