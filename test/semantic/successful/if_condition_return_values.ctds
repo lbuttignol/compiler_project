@@ -16,7 +16,7 @@ class Martin{
 		bool val;
 		a = 25.6;
 		// can't call this method
-		//method(c,a);
+		method(c,a);
 		if(val){
 			return 2;
 		}else{

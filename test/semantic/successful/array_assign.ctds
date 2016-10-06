@@ -41,7 +41,7 @@ class Main{
 	integer x,y,z;
 	
 	integer method(){
-		boolean exist;
+		bool exist;
 		float f;
 		z=x+y;
 		x=-y;

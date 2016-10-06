@@ -1,8 +1,8 @@
 class persona{
    integer edad;
-   boolean femenino;
+   bool femenino;
 
-   void persona(integer e, boolean f){
+   void persona(integer e, bool f){
        edad = e;
        femenino = f;
    }
@@ -16,7 +16,7 @@ class persona{
       return edad ; 
    }
   
-   boolean esHombre(){
+   bool esHombre(){
       if (!femenino){
           return true;
       }

@@ -16,7 +16,7 @@ class Martin{
 		float xmf,fd,a;
 		a = 25.6;
 //		callMethod(c,a);
-		// the condition of the if should have a boolean type
+		// the condition of the if should have a bool type
 		if (5){
 			return 2;
 		}else{

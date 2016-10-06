@@ -2,7 +2,7 @@ class Main{
 	void main(){
 		integer a,b;
 		float d,c;
-		boolean e,f;
+		bool e,f;
 		if (a==b)
 		{
 			if (c==d)

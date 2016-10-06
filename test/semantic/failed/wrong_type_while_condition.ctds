@@ -16,7 +16,7 @@ class Martin{
 		float xmf,fd,a;
 		a = 25.6;
 //		callMethod(c,a);
-		// the condition of the while should have a boolean type
+		// the condition of the while should have a bool type
 		while (1446-1541+652*26/25){
 			if (a > 5.0){
 				return 2;
