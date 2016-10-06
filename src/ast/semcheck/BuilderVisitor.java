@@ -181,10 +181,7 @@ public class BuilderVisitor implements ASTVisitor {
 		for (MethodDecl methodDecl : methodDeclList){
 			methodDecl.accept(this);
 		}
-
-
 		this.stack.closeLevel();
-	
 	}
 
 	@Override
@@ -249,6 +246,7 @@ public class BuilderVisitor implements ASTVisitor {
 			logicalUnaryOp.accept(this);
 		}
 	}
+	
 	@Override
 	public void visit(Expression expr){}
 	
