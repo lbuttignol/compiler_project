@@ -59,13 +59,13 @@ class Main{
 		x = true;
 		z = 3.5;
 		// can'n access to methods 
-/*		mami.setYears(32);
+		mami.setYears(32);
 		mami.setChilds(5);
 		juanita.setYears(43);
-*/		if (x){
+		if (x){
 			bool arr[44];
 			float arr2[32];
-//			mami.setYears(juanita.setYears());
+			mami.setYears(juanita.setYears());
 			mami.childs[0] = 0;
 			mami.childs[1] = 9;
 			mami.childs[2] = -31;

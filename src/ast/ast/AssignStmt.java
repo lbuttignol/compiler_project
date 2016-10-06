@@ -18,7 +18,7 @@ public class AssignStmt extends Statement {
 		this.location = loc;
 	}
 	
-	public Location getLocation() {
+	public Location getLocation(){
 		return this.location;
 	}
 	

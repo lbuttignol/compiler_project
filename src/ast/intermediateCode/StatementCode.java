@@ -1,13 +1,14 @@
 package ir.intermediateCode;
 
+import ir.ast.*;
 public class StatementCode{
 	
 	private OperationCode operationCode;
-	private String operand1;
-	private String operand2;
-	private String operand3;
+	private Operand operand1;
+	private Operand operand2;
+	private Operand operand3;
 	
-	public StatementCode(OperationCode opCode,String op1,String op2, String op3){
+	public StatementCode(OperationCode opCode, Operand op1, Operand op2, Operand op3){
 		this.operationCode = opCode;
 		this.operand1 = op1;
 		this.operand2 = op2;
@@ -18,15 +19,15 @@ public class StatementCode{
 		this.operationCode = opCode; 
 	}
 
-	public void setOperand1(String op1){
+	public void setOperand1(Operand op1){
 		this.operand1 = op1;
 	}
 
-	public void setOperand2(String op2){
+	public void setOperand2(Operand op2){
 		this.operand2 = op2;
 	}
 
-	public void setOperand3(String op3){
+	public void setOperand3(Operand op3){
 		this.operand3 = op3;
 	}
 
@@ -34,15 +35,23 @@ public class StatementCode{
 		return this.operationCode; 
 	}
 
-	public String getOperand1(){
+	public Operand getOperand1(){
 		return this.operand1;
 	}
 
-	public String getOperand2(){
+	public Operand getOperand2(){
 		return this.operand2;
 	}
 
-	public String getOperand3(){
+	public Operand getOperand3(){
 		return this.operand3;
+	}
+
+	@Override
+	public String toString(){
+		return 	this.operationCode.toString()+' '+
+				this.operand1 +' '+
+				this.operand2+' '+
+				this.operand3; 
 	}
 }
