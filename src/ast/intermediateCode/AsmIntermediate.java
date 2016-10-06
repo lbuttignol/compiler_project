@@ -344,7 +344,21 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(IdDecl loc){}
+	public void visit(IdDecl loc){
+		switch (loc.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.FLOATDECL,new Operand(loc),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
+				break;
+			default:
+				// ver!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		}	
+	}
 	
 	@Override
 	public void visit(IfThenElseStmt stmt){
@@ -569,7 +583,9 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(ReturnVoidStmt stmt){}
 	
 	@Override
-	public void visit(Skip stmt){}
+	public void visit(Skip stmt){
+		stmt.accept(this);
+	}
 	
 	@Override
 	public void visit(Statement stmt){}

@@ -15,6 +15,9 @@ public enum OperationCode {
 	ARRAYDECLI	, // ArrayDecl 	- null 			- null
 	ARRAYDECLF	, // ArrayDecl 	- null			- null
 	ARRAYDECLB 	, // ArrayDecl 	- null			- null
+	INTDECL		, // IdDecl 	- null			- null
+	FLOATDECL	, // IdDecl 	- null			- null
+	BOOLDECL	, // IdDecl 	- null			- null
 
 // Statements
 	BEGINIF		, // IfStatement- intLitNumber	- null
