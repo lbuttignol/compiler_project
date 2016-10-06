@@ -12,6 +12,7 @@ public class SymbolTable {
 	private ArrayList <List<SymbolInfo>> symbolTable; 
 	private int top;
 	private IdDecl current;
+	private SymbolInfo currentS;
 
 	public SymbolTable(){
 		this.symbolTable = new ArrayList<List<SymbolInfo>>();
@@ -20,6 +21,10 @@ public class SymbolTable {
 
 	public IdDecl currentId(){
 		return this.current;
+	}
+
+	public SymbolInfo currentS(){
+		return this.currentS;
 	}
 
 	public void addDeclare(SymbolInfo decl){
@@ -88,7 +93,7 @@ public class SymbolTable {
 	public void reachable(List<IdDecl> idList,boolean isMethod,boolean isArray){
 		boolean result = true;
 		if (idList.size()>0){
-			IdDecl firstElem = idList.remove(0);
+			IdDecl firstElem = idList.get(0);
 			SymbolInfo symb = getCurrentSymbolInfo(firstElem.toString());
 			SymbolInfo typeSymb = getCurrentSymbolInfo(symb.getType());
 			if (typeSymb!=null){
@@ -96,7 +101,7 @@ public class SymbolTable {
 					List <IdDecl> attList = typeSymb.getAttList();	
 					List <SymbolInfo> methodList = typeSymb.getMethodList();
 					List <IdDecl> arrayList = typeSymb.getArrayList();
-					IdDecl lastElem = idList.get(0);
+					IdDecl lastElem = idList.get(1);
 					if (isMethod){
 						result = result && ((methodList!=null)?containsMeth(methodList,lastElem):false);
 					}else{
@@ -105,7 +110,7 @@ public class SymbolTable {
 						}else{
 							result = result && ((attList!=null)?contains(attList,lastElem):false);
 						}
-					};
+					}
 					if (!result){
 						int line = lastElem.getLineNumber();
 						int col  = lastElem.getColumnNumber();
@@ -131,9 +136,10 @@ public class SymbolTable {
 		return false;
 	}
 
-	private boolean containsMeth(List<SymbolInfo> ids, IdDecl id){
+	public boolean containsMeth(List<SymbolInfo> ids, IdDecl id){
 		for (SymbolInfo idC : ids){
 			if (idC.getName().equals(id.getName())){
+				this.currentS = idC;
 				return true;
 			}
 		}

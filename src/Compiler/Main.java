@@ -25,7 +25,7 @@ public class Main {
 	BuilderVisitor builderVisitor = new BuilderVisitor();
 	program.accept(builderVisitor);
     
-    System.out.println("**********************************************************");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
     TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
     program.accept(typeEV);

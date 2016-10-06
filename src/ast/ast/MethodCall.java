@@ -19,7 +19,6 @@ public class MethodCall extends Expression{
 		this.params = params;
 	}
 
-
 	public MethodCall(int line, int col){
 		super(line,col);
 		this.ids    = new LinkedList<IdDecl>();

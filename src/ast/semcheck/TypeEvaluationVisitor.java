@@ -33,19 +33,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression exprLeft  = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
 		if (exprLeft.getType().equalsIgnoreCase("UNDEFINED")){
-			//System.out.println("CLASS: "+exprLeft.toString());
-			//System.out.println("accept de left "+ exprLeft.getClass());
 			exprLeft.accept(this);
 		}
 		if(exprRight.getType().equalsIgnoreCase("UNDEFINED")){
-			//System.out.println("accept de right");
 			exprRight.accept(this);
 		}
-		//checkExpressionType(exprLeft);
-		//checkExpressionType(exprRight);
-
-		//System.out.println("Left expression type: " + exprLeft.getType());
-		//System.out.println("Right expression type: " + exprRight.getType());
 		if (!( ( exprLeft.getType().equalsIgnoreCase("INTEGER")&&(exprRight.getType().equalsIgnoreCase("INTEGER")) ) ||
 			((exprLeft.getType().equalsIgnoreCase("FLOAT")&&(exprRight.getType().equalsIgnoreCase("FLOAT")) )))){
 			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Invalid artihmetic operation, both expressions should be INTEGER or FLOAT");
@@ -58,7 +50,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ArithmeticUnaryOp stmt){
 		Expression expr = stmt.getOperand();
 		expr.accept(this);
-		//System.out.println("Unary expression type: " + stmt.getType());
 		if (!((expr.getType().equalsIgnoreCase("INTEGER"))||(expr.getType().equalsIgnoreCase("FLOAT")))){
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Invalid aritmetic operation, "+expr.getType()+" expression expected");
 		}else{
@@ -86,7 +77,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AssignStmt assignStmt){
-		//System.out.println("Assing visit running");
 		Location loc = assignStmt.getLocation();
 		loc.accept(this);
 		Expression expr = assignStmt.getExpression();
@@ -112,21 +102,15 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<IdDecl> ids = loc.getIds();
 		int last = ids.size()-1;
 		String lastName = ids.get(last).getName();
-		//System.out.println("Lastname: "+ lastName);
-		String firstNameClass = ids.get(0).getType();
-		//System.out.println("First name: "+firstNameClass);
-
-		if (firstNameClass.equalsIgnoreCase("UNDEFINED")){
+		if (last==0){
 			String type = this.stack.getCurrentType(lastName);
-			//System.out.println("TIPO:::"+type);
 			if(type!=null){
 				loc.setType(ids.get(last).getType());
 			}
 		}else{
+			String firstNameClass = ids.get(0).getName();
 			String classD = this.stack.getCurrentType(firstNameClass);
-			//System.out.println("Class Name: "+classD);
 			SymbolInfo classDecl = this.stack.getCurrentSymbolInfo(classD);
-			//System.out.println("class :"+classDecl);
 			List<IdDecl> atts = classDecl.getAttList();
 			IdDecl aux = new IdDecl(lastName, loc.getLineNumber(), loc.getColumnNumber());
 			if(this.stack.contains(atts,aux)){
@@ -140,16 +124,13 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(Block block){
 		this.stack.newLevel();
-		//System.out.println("Block visit running");
 		List<FieldDecl> fieldDeclList = block.getVariable();
 		List<Statement> stmtList = block.getStatements();
 
 		for (FieldDecl fieldDecl : fieldDeclList){
 			fieldDecl.accept(this);
 		}
-		//System.out.println(stmtList.size());
 		for(Statement stmt : stmtList){
-			//System.out.println("Statement class: "+ stmt.getClass());
 			stmt.accept(this);
 		}
 		this.stack.closeLevel();
@@ -274,10 +255,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
 		}
 		Statement ifBlock = stmt.getIfBlock();
-		//System.out.println("If block type: "+ifBlock.getClass());
 		ifBlock.accept(this);
 		Statement elseBlock = stmt.getElseBlock();
-		//System.out.println("else block type: "+elseBlock.getClass());
 		elseBlock.accept(this);
 	}
 	
@@ -323,34 +302,41 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(MethodCall methodCall){
-		//System.out.println("Method call visit");
 		List<IdDecl> ids = methodCall.getIds();
 		int last = ids.size()-1;
 		String lastName = ids.get(last).getName();
-		//System.out.println("lastName: "+lastName);
-		String type = this.stack.getCurrentType(lastName);
-
-		if (type!=null){
-			methodCall.setType(type);
-			List<Expression> paramList = methodCall.getParams();
-			List<IdDecl> formal = this.stack.getCurrentSymbolInfo(lastName).getAttList();
-			//System.out.println("Size formal: "+formal.size()+", size actual:"+paramList.size());
-			if(formal.size()==paramList.size()){
-				for (IdDecl param : formal) {
-					Expression current=paramList.get(formal.indexOf(param));
-					//System.out.println("compara actual: ,(tipo: "+current.getType()+") formal: "+param.getName()+"(tipo: "+param.getType()+")");
-					if (current.getType().equalsIgnoreCase("UNDEFINED"))
-						current.accept(this);
-						//System.out.println("after exp check: ,(tipo: "+current.getType()+")");
-					//System.out.println("current type: "+current.getType());
-					if (!param.getType().equalsIgnoreCase(current.getType()))
-						new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
-				}
-			}else{
-				new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
+		List<Expression> paramList = methodCall.getParams();
+		List<IdDecl> formal = new LinkedList<IdDecl>();
+		if(last==0){
+			String type = this.stack.getCurrentType(lastName);
+			if (type!=null){
+				methodCall.setType(type);
+				formal = this.stack.getCurrentSymbolInfo(lastName).getAttList();
+			} else {
+				return;
 			}
 		}else{
-			//System.out.println("tipo null");
+			String firstName = ids.get(0).getName();
+			String type = this.stack.getCurrentType(firstName);
+			SymbolInfo instance = this.stack.getCurrentSymbolInfo(type);
+			List<SymbolInfo> methods = instance.getMethodList();
+			if(this.stack.containsMeth(methods, new IdDecl(lastName, methodCall.getLineNumber(), methodCall.getColumnNumber()))){
+				methodCall.setType(this.stack.currentS().getType());
+				formal = this.stack.currentS().getAttList();				
+			}else{
+				return;
+			}
+		}
+		if(formal.size()==paramList.size()){
+			for (IdDecl param : formal) {
+				Expression current=paramList.get(formal.indexOf(param));
+				if (current.getType().equalsIgnoreCase("UNDEFINED"))
+					current.accept(this);
+				if (!param.getType().equalsIgnoreCase(current.getType()))
+					new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
+			} 
+		} else {
+			new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
 		}
 	}
 	
@@ -362,7 +348,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
-		//System.out.println("Method declare visit");
 		String type = methodDecl.getType();
 		if (!Type.contains(type)){
 			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
@@ -371,8 +356,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
 		for (ParamDecl paramDecl : paramDeclList){
-			//System.out.println("Param "+paramDecl.getName()+", type: "+paramDecl.getType());
-
 			symbolInfoList.add(new SymbolInfo(paramDecl.getType(), paramDecl));
 		}
 
@@ -429,11 +412,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(RelationalBinOp stmt){
 		Expression exprLeft = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
-		//System.out.println("ANTES.. left: "+exprLeft.getType()+" RIGHT:"+exprRight.getType());
-		//System.out.println("clase left: "+exprLeft.getClass());
 		exprLeft.accept(this);
 		exprRight.accept(this);
-		//System.out.println("Despues.. left: "+exprLeft.getType()+" RIGHT:"+exprRight.getType());
 		if (!( (exprLeft.getType().equalsIgnoreCase("INTEGER")&&(exprRight.getType().equalsIgnoreCase("INTEGER")))||
 			((exprLeft.getType().equalsIgnoreCase("FLOAT")&&(exprRight.getType().equalsIgnoreCase("FLOAT")) )))){
 			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of an INTEGER or FLOAT type");
@@ -444,7 +424,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ReturnStmt stmt){
-		//System.out.println("ReturnStmt visit");
 		Expression expr = stmt.getExpression();
 		if(expr.getType().equalsIgnoreCase("UNDEFINED"))
 			expr.accept(this);
@@ -471,7 +450,6 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		int last = ids.size()-1;
 		String lastName = ids.get(last).getName();
 		String type = this.stack.getCurrentType(lastName);
-		//System.out.println("Type of var location("+lastName+"): "+type);
 		if(type!=null)
 			loc.setType(type);
 	}
