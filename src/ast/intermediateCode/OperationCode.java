@@ -24,6 +24,7 @@ public enum OperationCode {
 	ENDIF		, // IfStatement- intLitNumber	- null
 	ELSEIF		, // IfStatement- intLitNumber 	- null
 	BEGINFOR	, // ForStat	- intLitNumber	- null
+	INCFOR		, // ForStat	- intLitNumber	- null
 	ENDFOR		, // ForStat	- intLitNumber	- null
 	BEGINWHILE	, // WhileStat	- intLitNumber 	- null
 	ENDWHILE	, // WhileStat	- intLitNumber	- null

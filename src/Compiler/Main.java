@@ -33,7 +33,7 @@ public class Main {
     System.out.println("START INTERMEDIATE CODE CREATION ************************************");
     AsmIntermediate intermediateCode = new AsmIntermediate();
     program.accept(intermediateCode);
-    System.out.println(intermediateCode.toString());
+    // System.out.println(intermediateCode.toString());
 
 	}		
     public void syntax_error(Symbol sym){ 
