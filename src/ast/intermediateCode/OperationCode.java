@@ -11,7 +11,7 @@ public enum OperationCode {
 	ENDMETHOD	, // MethodDecl	- type			- null
 	PARAMDECL 	, // ParamDecl 	- type			- null
 	LOADPARAM	, // ParamNAME	- type			- null  
-	IDDECL		, // IdDecl 	- null			- null				// ver si hay que dividir o no!!!!!11
+	IDDECL		, // IdDecl 	- null			- null
 	ARRAYDECLI	, // ArrayDecl 	- null 			- null
 	ARRAYDECLF	, // ArrayDecl 	- null			- null
 	ARRAYDECLB 	, // ArrayDecl 	- null			- null
