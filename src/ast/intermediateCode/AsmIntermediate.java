@@ -145,7 +145,21 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(ArrayLocation stmt){}
+	public void visit(ArrayLocation stmt){
+		switch (stmt.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.ARRAYLOCF,new Operand(stmt),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.ARRAYLOCB,new Operand(stmt),null,null));
+				break;
+			default:
+				throw new IllegalStateException("Some error in array type");
+		}
+	}
 	
 	@Override
 	public void visit(AssignStmt stmt){
@@ -188,10 +202,38 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(AttributeArrayLocation stmt){}
+	public void visit(AttributeArrayLocation stmt){
+		switch (stmt.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCI,new Operand(stmt),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCF,new Operand(stmt),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCB,new Operand(stmt),null,null));
+				break;
+			default:
+				throw new IllegalStateException("Some error in array type");
+		}
+	}
 	
 	@Override
-	public void visit(AttributeLocation stmt){}
+	public void visit(AttributeLocation stmt){
+		switch (stmt.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,null));
+				break;
+			default:
+				throw new IllegalStateException("Some error in array type");
+		}
+	}
 	
 	@Override
 	public void visit(Block block){
@@ -385,7 +427,7 @@ public class AsmIntermediate implements ASTVisitor {
 				this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
 				break;
 			default:
-				// ver!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				System.out.println("Some error in idDecl type");
 		}	
 	}
 	
@@ -620,7 +662,21 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(Statement stmt){}
 	
 	@Override
-	public void visit(VarLocation loc){}
+	public void visit(VarLocation loc){
+		switch (loc.getType()) {
+			case "INTEGER":
+				this.addStatement(new StatementCode(OperationCode.VARLOCI,new Operand(loc),null,null));
+				break;
+			case "FLOAT":
+				this.addStatement(new StatementCode(OperationCode.VARLOCF,new Operand(loc),null,null));
+				break;
+			case "BOOLEAN":
+				this.addStatement(new StatementCode(OperationCode.VARLOCB,new Operand(loc),null,null));
+				break;
+			default:
+				throw new IllegalStateException("Some error in var type");
+		}
+	}
 	
 	@Override
 	public void visit(WhileStmt stmt){

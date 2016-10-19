@@ -19,6 +19,20 @@ public enum OperationCode {
 	FLOATDECL	, // IdDecl 	- null			- null
 	BOOLDECL	, // IdDecl 	- null			- null
 
+//Locations
+	ARRAYLOCI	, // ArrayLocat - null			- null
+	ARRAYLOCF 	, // ArrayLocat - null			- null
+	ARRAYLOCB 	, // ArrayLocat - null			- null
+	ATTARRAYLOCI, // AttArrayLoc- null			- null
+	ATTARRAYLOCF, // AttArrayLoc- null			- null
+	ATTARRAYLOCB, // AttArrayLoc- null			- null
+	ATTLOCI 	, // AttLoc 	- null			- null
+	ATTLOCF 	, // AttLoc 	- null			- null
+	ATTLOCB 	, // AttLoc 	- null			- null
+	VARLOCI 	, // VarLod 	- null 			- null
+	VARLOCF 	, // VarLod 	- null 			- null
+	VARLOCB 	, // VarLod 	- null 			- null
+
 // Statements
 	BEGINIF		, // IfStatement- intLitNumber	- null
 	ENDIF		, // IfStatement- intLitNumber	- null
@@ -138,6 +152,32 @@ public enum OperationCode {
 				return "FLOATDECL";
 			case BOOLDECL:
 				return "BOOLDECL";
+			
+			//Locations
+			case ARRAYLOCI:
+				return "ARRAYLOCI";
+			case ARRAYLOCF:
+				return "ARRAYLOCF";
+			case ARRAYLOCB:
+				return "ARRAYLOCB";
+			case ATTARRAYLOCI:
+				return "ATTARRAYLOCI";
+			case ATTARRAYLOCF:
+				return "ATTARRAYLOCF";
+			case ATTARRAYLOCB:
+				return "ATTARRAYLOCB";
+			case ATTLOCI:
+				return "ATTLOCI";
+			case ATTLOCF:
+				return "ATTLOCF";
+			case ATTLOCB:
+				return "ATTLOCB";
+			case VARLOCI:
+				return "VARLOCI";
+			case VARLOCF:
+				return "VARLOCF";
+			case VARLOCB:
+				return "VARLOCB";
 
 		// Statements
 			case BEGINIF:
