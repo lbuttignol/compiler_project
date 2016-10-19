@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 public class IdDecl extends Declaration {
 	String type;
-	List<Integer> offset = new LinkedList<Integer>();
+	private int offset = 0;
 
 	public IdDecl( int line, int col){
 		super(line,col,null);
@@ -30,11 +30,11 @@ public class IdDecl extends Declaration {
 	}
 
 	public void setOff (Integer off){
-		this.offset.add(off);
+		this.offset=off;
 	}
 
-	public Integer getOff(){
-		return this.offset.get(this.offset.size()-1);
+	public int getOff(){
+		return this.offset;
 	}
 
 	@Override

@@ -215,14 +215,17 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		if (!Type.contains(type)){
 			new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(), "Unexistent field declaration type");
 		}
-		List<IdDecl> idDeclList = fieldDecl.getNames();
+		List<IdDecl> idDeclList 		= fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
 			if(idDecl instanceof ArrayIdDecl){
-				ArrayIdDecl arr = (ArrayIdDecl) idDecl;
-				coffvar = coffvar-arr.getNumber()*VARSIZE;
+				ArrayIdDecl arr 	= (ArrayIdDecl) idDecl;
+				coffvar 			= coffvar-arr.getNumber()*VARSIZE;
+			}else if (!Type.contains(idDecl.getType())) {
+				SymbolInfo idClass 	= this.stack.getCurrentSymbolInfo(idDecl.getType());
+				coffvar 			= idClass.getAttList().size()*VARSIZE;
 			}else{
-				coffvar=coffvar-VARSIZE;
+				coffvar 			= coffvar-VARSIZE;
 			}
 			idDecl.setOff(coffvar);
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
@@ -280,7 +283,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		if (!condition.getType().equalsIgnoreCase("BOOLEAN")){
 			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
 		}
-		Statement ifBlock = stmt.getIfBlock();
+		Statement ifBlock 	 = stmt.getIfBlock();
 		ifBlock.accept(this);
 	}
 	

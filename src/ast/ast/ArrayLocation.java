@@ -28,7 +28,6 @@ public class ArrayLocation extends Location {
 	}
 */	
 
-
 	public Expression getExpression(){
 		return this.expr;
 	}
@@ -36,7 +35,6 @@ public class ArrayLocation extends Location {
 	public void setExpression(Expression expr){
 		this.expr = expr;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -47,4 +45,5 @@ public class ArrayLocation extends Location {
 	public void accept(ASTVisitor v) {
 		v.visit(this);
 	}
+
 }
