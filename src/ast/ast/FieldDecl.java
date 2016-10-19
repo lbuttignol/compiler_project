@@ -11,7 +11,7 @@ public class FieldDecl extends AST{
 		super(line,col);
 		this.type = type;
 		this.names = names;
-		for (IdDecl name :names){
+		for (IdDecl name : names){
 			name.setType(type.toUpperCase());
 		}
 	}

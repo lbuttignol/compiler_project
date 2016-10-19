@@ -17,6 +17,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	private List<Error> errors;
 
+	private int coffpar;
+	private int coffvar;
+
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
 	}
@@ -108,11 +111,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				loc.setType(ids.get(last).getType());
 			}
 		}else{
-			String firstNameClass = ids.get(0).getName();
-			String classD = this.stack.getCurrentType(firstNameClass);
-			SymbolInfo classDecl = this.stack.getCurrentSymbolInfo(classD);
-			List<IdDecl> atts = classDecl.getAttList();
-			IdDecl aux = new IdDecl(lastName, loc.getLineNumber(), loc.getColumnNumber());
+			String firstNameClass 	= ids.get(0).getName();
+			String classD 			= this.stack.getCurrentType(firstNameClass);
+			SymbolInfo classDecl 	= this.stack.getCurrentSymbolInfo(classD);
+			List<IdDecl> atts 		= classDecl.getAttList();
+			IdDecl aux 				= new IdDecl(lastName, loc.getLineNumber(), loc.getColumnNumber());
 			if(this.stack.contains(atts,aux)){
 				loc.setType(this.stack.currentId().getType());
 			} else {
@@ -124,8 +127,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(Block block){
 		this.stack.newLevel();
-		List<FieldDecl> fieldDeclList = block.getVariable();
-		List<Statement> stmtList = block.getStatements();
+		List<FieldDecl> fieldDeclList 	= block.getVariable();
+		List<Statement> stmtList 		= block.getStatements();
 
 		for (FieldDecl fieldDecl : fieldDeclList){
 			fieldDecl.accept(this);
@@ -134,7 +137,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			stmt.accept(this);
 		}
 		this.stack.closeLevel();
-	} 		
+	}
 	
 	@Override
 	public void visit(BodyDecl body){
@@ -156,7 +159,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ClassDecl classDecl){
-		List<FieldDecl> fieldDeclList = classDecl.getAttributes();
+		List<FieldDecl> fieldDeclList 	= classDecl.getAttributes();
 		List<MethodDecl> methodDeclList = classDecl.getMethods();
 		this.stack.newLevel();
 		
@@ -184,7 +187,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(EqBinOp stmt){
-		Expression exprLeft = stmt.getLeftOperand();
+		Expression exprLeft  = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
 		exprLeft.accept(this);
 		exprRight.accept(this);
@@ -203,7 +206,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(Expression stmt){
 		
 	}
-	
+
 	@Override
 	public void visit(FieldDecl fieldDecl){
 		String type = fieldDecl.getType();
@@ -213,19 +216,27 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<IdDecl> idDeclList = fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
+			if(idDecl instanceof ArrayIdDecl){
+				ArrayIdDecl arr = (ArrayIdDecl) idDecl;
+				coffvar = coffvar-arr.getNumber();
+			}else{
+				coffvar--;
+			}
+			idDecl.setOff(coffvar);
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
 		}
+		coffvar = coffvar + idDeclList.size();
 	}
-	
+
 	@Override
 	public void visit(FloatLiteral lit){
 
 	}
-	
+
 	@Override
 	public void visit(ForStmt stmt){
 		this.stack.newLevel();
-		IdDecl counterName = stmt.getCounterName();
+		IdDecl counterName   = stmt.getCounterName();
 		this.stack.addDeclare(new SymbolInfo(counterName.getType(), counterName));
 
 		Expression initValue = stmt.getInit();
@@ -237,7 +248,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			new ir.error.Error(initValue.getLineNumber(),initValue.getColumnNumber(), "Both init and end value should be Integers");
 		}
 
-		Statement statement = stmt.getBody();
+		Statement statement  = stmt.getBody();
 		statement.accept(this);
 		this.stack.closeLevel();
 	}
@@ -254,12 +265,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		if (!condition.getType().equalsIgnoreCase("BOOLEAN")){
 			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
 		}
-		Statement ifBlock = stmt.getIfBlock();
+		Statement ifBlock 	= stmt.getIfBlock();
 		ifBlock.accept(this);
 		Statement elseBlock = stmt.getElseBlock();
 		elseBlock.accept(this);
 	}
-	
+
 	@Override
 	public void visit(IfThenStmt stmt){
 		Expression condition = stmt.getCondition();
@@ -278,7 +289,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(LogicalBinOp stmt){
-		Expression exprLeft = stmt.getLeftOperand();
+		Expression exprLeft  = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
 		exprLeft.accept(this);
 		exprRight.accept(this);
@@ -291,7 +302,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(LogicalUnaryOp stmt){
-		Expression expr =stmt.getOperand();
+		Expression expr = stmt.getOperand();
 		expr.accept(this);
 		if (!expr.getType().equalsIgnoreCase("BOOLEAN")){
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Boolean expression expected");
@@ -302,11 +313,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(MethodCall methodCall){
-		List<IdDecl> ids = methodCall.getIds();
-		int last = ids.size()-1;
-		String lastName = ids.get(last).getName();
-		List<Expression> paramList = methodCall.getParams();
-		List<IdDecl> formal = new LinkedList<IdDecl>();
+		List<IdDecl> ids 			= methodCall.getIds();
+		int last 		 			= ids.size()-1;
+		String lastName  			= ids.get(last).getName();
+		List<Expression> paramList  = methodCall.getParams();
+		List<IdDecl> formal 		= new LinkedList<IdDecl>();
 		if(last==0){
 			String type = this.stack.getCurrentType(lastName);
 			if (type!=null){
@@ -316,9 +327,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				return;
 			}
 		}else{
-			String firstName = ids.get(0).getName();
-			String type = this.stack.getCurrentType(firstName);
-			SymbolInfo instance = this.stack.getCurrentSymbolInfo(type);
+			String firstName 		 = ids.get(0).getName();
+			String type 		   	 = this.stack.getCurrentType(firstName);
+			SymbolInfo instance 	 = this.stack.getCurrentSymbolInfo(type);
 			List<SymbolInfo> methods = instance.getMethodList();
 			if(this.stack.containsMeth(methods, new IdDecl(lastName, methodCall.getLineNumber(), methodCall.getColumnNumber()))){
 				methodCall.setType(this.stack.currentS().getType());
@@ -329,13 +340,16 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		}
 		if(formal.size()==paramList.size()){
 			for (IdDecl param : formal) {
-				Expression current=paramList.get(formal.indexOf(param));
+				Expression current = paramList.get(formal.indexOf(param));
 				if (current.getType().equalsIgnoreCase("UNDEFINED"))
 					current.accept(this);
+				current.setOff(coffpar);
+				coffpar++;
 				if (!param.getType().equalsIgnoreCase(current.getType()))
 					new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
-			} 
-		} else {
+			}
+			coffpar = coffpar-formal.size();
+		}else{
 			new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
 		}
 	}
@@ -354,7 +368,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		}
 		this.stack.newLevel();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
-		List<ParamDecl> paramDeclList = methodDecl.getParams();
+		List<ParamDecl> paramDeclList 	= methodDecl.getParams();
 		for (ParamDecl paramDecl : paramDeclList){
 			symbolInfoList.add(new SymbolInfo(paramDecl.getType(), paramDecl));
 		}
@@ -366,8 +380,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
 		if (!body.isExtern()){
-			List<Statement> stmts=body.getBlock().getStatements();
-			for (Statement stmt: stmts){
+			List<Statement> stmts = body.getBlock().getStatements();
+			for (Statement stmt : stmts){
 				if(stmt instanceof ReturnStmt){
 					ReturnStmt ret = (ReturnStmt) stmt;
 					if (!ret.getExpression().getType().equalsIgnoreCase(type)){
@@ -394,10 +408,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(Program prog){
+		this.coffvar = 0;
+		this.coffpar = 0;
 		this.stack.newLevel();
 		List<ClassDecl> classDeclList = prog.getClassDeclare();
 		for (ClassDecl classDecl : classDeclList){
-			SymbolInfo classSymbol = new SymbolInfo(classDecl.getName(),classDecl);
+			SymbolInfo classSymbol 	  = new SymbolInfo(classDecl.getName(),classDecl);
 			classSymbol.addAttList(classDecl.getAttributes());
 			classSymbol.addMethodList(classDecl.getMethods());
 			this.stack.addDeclare(classSymbol);
@@ -410,7 +426,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(RelationalBinOp stmt){
-		Expression exprLeft = stmt.getLeftOperand();
+		Expression exprLeft  = stmt.getLeftOperand();
 		Expression exprRight = stmt.getRightOperand();
 		exprLeft.accept(this);
 		exprRight.accept(this);
@@ -447,9 +463,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	@Override
 	public void visit(VarLocation loc){
 		List<IdDecl> ids = loc.getIds();
-		int last = ids.size()-1;
-		String lastName = ids.get(last).getName();
-		String type = this.stack.getCurrentType(lastName);
+		int last 		 = ids.size()-1;
+		String lastName  = ids.get(last).getName();
+		String type 	 = this.stack.getCurrentType(lastName);
 		if(type!=null)
 			loc.setType(type);
 	}

@@ -41,5 +41,4 @@ public abstract class Location extends Expression {
 		v.visit(this);
 	}
 
-
 }
