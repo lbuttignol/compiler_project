@@ -7,7 +7,7 @@ public abstract class Expression extends AST{
 	protected Expression expr;
 	protected String type;
 	private String id  = "a";
-	private List<Integer> offset = new LinkedList<Integer>();
+	private int offset = 0;
 
 	public Expression( int line, int col){
 		super(line,col);
@@ -27,12 +27,12 @@ public abstract class Expression extends AST{
 		this.type = t;
 	}
 
-	public void setOff(Integer off){
-		this.offset.add(off);
+	public void setOff(int off){
+		this.offset = off;
 	}
 
-	public Integer getLastOff(){
-		return this.offset.get(offset.size()-1);
+	public Integer getOff(){
+		return this.offset;
 	}
 
 	@Override
