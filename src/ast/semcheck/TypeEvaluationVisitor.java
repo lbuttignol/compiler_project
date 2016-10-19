@@ -20,6 +20,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	private int coffpar;
 	private int coffvar;
 
+	private final static int VARSIZE=4;
+
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
 	}
@@ -218,14 +220,14 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		for (IdDecl idDecl : idDeclList){
 			if(idDecl instanceof ArrayIdDecl){
 				ArrayIdDecl arr = (ArrayIdDecl) idDecl;
-				coffvar = coffvar-arr.getNumber();
+				coffvar = coffvar-arr.getNumber()*VARSIZE;
 			}else{
-				coffvar--;
+				coffvar=coffvar-VARSIZE;
 			}
 			idDecl.setOff(coffvar);
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
 		}
-		coffvar = coffvar + idDeclList.size();
+		coffvar = coffvar + idDeclList.size()*VARSIZE;
 	}
 
 	@Override
@@ -343,12 +345,14 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				Expression current = paramList.get(formal.indexOf(param));
 				if (current.getType().equalsIgnoreCase("UNDEFINED"))
 					current.accept(this);
-				current.setOff(coffpar);
-				coffpar++;
+				if (coffpar>(6*VARSIZE)){
+					current.setOff(coffpar);
+				}
+				coffpar = coffpar+VARSIZE;
 				if (!param.getType().equalsIgnoreCase(current.getType()))
 					new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
 			}
-			coffpar = coffpar-formal.size();
+			coffpar = coffpar-formal.size()*VARSIZE;
 		}else{
 			new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
 		}
