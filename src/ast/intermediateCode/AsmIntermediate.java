@@ -7,23 +7,23 @@ import ir.error.*;
 
 import java.util.List;
 import java.util.LinkedList;
-/*
-dudas para consultar 
-PARÁMETROS DE CADA StatementCode???
+import java.util.Stack;
 
-
-*/
 public class AsmIntermediate implements ASTVisitor {
 //	private String programName;
 	private List<StatementCode> code;
 	private AST temporal; // sould be always a  literal.......???????????
 	private Integer ifCounter, whileCounter, forCounter;
+	private Stack<LoopLabel> beginLoop, endFor;
+	private Stack<LoopLabel> endLoop, endWile;
 
 	public AsmIntermediate(){
 		this.code = new LinkedList<StatementCode>();
 		this.ifCounter 	= 0;
 		this.whileCounter = 0;
 		this.forCounter = 0;
+		this.beginLoop 	= new Stack<LoopLabel>();
+		this.endLoop 	= new Stack<LoopLabel>();
 	}
 
 	@Override
@@ -221,7 +221,19 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(BreakStmt stmt){}
+	public void visit(BreakStmt stmt){
+		LoopLabel aux = this.endLoop.peek();
+		switch (aux.getType()){
+			case FOR :
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDFOR.toString()+aux.getLabelNumber().toString()),null,null));
+				break;
+			case WHILE :
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDWHILE.toString()+aux.getLabelNumber().toString()),null,null));
+				break;
+			default:
+				new IllegalStateException("Wrong type on Break Statement");
+		}
+	}
 	
 	@Override
 	public void visit(ClassDecl classDecl){
@@ -238,7 +250,19 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(ContinueStmt stmt){}
+	public void visit(ContinueStmt stmt){
+		LoopLabel aux = this.endLoop.peek();
+		switch (aux.getType()){
+			case FOR :
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.INCFOR.toString()+aux.getLabelNumber().toString()),null,null));
+				break;
+			case WHILE :
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDWHILE.toString()+aux.getLabelNumber().toString()),null,null));
+				break;
+			default:
+				new IllegalStateException("Wrong type on Break Statement");
+		}
+	}
 	
 	@Override
 	public void visit(EqBinOp stmt){
@@ -329,6 +353,8 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ForStmt stmt){
 		Integer forNum = this.getForCounter();
+		this.beginLoop.push(new LoopLabel(LabelType.FOR,forNum));
+		this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
 		this.addStatement(new StatementCode(OperationCode.IDDECL,new Operand(stmt.getCounterName()),null,null));
 		stmt.getInit().accept(this);
 		IntLiteral contInit = (IntLiteral) temporal; 
@@ -338,9 +364,12 @@ public class AsmIntermediate implements ASTVisitor {
 		forCond.accept(this);
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDFOR.toString()+forNum.toString()),null));
 		stmt.getBody().accept(this);
+		this.addStatement(new StatementCode(OperationCode.INCFOR,new Operand(stmt),new Operand(forNum),null));
 		this.addStatement(new StatementCode(OperationCode.INC,null,null,new Operand(contInit)));
 		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINFOR.toString()+forNum.toString()),null,null));
 		this.addStatement(new StatementCode(OperationCode.ENDFOR,new Operand(stmt),new Operand(forNum),null));
+		this.beginLoop.pop();
+		this.endLoop.pop();
 	}
 	
 	@Override
@@ -596,12 +625,16 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(WhileStmt stmt){
 		Integer whileNum = this.getWhileCounter();
+		this.beginLoop.push(new LoopLabel(LabelType.WHILE,whileNum));
+		this.endLoop.push(new LoopLabel(LabelType.WHILE, whileNum));
 		this.addStatement(new StatementCode(OperationCode.BEGINWHILE,new Operand(stmt),new Operand(whileNum),null));
 		stmt.getCondition().accept(this);
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDWHILE.toString()+whileNum.toString()),null));
 		stmt.getBody().accept(this);
 		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINWHILE.toString()+whileNum.toString()),null,null));
 		this.addStatement(new StatementCode(OperationCode.ENDWHILE,new Operand(stmt),new Operand(whileNum),null));
+		this.beginLoop.pop();
+		this.endLoop.pop();
 	}
 
 	@Override
@@ -883,7 +916,5 @@ public class AsmIntermediate implements ASTVisitor {
 		}
 		return result;
 	}
-
-
 
 }

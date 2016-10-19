@@ -15,7 +15,7 @@ class Martin{
 		integer c;
 		float xmf,fd,a;
 		a = 25.6;
-//		callMethod(c,a);
+		callMethod(c,a);
 		// the condition of the while should have a boolean type
 		while (false){
 			if (a > 5.0){

@@ -1,10 +1,8 @@
-
 package ir.ast;
 
 import java.util.List;
 
 import ir.ASTVisitor;
-import java.util.List;
 
 public class ArrayLocation extends Location {
 	

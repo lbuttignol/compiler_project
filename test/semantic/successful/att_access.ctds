@@ -40,7 +40,7 @@ class Main{
 	integer x,y,z;
 	
 	integer method(){
-		boolean exist;
+		bool exist;
 		float f;
 		z=x+y;
 		x=-y;
@@ -52,7 +52,7 @@ class Main{
 	}
 
 	bool method1(bool x,float z){
-		boolean a;
+		bool a;
 		Person juanita;
 		Mom mami;
 		Integer aux;

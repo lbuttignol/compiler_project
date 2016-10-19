@@ -11,7 +11,7 @@ public enum OperationCode {
 	ENDMETHOD	, // MethodDecl	- type			- null
 	PARAMDECL 	, // ParamDecl 	- type			- null
 	LOADPARAM	, // ParamNAME	- type			- null  
-	IDDECL		, // IdDecl 	- null			- null				// ver si hay que dividir o no!!!!!11
+	IDDECL		, // IdDecl 	- null			- null
 	ARRAYDECLI	, // ArrayDecl 	- null 			- null
 	ARRAYDECLF	, // ArrayDecl 	- null			- null
 	ARRAYDECLB 	, // ArrayDecl 	- null			- null
@@ -24,6 +24,7 @@ public enum OperationCode {
 	ENDIF		, // IfStatement- intLitNumber	- null
 	ELSEIF		, // IfStatement- intLitNumber 	- null
 	BEGINFOR	, // ForStat	- intLitNumber	- null
+	INCFOR		, // ForStat	- intLitNumber	- null
 	ENDFOR		, // ForStat	- intLitNumber	- null
 	BEGINWHILE	, // WhileStat	- intLitNumber 	- null
 	ENDWHILE	, // WhileStat	- intLitNumber	- null
@@ -104,9 +105,9 @@ public enum OperationCode {
 	@Override
 	public String toString(){
 		switch (this) {
-
+			// Declarations	
 			case BEGINPROGRAM:
-				return "BEGINPROGRAM";
+				return "BEGINPROGRAM";			
 			case ENDPROGRAM:
 				return "ENDPROGRAM";
 			case BEGINCLASS:
@@ -122,8 +123,23 @@ public enum OperationCode {
 			case PARAMDECL:
 				return "PARAMDECL";
 			case LOADPARAM:
-				return "LOADPARAM";  /////////////////////////////ver!
+				return "LOADPARAM";  
+			case IDDECL:
+				return "IDDECL";				
+			case ARRAYDECLI:
+				return "ARRAYDECLI";
+			case ARRAYDECLF:
+				return "ARRAYDECLF";
+			case ARRAYDECLB:
+				return "ARRAYDECLB";
+			case INTDECL:
+				return "INTDECL";
+			case FLOATDECL:
+				return "FLOATDECL";
+			case BOOLDECL:
+				return "BOOLDECL";
 
+		// Statements
 			case BEGINIF:
 				return "BEGINIF";
 			case ENDIF:
@@ -132,6 +148,8 @@ public enum OperationCode {
 				return "ELSEIF";
 			case BEGINFOR:
 				return "BEGINFOR";
+			case INCFOR:
+				return "INCFOR";
 			case ENDFOR:
 				return "ENDFOR";
 			case BEGINWHILE:
@@ -139,6 +157,11 @@ public enum OperationCode {
 			case ENDWHILE:
 				return "ENDWHILE";
 			
+		// Unary Aruthmetic
+			case SUBUI:
+				return "SUBUI";
+			case NOT:
+				return "NOT"; 	
 			case ADDII:
 				return "ADDII";
 			case ADDFF:
@@ -174,19 +197,29 @@ public enum OperationCode {
 			case MODII:
 				return "MODII";
 
+		// Eq operations													
 			case EQII:
 				return "EQII";
 			case EQFF:
 				return "EQFF";
+			case EQIF:
+				return "EQIF";
+			case EQFI:
+				return "EQFI";
 			case EQBB:
 				return "EQBB";
 			case NEQII:
 				return "NEQII";
 			case NEQFF:
 				return "NEQFF";
+			case NEQIF:
+				return "NEQIF";
+			case NEQFI:
+				return "NEQFI";
 			case NEQBB:
 				return "NEQBB";
 
+		// Relational operations
 			case SMALLII:
 				return "SMALLII";
 			case SMALLFF:
@@ -220,18 +253,33 @@ public enum OperationCode {
 			case GTOEFI:
 				return "GTOEFI";
 
+		// Logical operations			
 			case ANDBB:
 				return "ANDBB";
 			case ORBB:
 				return "ORBB";
 
+		// Jump
 			case JMPFALSE:
 				return "JMPFALSE";	
 			case JMPTRUE:
 				return "JMPTRUE";
+			case JMP:
+				return "JMP";
 
+		// Assign
 			case ASSIGNATION:
-				return "ASSIGNATION";
+				return "ASSIGNATION"; 		
+			case ASSINCI:
+				return "ASSINCI";
+			case ASSDECI:
+				return "ASSDECI";
+			case ASSINCF:
+				return "ASSINCF";
+			case ASSDECF:
+				return "ASSDECF";
+			case INC:
+				return "INC";
 				
 		}
 
