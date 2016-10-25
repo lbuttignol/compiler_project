@@ -12,7 +12,8 @@ import java.util.Stack;
 public class AsmIntermediate implements ASTVisitor {
 //	private String programName;
 	private List<StatementCode> code;
-	private AST temporal; // sould be always a  literal.......???????????
+	private VarLocation temporal;
+	private Integer tempNum;
 	private Integer ifCounter, whileCounter, forCounter;
 	private Stack<LoopLabel> beginLoop, endFor;
 	private Stack<LoopLabel> endLoop, endWile;
@@ -22,74 +23,106 @@ public class AsmIntermediate implements ASTVisitor {
 		this.ifCounter 	= 0;
 		this.whileCounter = 0;
 		this.forCounter = 0;
+		this.tempNum = 0;
 		this.beginLoop 	= new Stack<LoopLabel>();
 		this.endLoop 	= new Stack<LoopLabel>();
 	}
 
 	@Override
 	public void visit(AST stmt){}
+
+	private VarLocation createTemporalLit(Literal stmt){
+		String tName = "t" + getTemporalNumber().toString();
+		List lName = new LinkedList<String>();
+		lName.add(tName);
+		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
+		ret.setType(stmt.getType());
+		// offset ver
+		AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
+		initTemporal.accept(this);
+		return ret;
+	}
 	
+	private VarLocation createTemporal(Expression stmt,String t){
+		String tName = "t" + getTemporalNumber().toString();
+		List lName = new LinkedList<String>();
+		lName.add(tName);
+		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
+		ret.setType(t);
+		// offset ver
+		return ret;
+	}
+
 	@Override
 	public void visit(ArithmeticBinOp stmt){
 		Expression exprL = stmt.getLeftOperand();
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		Literal auxL, auxR;
+		VarLocation auxL, auxR;
 		switch (operandsType(exprL,exprR)) {
 			case II:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"INTEGER");
 				break;
 			case IF:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"FLOAT");
 				break;
 			case IB:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"INTEGER"); 					//	ver
 				break;
 			case FF:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"FLOAT");
 				break;
 			case FI:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"FLOAT");
 				break;
 			case FB:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"FLOAT"); 					//	ver
 				break;
 			case BB:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"BOOLEAN");
 				break;
 			case BI:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"INTEGER");				//ver
 				break;
 			case BF:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
+				temporal = createTemporal(stmt,"FLOAT");				//ver
 				break;
 			default:
 				throw new IllegalStateException("The operands type has a incompatibl type");
@@ -100,32 +133,23 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ArithmeticUnaryOp stmt){
 		stmt.getOperand().accept(this);
-		Literal aux;
+		VarLocation aux;
 		switch (stmt.getOperand().getType()) {
 			case "INTEGER":
-				aux = (IntLiteral) temporal; 
+				aux = temporal; 
+				temporal = createTemporal(stmt,"INTEGER");
 				this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
 				break;
 			case "FLOAT":
-				aux = (FloatLiteral) temporal;
+				aux = temporal;
+				temporal = createTemporal(stmt,"FLOAT");
 				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,new Operand(temporal)));
 				break;
 			default:
 				throw new IllegalStateException("Wrong arithmetic unary type");
 
 		}
-/*		if (stmt.getOperand().getType().compareTo("INTEGER")==0) {
-			aux = (IntLiteral) temporal; 
-			this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
-		} else {
-			if (stmt.getOperand().getType().compareTo("FLOAT")==0) {
-				aux = (FloatLiteral) temporal;
-				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,new Operand(temporal)));
-			}else{
-				throw new IllegalStateException("Wrong arithmetic unary type");
-			}
-		}
-*/	}
+	}
 	
 	@Override
 	public void visit(ArrayIdDecl stmt){
@@ -163,37 +187,67 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(AssignStmt stmt){
-		Literal aux;
+		VarLocation aux;
 		switch (stmt.getOperator()) {
 			case INCREMENT:
-				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+				/*switch(stmt.getExpression().getType()){
+					case INTEGER:
 						stmt.getExpression().accept(this);
 						aux = (IntLiteral) temporal; 
 						this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
-					} else {
-						if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
-							stmt.getExpression().accept(this);
-							aux = (FloatLiteral) temporal;
-							this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
-						}else{
-							throw new IllegalStateException("Wrong assignation type");
-						}
+						break;
+					case FLOAT:
+						stmt.getExpression().accept(this);
+						aux = (FloatLiteral) temporal;
+						this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						break;
+					default:
+						throw new IllegalStateException("Wrong assignation type");
+						break;
+				}*/
+				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+					stmt.getExpression().accept(this);
+					aux = temporal; 
+					this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
+				} else {
+					if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+						stmt.getExpression().accept(this);
+						aux = temporal;
+						this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+					}else{
+						throw new IllegalStateException("Wrong assignation type");
 					}
+				}
 				break;
 			case DECREMENT:
-					if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+				/*switch (stmt.getExpression().getType()){
+					case INTEGER:
 						stmt.getExpression().accept(this);
 						aux = (IntLiteral) temporal; 
 						this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
-					} else {
-						if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
-							stmt.getExpression().accept(this);
-							aux = (FloatLiteral) temporal;
-							this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
-						}else{
-							throw new IllegalStateException("Wrong assignation type");
-						}
+						break;
+					case FLOAT:
+						stmt.getExpression().accept(this);
+						aux = (FloatLiteral) temporal;
+						this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						break;
+					default:
+						throw new IllegalStateException("Wrong assignation type");
+						break;
+				}*/
+				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+					stmt.getExpression().accept(this);
+					aux = temporal; 
+					this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
+				} else {
+					if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+						stmt.getExpression().accept(this);
+						aux = temporal;
+						this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+					}else{
+						throw new IllegalStateException("Wrong assignation type");
 					}
+				}
 				break;
 			case ASSIGN:
 				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(stmt.getExpression()),null, new Operand(stmt.getLocation())));
@@ -259,7 +313,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(BooleanLiteral lit){
-		this.temporal = lit;
+		this.temporal = createTemporalLit(lit);
 	}
 	
 	@Override
@@ -312,65 +366,66 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		Literal auxL, auxR;
+		VarLocation auxL, auxR;
 		switch (operandsType(exprL,exprR)) {
 			case II:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IF:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IB:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FF:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FI:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FB:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BB:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BI:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BF:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			default:
 				throw new IllegalStateException("The operands type has a incompatibl type");
 		}
+		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
 	}
 	
@@ -389,7 +444,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(FloatLiteral lit){
-		this.temporal = lit;
+		this.temporal = createTemporalLit(lit);
 	}
 	
 	@Override
@@ -399,7 +454,7 @@ public class AsmIntermediate implements ASTVisitor {
 		this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
 		this.addStatement(new StatementCode(OperationCode.IDDECL,new Operand(stmt.getCounterName()),null,null));
 		stmt.getInit().accept(this);
-		IntLiteral contInit = (IntLiteral) temporal; 
+		VarLocation contInit = temporal; 
 		this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(stmt.getCounterName())));
 		this.addStatement(new StatementCode(OperationCode.BEGINFOR,new Operand(stmt),new Operand(forNum),null));
 		RelationalBinOp forCond = new RelationalBinOp(contInit,BinOpType.SMALL,stmt.getEnd(),stmt.getLineNumber(),stmt.getColumnNumber());
@@ -437,7 +492,7 @@ public class AsmIntermediate implements ASTVisitor {
 		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
 		this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
 		stmt.getCondition().accept(this); // this method set temporal variable with a condition value		
-		BooleanLiteral cond = (BooleanLiteral) temporal;
+		VarLocation cond =  temporal;
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
 		stmt.getIfBlock().accept(this);
 		this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(intLit),null));
@@ -451,7 +506,7 @@ public class AsmIntermediate implements ASTVisitor {
 		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
 		this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
 		stmt.getCondition().accept(this);
-		BooleanLiteral cond = (BooleanLiteral) temporal;
+		VarLocation cond = temporal;
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null)); //saltar al fin de if
 		stmt.getIfBlock().accept(this);
 		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(intLit),null));
@@ -459,7 +514,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IntLiteral lit){
-		this.temporal = lit;
+		this.temporal = createTemporalLit(lit);
 	}
 	
 	@Override
@@ -468,74 +523,76 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		Literal auxL, auxR;
+		VarLocation auxL, auxR;
 		switch (operandsType(exprL,exprR)) {
 			case II:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IF:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IB:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FF:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FI:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FB:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BB:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BI:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BF:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			default:
 				throw new IllegalStateException("The operands type has a incompatibl type");
 		}
+		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
 	}
 	
 	@Override
 	public void visit(LogicalUnaryOp stmt){
 		stmt.getOperand().accept(this);
-		Literal aux;
+		VarLocation aux;
 		if (stmt.getOperand().getType().compareTo("BOOLEAN")==0) {
-			aux = (BooleanLiteral) temporal; 
+			aux = temporal; 
+			temporal = createTemporal(stmt,"BOOLEAN");
 			this.addStatement(new StatementCode(OperationCode.NOT,new Operand(aux),null,null));
 		}else{
 			throw new IllegalStateException("Wrong boolean unary type");
@@ -585,66 +642,68 @@ public class AsmIntermediate implements ASTVisitor {
 		Expression exprR = stmt.getRightOperand();
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
-		Literal auxL, auxR;
+		VarLocation auxL, auxR;
 		switch (operandsType(exprL,exprR)) {
 			case II:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IF:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case IB:
 				exprL.accept(this);
-				auxL = (IntLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FF:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FI:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case FB:
 				exprL.accept(this);
-				auxL = (FloatLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BB:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (BooleanLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BI:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (IntLiteral) temporal;
+				auxR = temporal;
 				break;
 			case BF:
 				exprL.accept(this);
-				auxL = (BooleanLiteral) temporal;
+				auxL = temporal;
 				exprR.accept(this);
-				auxR = (FloatLiteral) temporal;
+				auxR = temporal;
 				break;
 			default:
 				throw new IllegalStateException("The operands type has a incompatibl type");
 		}
+		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
+				System.out.print("*************************************************************************************̣\n");
 	}
 	
 	@Override
@@ -722,6 +781,12 @@ public class AsmIntermediate implements ASTVisitor {
 		Integer aux = this.whileCounter;
 		this.whileCounter ++;
 		return aux;
+	}
+
+	private Integer getTemporalNumber(){
+		Integer ret = this.tempNum;
+		this.tempNum ++;
+		return ret;
 	}
 
 	private OperandsType operandsType(Expression l, Expression r){

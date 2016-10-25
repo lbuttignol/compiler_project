@@ -1,0 +1,11 @@
+class Main {
+ void main() {
+	float x,y;
+	x=20.0;
+	y= 0;
+	if (3.0<2.0){
+
+	}
+	return ;
+	}
+}
