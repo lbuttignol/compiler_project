@@ -114,8 +114,13 @@ public enum OperationCode {
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult
 	ASSDECF		, // Variable 	- null			- FloatResult
-	INC 		; // null 		- null			- VarDatoResult
+	INC 		, // null 		- null			- VarDatoResult
 
+// 
+	PUSHPARAMS	, // MethodCall - null			- NULL
+	CALL 		, // methodCall - null 			- null 
+	RET 		, // VarLoc 	- null 			- null 
+	RETVOID		; // null 		- null 			- null
 	@Override
 	public String toString(){
 		switch (this) {
@@ -320,6 +325,14 @@ public enum OperationCode {
 				return "ASSDECF";
 			case INC:
 				return "INC";
+			case PUSHPARAMS:
+				return "PUSHPARAMS";
+			case CALL:
+				return "CALL";
+			case RET:
+				return "RET";
+			case RETVOID:
+				return "RETVOID";
 				
 		}
 

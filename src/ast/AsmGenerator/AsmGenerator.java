@@ -336,7 +336,18 @@ public class AsmGenerator {
 				case INC:
 					System.out.println( "INC");
 					break;
-					
+				case PUSHPARAMS:
+					System.out.print("PUSHPARAMS");
+					break;
+				case CALL:
+					System.out.print( "CALL");
+					break;
+				case RET:
+					System.out.print( "RET");
+					break;
+				case RETVOID:
+					System.out.print( "RETVOID");
+					break;
 			}			
 		}catch(IOException e){
 			e.printStackTrace();

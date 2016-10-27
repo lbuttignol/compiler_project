@@ -18,6 +18,8 @@ public class AsmIntermediate implements ASTVisitor {
 	private Stack<LoopLabel> beginLoop, endFor;
 	private Stack<LoopLabel> endLoop, endWile;
 
+	private Integer actualOffset;
+
 	public AsmIntermediate(){
 		this.code = new LinkedList<StatementCode>();
 		this.ifCounter 	= 0;
@@ -26,6 +28,30 @@ public class AsmIntermediate implements ASTVisitor {
 		this.tempNum = 0;
 		this.beginLoop 	= new Stack<LoopLabel>();
 		this.endLoop 	= new Stack<LoopLabel>();
+	}
+
+	private void initActualOffset(){
+		this.actualOffset =1;
+	}
+
+	private void initActualOffset(Integer val){
+		this.actualOffset = val;
+	}
+
+	private Integer getActualOffset(){
+		return this.actualOffset;
+	}
+
+	private Integer incActualOffset(){
+		Integer aux = this.actualOffset;
+		this.actualOffset++;
+		return aux;
+	}
+
+	private Integer incActualOffsetArray(Integer cant){
+		this.actualOffset = this.actualOffset + cant;
+		Integer aux = this.actualOffset--;
+		return aux;
 	}
 
 	@Override
@@ -37,19 +63,19 @@ public class AsmIntermediate implements ASTVisitor {
 		lName.add(tName);
 		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
 		ret.setType(stmt.getType());
-		// offset ver
+		ret.setOff(incActualOffset());
 		AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
 		initTemporal.accept(this);
 		return ret;
 	}
 	
-	private VarLocation createTemporal(Expression stmt,String t){
+	private VarLocation createTemporal(Expression stmt,String type){
 		String tName = "t" + getTemporalNumber().toString();
 		List lName = new LinkedList<String>();
 		lName.add(tName);
 		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
-		ret.setType(t);
-		// offset ver
+		ret.setType(type);
+		ret.setOff(incActualOffset());
 		return ret;
 	}
 
@@ -367,64 +393,10 @@ public class AsmIntermediate implements ASTVisitor {
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
 		VarLocation auxL, auxR;
-		switch (operandsType(exprL,exprR)) {
-			case II:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case IF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case IB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FI:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BI:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			default:
-				throw new IllegalStateException("The operands type has a incompatibl type");
-		}
+		exprL.accept(this);
+		auxL = temporal;
+		exprR.accept(this);
+		auxR = temporal;
 		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
 	}
@@ -437,8 +409,7 @@ public class AsmIntermediate implements ASTVisitor {
 		String type = fieldDecl.getType();
 		List<IdDecl> idDeclList = fieldDecl.getNames();
 		for ( IdDecl idDecl : idDeclList) {
-			String name = idDecl.getName();
-			this.addStatement(new StatementCode(OperationCode.FIELD,new Operand(idDecl),new Operand(fieldDecl),null));
+			idDecl.accept(this);
 		}	
 	}
 	
@@ -524,64 +495,10 @@ public class AsmIntermediate implements ASTVisitor {
 		BinOpType op = stmt.getOperator();
 		OperationCode c = createBinOpCode(exprL, op, exprR );
 		VarLocation auxL, auxR;
-		switch (operandsType(exprL,exprR)) {
-			case II:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case IF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case IB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FI:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case FB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BB:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BI:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			case BF:
-				exprL.accept(this);
-				auxL = temporal;
-				exprR.accept(this);
-				auxR = temporal;
-				break;
-			default:
-				throw new IllegalStateException("The operands type has a incompatibl type");
-		}
+		exprL.accept(this);
+		auxL = temporal;
+		exprR.accept(this);
+		auxR = temporal;
 		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
 	}
@@ -600,13 +517,22 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	@Override
-	public void visit(MethodCall stmt){} // math(p1, p2,p3)
+	public void visit(MethodCall stmt){
+		// primero debería evaluar todos los parametros y luego apilarlos uno por uno o modificar mi clse Operand para poder almacenar una lista de varlocations
+		//this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand( stmt), null, null));
+		//this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+	} 
 	
 	@Override
-	public void visit(MethodCallStmt stmt){}
+	public void visit(MethodCallStmt stmt){
+		// primero debería evaluar todos los parametros y luego apilarlos uno por uno o modificar mi clse Operand para poder almacenar una lista de varlocations
+		//this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand( stmt), null, null));
+		//this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+	}
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
+		initActualOffset(methodDecl.getOffset());
 		String type = methodDecl.getType();
 		String name = methodDecl.getName();
 		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD,new Operand( methodDecl), null, null));
@@ -616,6 +542,7 @@ public class AsmIntermediate implements ASTVisitor {
 		}
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
+		methodDecl.setOffset(getActualOffset());
 		this.addStatement(new StatementCode(OperationCode.ENDMETHOD,new Operand( methodDecl), null, null));
 	}
 	
@@ -703,14 +630,18 @@ public class AsmIntermediate implements ASTVisitor {
 		}
 		temporal = createTemporal(stmt,"BOOLEAN");
 		this.addStatement(new StatementCode(c,new Operand(auxL),new Operand(auxR),new Operand(temporal)));
-				System.out.print("*************************************************************************************̣\n");
 	}
 	
 	@Override
-	public void visit(ReturnStmt stmt){}
+	public void visit(ReturnStmt stmt){
+		stmt.getExpression().accept(this);
+		this.addStatement(new StatementCode(OperationCode.RET,new Operand(temporal),null,null));
+	}
 	
 	@Override
-	public void visit(ReturnVoidStmt stmt){}
+	public void visit(ReturnVoidStmt stmt){
+		this.addStatement(new StatementCode(OperationCode.RETVOID,null,null,null));
+	}
 	
 	@Override
 	public void visit(Skip stmt){

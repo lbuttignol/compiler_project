@@ -17,8 +17,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	private List<Error> errors;
 
-	private int coffpar;
-	private int coffvar;
+	private Integer actualOffset;
 
 	private final static int VARSIZE=4;
 
@@ -27,7 +26,26 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	}
 
 	// visit statements
-	
+	private void initActualOffset(){
+		this.actualOffset =1;
+	}
+
+	private Integer getActualOffset(){
+		return this.actualOffset;
+	}
+
+	private Integer incActualOffset(){
+		Integer aux = this.actualOffset;
+		this.actualOffset++;
+		return aux;
+	}
+
+	private Integer incActualOffsetArray(Integer cant){
+		this.actualOffset = this.actualOffset + cant;
+		Integer aux = this.actualOffset-1;
+		return aux;
+	}
+
 	@Override
 	public void visit(AST stmt){
 
@@ -219,18 +237,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
 			if(idDecl instanceof ArrayIdDecl){
-				ArrayIdDecl arr 	= (ArrayIdDecl) idDecl;
-				coffvar 			= coffvar-arr.getNumber()*VARSIZE;
-			}else if (!Type.contains(idDecl.getType())) {
-				SymbolInfo idClass 	= this.stack.getCurrentSymbolInfo(idDecl.getType());
-				coffvar 			= idClass.getAttList().size()*VARSIZE;
+				idDecl.setOffset(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
 			}else{
-				coffvar 			= coffvar-VARSIZE;
+				idDecl.setOffset(incActualOffset());
 			}
-			idDecl.setOff(coffvar);
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
 		}
-		coffvar = coffvar + idDeclList.size()*VARSIZE;
 	}
 
 	@Override
@@ -348,14 +360,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				Expression current = paramList.get(formal.indexOf(param));
 				if (current.getType().equalsIgnoreCase("UNDEFINED"))
 					current.accept(this);
-				if (coffpar>(6*VARSIZE)){
-					current.setOff(coffpar);
-				}
-				coffpar = coffpar+VARSIZE;
 				if (!param.getType().equalsIgnoreCase(current.getType()))
 					new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
 			}
-			coffpar = coffpar-formal.size()*VARSIZE;
 		}else{
 			new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
 		}
@@ -369,6 +376,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
+		initActualOffset();
 		String type = methodDecl.getType();
 		if (!Type.contains(type)){
 			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
@@ -403,6 +411,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 					
 			}
 		}
+		methodDecl.setOffset(getActualOffset());
 		this.stack.closeLevel();
 	}
 	
@@ -411,12 +420,11 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		String type = paramDecl.getType();
 		if (!Type.contains(type))
 			new ir.error.Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type");
+		paramDecl.setOffset(incActualOffset());
 	}
 	
 	@Override
 	public void visit(Program prog){
-		this.coffvar = 0;
-		this.coffpar = 0;
 		this.stack.newLevel();
 		List<ClassDecl> classDeclList = prog.getClassDeclare();
 		for (ClassDecl classDecl : classDeclList){

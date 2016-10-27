@@ -7,7 +7,7 @@ public abstract class Expression extends AST{
 	protected Expression expr;
 	protected String type;
 	private String id  = "a";
-	private int offset = 0;
+	
 
 	public Expression( int line, int col){
 		super(line,col);
@@ -25,14 +25,6 @@ public abstract class Expression extends AST{
 	
 	public void setType(String t) {
 		this.type = t;
-	}
-
-	public void setOff(int off){
-		this.offset = off;
-	}
-
-	public Integer getOff(){
-		return this.offset;
 	}
 
 	@Override

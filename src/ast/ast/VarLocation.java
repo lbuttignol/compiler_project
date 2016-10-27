@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 public class VarLocation extends Location {
 	private int blockId;
+	private Integer offset = 0;
 
 	public VarLocation(List<String> ids, int line, int col){
 		super(ids,line,col);
@@ -25,6 +26,14 @@ public class VarLocation extends Location {
 	@Override
 	public String toString() {
 		return ids.toString();
+	}
+
+	public void setOff(Integer off){
+		this.offset = off;
+	}
+
+	public Integer getOff(){
+		return this.offset;
 	}
 
 	@Override
