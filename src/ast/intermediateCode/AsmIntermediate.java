@@ -30,6 +30,10 @@ public class AsmIntermediate implements ASTVisitor {
 		this.endLoop 	= new Stack<LoopLabel>();
 	}
 
+	public List<StatementCode> getPseudo(){
+		return this.code;
+	}
+
 	private void initActualOffset(){
 		this.actualOffset =1;
 	}
@@ -538,7 +542,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodDecl methodDecl){
-		initActualOffset(methodDecl.getOffset());
+		initActualOffset(methodDecl.getOff());
 		String type = methodDecl.getType();
 		String name = methodDecl.getName();
 		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD,new Operand( methodDecl), null, null));
@@ -548,7 +552,7 @@ public class AsmIntermediate implements ASTVisitor {
 		}
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
-		methodDecl.setOffset(getActualOffset());
+		methodDecl.setOff(getActualOffset());
 		this.addStatement(new StatementCode(OperationCode.ENDMETHOD,new Operand( methodDecl), null, null));
 	}
 	
