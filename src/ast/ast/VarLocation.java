@@ -23,7 +23,6 @@ public class VarLocation extends Location {
 		this.blockId = blockId;
 	}
 
-
 	@Override
 	public String toString() {
 		return ids.toString();

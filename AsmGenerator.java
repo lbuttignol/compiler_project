@@ -49,7 +49,7 @@ public class AsmGenerator {
 	public void translate(StatementCode stmt){		
 		try{
 			switch (stmt.getOperationCode()) {
-				// Declarations	
+				// Declarations
 				case BEGINPROGRAM:
 					writeFile(bw,"# begin program");
 					writeFile(bw,".file "+originalFileName);
@@ -77,7 +77,6 @@ public class AsmGenerator {
 					break; 
 				case BEGINMETHOD: 
 					String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};	
-					
 					MethodDecl methodDecl = (MethodDecl) stmt.getOperand1().getExpression();
 					label = methodDecl.getName();
 					Integer methodOff = 0;
@@ -320,61 +319,73 @@ public class AsmGenerator {
 				case EQII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmove $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "EQII");
 					break;
 				case EQFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmove $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "EQFF");
 					break;
 				case EQBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmove $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "EQBB");
 					break;
 				case NEQII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovne $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "NEQII");
 					break;
 				case NEQFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovne $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "NEQFF");
 					break;
 				case NEQBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovne $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "NEQBB");
 					break;
 
@@ -382,79 +393,95 @@ public class AsmGenerator {
 				case SMALLII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovl $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "SMALLII");
 					break;
 				case SMALLFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovl $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "SMALLFF");
 					break;
 				case LTOEII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovle $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "LTOEII");
 					break;
 				case LTOEFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovle $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "LTOEFF");
 					break;
 				case BIGGERII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovg $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "BIGGERII");
 					break;
 				case BIGGERFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovg $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "BIGGERFF");
 					break;
 				case GTOEII:
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovge $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "GTOEII");
 					break;
 				case GTOEFF:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovge $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "GTOEFF");
 					break;
 
@@ -462,6 +489,7 @@ public class AsmGenerator {
 				case ANDBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $0, %rax");
@@ -469,11 +497,13 @@ public class AsmGenerator {
 					writeFile(bw,"cmovne $1, %rax");
 					writeFile(bw,"cmp $0, %r11");
 					writeFile(bw,"cmovne $1, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "ANDBB");
 					break;
 				case ORBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
+					operand3 = (VarLocation) stmt.getOperand3().getExpression();
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
 					writeFile(bw,"mov $1, %rax");
@@ -481,6 +511,7 @@ public class AsmGenerator {
 					writeFile(bw,"cmove $0, %rax");
 					writeFile(bw,"cmp $0, %r11");
 					writeFile(bw,"cmove $0, %rax");
+					writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "ORBB");
 					break;
 
