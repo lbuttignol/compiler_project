@@ -3,8 +3,7 @@ package ir.ast;
 public abstract class Declaration extends AST{
 	
 	protected String name;
-	private int offset = 0;
-
+	private Integer offset;
 
 	public Declaration(int lineNumber, int columnNumber, String name){
 		super(lineNumber,columnNumber);
@@ -23,11 +22,11 @@ public abstract class Declaration extends AST{
 		return name;
 	}
 
-	public void setOff (Integer off){
-		this.offset=off;
+	public void setOffset(Integer val){
+		this.offset = val;
 	}
 
-	public int getOff(){
+	public Integer getOffset(){
 		return this.offset;
 	}
 

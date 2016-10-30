@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import ir.ASTVisitor;
 public abstract class Location extends Expression {
 	protected List<IdDecl> ids;
+	private Declaration decl;
 
 	public Location(List<String> ids, int line, int col){
 		super(line,col);
@@ -39,6 +40,14 @@ public abstract class Location extends Expression {
 	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);
+	}
+
+	public void setDeclaration(Declaration d){
+		this.decl = d;
+	}
+
+	public Declaration getDeclaration(){
+		return this.decl;
 	}
 
 }
