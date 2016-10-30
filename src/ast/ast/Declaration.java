@@ -29,4 +29,5 @@ public abstract class Declaration extends AST{
 	public Integer getOffset(){
 		return this.offset;
 	}
+
 }
