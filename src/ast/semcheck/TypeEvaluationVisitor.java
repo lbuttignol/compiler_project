@@ -238,9 +238,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
 			if(idDecl instanceof ArrayIdDecl){
-				idDecl.setOffset(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
+				idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
 			}else{
-				idDecl.setOffset(incActualOffset());
+				idDecl.setOff(incActualOffset());
 			}
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
 		}
@@ -412,7 +412,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 					
 			}
 		}
-		methodDecl.setOffset(getActualOffset());
+		methodDecl.setOff(getActualOffset());
 		this.stack.closeLevel();
 	}
 	
@@ -421,7 +421,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		String type = paramDecl.getType();
 		if (!Type.contains(type))
 			new ir.error.Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type");
-		paramDecl.setOffset(incActualOffset());
+		paramDecl.setOff(incActualOffset());
 	}
 	
 	@Override
