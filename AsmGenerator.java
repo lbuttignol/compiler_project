@@ -242,12 +242,6 @@ public class AsmGenerator {
 					writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "ADDFF");
 					break;
-				case ADDIF:
-					System.out.println( "ADDIF");
-					break;
-				case ADDFI:
-					System.out.println( "ADDFI");
-					break;
 				case SUBII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
@@ -269,12 +263,6 @@ public class AsmGenerator {
 					writeFile(bw, "mov %r10, %rax");
 					writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "SUBFF");
-					break;
-				case SUBIF:
-					System.out.println( "SUBIF");
-					break;
-				case SUBFI:
-					System.out.println( "SUBFI");
 					break;
 				case MULII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
@@ -298,12 +286,6 @@ public class AsmGenerator {
 					writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "MULFF");
 					break;
-				case MULIF:
-					System.out.println( "MULIF");
-					break;
-				case MULFI:
-					System.out.println( "MULFI");
-					break;
 				case DIVII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
@@ -323,12 +305,6 @@ public class AsmGenerator {
 					writeFile(bw,"idiv %r10");
 					writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff())+"(%rbp)");
 					System.out.println( "DIVFF");
-					break;
-				case DIVIF:
-					System.out.println( "DIVIF");
-					break;
-				case DIVFI:
-					System.out.println( "DIVFI");
 					break;
 				case MODII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
@@ -361,12 +337,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmove $0, %rax");
 					System.out.println( "EQFF");
 					break;
-				case EQIF:
-					System.out.println( "EQIF");
-					break;
-				case EQFI:
-					System.out.println( "EQFI");
-					break;
 				case EQBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
@@ -396,12 +366,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovne $0, %rax");
 					System.out.println( "NEQFF");
-					break;
-				case NEQIF:
-					System.out.println( "NEQIF");
-					break;
-				case NEQFI:
-					System.out.println( "NEQFI");
 					break;
 				case NEQBB:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
@@ -435,12 +399,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmovl $0, %rax");
 					System.out.println( "SMALLFF");
 					break;
-				case SMALLIF:
-					System.out.println( "SMALLIF");
-					break;
-				case SMALLFI:
-					System.out.println( "SMALLFI");
-					break;
 				case LTOEII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
 					operand2 = (VarLocation) stmt.getOperand2().getExpression();
@@ -460,12 +418,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovle $0, %rax");
 					System.out.println( "LTOEFF");
-					break;
-				case LTOEIF:
-					System.out.println( "LTOEIF");
-					break;
-				case LTOEFI:
-					System.out.println( "LTOEFI");
 					break;
 				case BIGGERII:
 					operand1 = (VarLocation) stmt.getOperand1().getExpression();
@@ -487,12 +439,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmovg $0, %rax");
 					System.out.println( "BIGGERFF");
 					break;
-				case BIGGERIF:
-					System.out.println( "BIGGERIF");
-					break;
-				case BIGGERFI:
-					System.out.println( "BIGGERFI");
-					break;
 				case GTOEII:
 					writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %r10");
 					writeFile(bw,"mov -"+String.valueOf(operand2.getOff())+"(%rbp), %r11");
@@ -510,12 +456,6 @@ public class AsmGenerator {
 					writeFile(bw,"cmp %r10, %r11");
 					writeFile(bw,"cmovge $0, %rax");
 					System.out.println( "GTOEFF");
-					break;
-				case GTOEIF:
-					System.out.println( "GTOEIF");
-					break;
-				case GTOEFI:
-					System.out.println( "GTOEFI");
 					break;
 
 			// Logical operations			
@@ -619,18 +559,7 @@ public class AsmGenerator {
 				case INC:
 					System.out.println( "INC");
 					break;
-				case PUSHPARAMS:
-					System.out.print("PUSHPARAMS");
-					break;
-				case CALL:
-					System.out.print( "CALL");
-					break;
-				case RET:
-					System.out.print( "RET");
-					break;
-				case RETVOID:
-					System.out.print( "RETVOID");
-					break;
+					
 			}			
 		}catch(IOException e){
 			e.printStackTrace();
@@ -642,7 +571,7 @@ public class AsmGenerator {
 
 	public void execute(){
 		for (StatementCode stmtCode : this.intermediateCode){
-
+			translate(stmtCode);
 		}
 	}
 

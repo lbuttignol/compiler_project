@@ -23,6 +23,10 @@ public class VarLocation extends Location {
 		this.blockId = blockId;
 	}
 
+	public Integer getOff(){
+		return 0;
+	}
+
 	@Override
 	public String toString() {
 		return ids.toString();
@@ -32,9 +36,9 @@ public class VarLocation extends Location {
 		this.offset = off;
 	}
 
-	public Integer getOff(){
+	/*public Integer getOff(){
 		return this.offset;
-	}
+	}*/
 
 	@Override
 	public void accept(ASTVisitor v) {

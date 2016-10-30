@@ -15,6 +15,7 @@ public class SymbolInfo <T extends Declaration> {
 	private List<IdDecl> attList;		//independientemente de que sean o no necesarias
 	private Integer index;                  //Se utiliza cuando se desea encapsular un SymbolInfo
 	private List<IdDecl> arrayList;
+	private Declaration reference;
 	//private List<ParamDecl> paramList; 
 	
 	public  SymbolInfo(T ast){
@@ -28,6 +29,8 @@ public class SymbolInfo <T extends Declaration> {
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.method 	= false;
 		this.index		= null;
+		this.reference  = ast;
+
 	}
 
 	public SymbolInfo(String type, T ast){
@@ -40,6 +43,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
+		this.reference  = ast;
 
 	}
 	public SymbolInfo(String type, T ast,int index){
@@ -52,6 +56,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= index;
+		this.reference  = ast;
 
 	}
 
@@ -65,6 +70,7 @@ public class SymbolInfo <T extends Declaration> {
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
+		this.reference  = ast;
 
 	}
 	public SymbolInfo(boolean method, String type,T ast){
@@ -77,6 +83,8 @@ public class SymbolInfo <T extends Declaration> {
 		this.attList	= new LinkedList<IdDecl>();
 		this.arrayList  = new LinkedList<IdDecl>();
 		this.index		= null;
+		this.reference  = ast;
+
 
 	}
 
@@ -164,6 +172,14 @@ public class SymbolInfo <T extends Declaration> {
 
 	public void setIndex(Integer index){
 		this.index=index;
+	}
+
+	public void setReference (Declaration idDecl){
+		this.reference = idDecl;
+	}
+
+	public Declaration getReference(){
+		return this.reference;
 	}
 
 }

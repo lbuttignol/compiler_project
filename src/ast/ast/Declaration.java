@@ -22,11 +22,12 @@ public abstract class Declaration extends AST{
 		return name;
 	}
 
-	public void setOffset(Integer val){
+	public void setOff(Integer val){
 		this.offset = val;
 	}
 
-	public Integer getOffset(){
+	public Integer getOff(){
 		return this.offset;
 	}
+
 }

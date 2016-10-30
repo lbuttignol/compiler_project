@@ -60,6 +60,10 @@ public class BuilderVisitor implements ASTVisitor {
 				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
 		}
+		IdDecl id = ids.get(ids.size()-1);
+		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
+		if (referencesDecl!=null)
+			loc.setDeclaration(referencesDecl.getReference());
 		Expression exprArray = loc.getExpression();
 		checkExpression(exprArray);
 	}
@@ -98,6 +102,11 @@ public class BuilderVisitor implements ASTVisitor {
 		this.stack.reachable(ids,false,true);
 		Expression exprArray = loc.getExpr();
 		checkExpression(exprArray);
+		IdDecl id = ids.get(ids.size()-1);
+		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
+		if (referencesDecl!=null)
+			loc.setDeclaration(referencesDecl.getReference());
+
 	}
 	
 	@Override
@@ -107,6 +116,10 @@ public class BuilderVisitor implements ASTVisitor {
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
 		this.stack.reachable(ids,false,false);	
+		IdDecl id = ids.get(ids.size()-1);
+		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
+		if (referencesDecl!=null)
+			loc.setDeclaration(referencesDecl.getReference());
 	}
 	
 	@Override
@@ -498,6 +511,10 @@ public class BuilderVisitor implements ASTVisitor {
 				new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 			}			
 		}
+		IdDecl id = ids.get(ids.size()-1);
+		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
+		if (referencesDecl!=null)
+			loc.setDeclaration(referencesDecl.getReference());
 	}
 	
 	@Override

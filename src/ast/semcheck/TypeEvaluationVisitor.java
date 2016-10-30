@@ -19,7 +19,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	private Integer actualOffset;
 
-	private final static int VARSIZE=4;
+	private final static int VARSIZE=1;
 
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
@@ -92,7 +92,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		String type 	 = this.stack.getCurrentType(ids.get(last).getName());
 		if (type!=null)
 			loc.setType(type);
-		Expression expr=loc.getExpression();
+		Expression expr  = loc.getExpression();
 		expr.accept(this);
 		if(!expr.getType().equalsIgnoreCase("INTEGER"))
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Only Integer index allowed");
@@ -100,11 +100,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AssignStmt assignStmt){
-		Location loc = assignStmt.getLocation();
+		Location loc    = assignStmt.getLocation();
 		loc.accept(this);
 		Expression expr = assignStmt.getExpression();
 		expr.accept(this);
-		if (!loc.getType().equalsIgnoreCase(expr.getType())&& !loc.getType().equalsIgnoreCase("UNDEFINED")) {
+		if (!loc.getType().equalsIgnoreCase(expr.getType()) && 
+			!loc.getType().equalsIgnoreCase("UNDEFINED")) {
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected");
 		}
 
@@ -237,9 +238,9 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
 			if(idDecl instanceof ArrayIdDecl){
-				idDecl.setOffset(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
+				idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
 			}else{
-				idDecl.setOffset(incActualOffset());
+				idDecl.setOff(incActualOffset());
 			}
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
 		}
@@ -301,7 +302,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(IntLiteral lit){
-	
+
 	}
 	
 	@Override
@@ -411,7 +412,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 					
 			}
 		}
-		methodDecl.setOffset(getActualOffset());
+		methodDecl.setOff(getActualOffset());
 		this.stack.closeLevel();
 	}
 	
@@ -420,7 +421,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		String type = paramDecl.getType();
 		if (!Type.contains(type))
 			new ir.error.Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type");
-		paramDecl.setOffset(incActualOffset());
+		paramDecl.setOff(incActualOffset());
 	}
 	
 	@Override
