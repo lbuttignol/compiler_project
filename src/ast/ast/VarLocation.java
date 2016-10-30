@@ -22,6 +22,10 @@ public class VarLocation extends Location {
 		this.blockId = blockId;
 	}
 
+	public Integer getOff(){
+		return 0;
+	}
+
 	@Override
 	public String toString() {
 		return ids.toString();

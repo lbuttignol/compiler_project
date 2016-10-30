@@ -20,7 +20,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	private int coffpar;
 	private int coffvar;
 
-	private final static int VARSIZE=4;
+	private final static int VARSIZE=1;
 
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
@@ -74,7 +74,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		String type 	 = this.stack.getCurrentType(ids.get(last).getName());
 		if (type!=null)
 			loc.setType(type);
-		Expression expr=loc.getExpression();
+		Expression expr  = loc.getExpression();
 		expr.accept(this);
 		if(!expr.getType().equalsIgnoreCase("INTEGER"))
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Only Integer index allowed");
@@ -82,11 +82,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(AssignStmt assignStmt){
-		Location loc = assignStmt.getLocation();
+		Location loc    = assignStmt.getLocation();
 		loc.accept(this);
 		Expression expr = assignStmt.getExpression();
 		expr.accept(this);
-		if (!loc.getType().equalsIgnoreCase(expr.getType())&& !loc.getType().equalsIgnoreCase("UNDEFINED")) {
+		if (!loc.getType().equalsIgnoreCase(expr.getType()) && 
+			!loc.getType().equalsIgnoreCase("UNDEFINED")) {
 			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected");
 		}
 
@@ -289,7 +290,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(IntLiteral lit){
-	
+
 	}
 	
 	@Override
