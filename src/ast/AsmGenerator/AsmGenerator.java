@@ -1,5 +1,6 @@
 package ir.AsmGenerator;
 
+import ir.ast.*;
 import ir.intermediateCode.*;
 import java.util.List;
 import java.io.BufferedWriter;
@@ -40,33 +41,28 @@ public class AsmGenerator {
 			switch (stmt.getOperationCode()) {
 				// Declarations	
 				case BEGINPROGRAM:
-					writeFile(bw,"# begin program");
-					writeFile(bw,".file "+originalFileName);
-					writeFile(bw,".glob main");
-					writeFile(bw,".type	main, @function");
+					executeBeginProgram(stmt);
 					break;
 				case ENDPROGRAM:
-					bw.write("# end program");
-					bw.flush();
-					bw.close();
+					executeEndProgram(stmt);
 					break;
 				case BEGINCLASS:
-					writeFile(bw,"# begin class");
+					executeBeginClass(stmt);
 					break;
 				case ENDCLASS:
-					writeFile(bw,"# end class");
+					executeEndClass(stmt);
 					break;
 				case FIELD:
-					System.out.println( "FIELD");
+					executeField(stmt);
 					break;
 				case BEGINMETHOD:
-					System.out.println( "BEGINMETHOD");
+					executeBeginMethod(stmt);
 					break;
 				case ENDMETHOD:
-					System.out.println( "ENDMETHOD");
+					executeEndMethod(stmt);
 					break;
 				case PARAMDECL:
-					System.out.println( "PARAMDECL");
+					executeParamDecl(stmt);
 					break;
 				case LOADPARAM:
 					System.out.println( "LOADPARAM");  
@@ -84,13 +80,13 @@ public class AsmGenerator {
 					System.out.println( "ARRAYDECLB");
 					break;
 				case INTDECL:
-					System.out.println( "INTDECL");
+					executeIntDecl(stmt);
 					break;
 				case FLOATDECL:
 					System.out.println( "FLOATDECL");
 					break;
 				case BOOLDECL:
-					System.out.println( "BOOLDECL");
+					executeBoolDecl(stmt);
 					break;
 
 			//Locations
@@ -133,21 +129,26 @@ public class AsmGenerator {
 
 			// Statements
 				case BEGINIF:
-					System.out.println( "BEGINIF");
+					executeBeginIf(stmt);
 					break;
 				case ENDIF:
+					executeEndIf(stmt);
 					System.out.println( "ENDIF");
 					break;
 				case ELSEIF:
+					executeElseIf(stmt);
 					System.out.println( "ELSEIF");
 					break;
 				case BEGINFOR:
+					executeBeginFor(stmt);
 					System.out.println( "BEGINFOR");
 					break;
 				case INCFOR:
+					executeIncFor(stmt);
 					System.out.println( "INCFOR");
 					break;
 				case ENDFOR:
+					executeEndFor(stmt);
 					System.out.println( "ENDFOR");
 					break;
 				case BEGINWHILE:
@@ -308,13 +309,13 @@ public class AsmGenerator {
 
 			// Jump
 				case JMPFALSE:
-					System.out.println( "JMPFALSE");	
+					executeJmpFalse(stmt);	
 					break;
 				case JMPTRUE:
 					System.out.println( "JMPTRUE");
 					break;
 				case JMP:
-					System.out.println( "JMP");
+					executeJmp(stmt);
 					break;
 
 			// Assign
@@ -366,5 +367,120 @@ public class AsmGenerator {
 	private void writeFile(BufferedWriter bwen, String content) throws IOException{
 		bw.write(content);
 		bw.newLine();
+	}
+
+	private void executeBeginProgram(StatementCode stmt) throws IOException{
+		writeFile(bw,"# begin program");
+		writeFile(bw,".file "+originalFileName);
+		writeFile(bw,".glob main");
+		writeFile(bw,".type	main, @function");
+	}
+
+	private void executeEndProgram(StatementCode stmt) throws IOException{
+		bw.write("# end program");
+		bw.flush();
+		bw.close();
+	}
+
+	private void executeBeginClass(StatementCode stmt) throws IOException{
+		writeFile(bw,"# begin class");
+		ClassDecl classDecl = (ClassDecl) stmt.getOperand1().getExpression();
+		String nameClass = classDecl.getName();
+		writeFile(bw,nameClass+":");
+	}
+
+	private void executeEndClass(StatementCode stmt) throws IOException{
+
+	}
+
+	private void executeField(StatementCode stmt) throws IOException{
+		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
+		Integer offSet = idDecl.getOff();
+		writeFile(bw,"movq $0, -"+String.valueOf(offSet)+"(%rbp)");
+	}
+
+	private void executeBeginMethod(StatementCode stmt) throws IOException{
+		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};	
+		MethodDecl methodDecl = (MethodDecl) stmt.getOperand1().getExpression();
+		String label = methodDecl.getName();
+		Integer methodOff = 0;
+		writeFile(bw,label+":");
+		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
+		List<ParamDecl> paramDecl = methodDecl.getParams();
+		for (int i=0;i<6&&i<paramDecl.size();i++){
+			//offSet = paramDecl.getOff();
+		//	writeFile(bw,"mov %"+registers[i]+", -"+offSet+"(%rbp)");
+		}
+		// DONDE PONGO LOS ARGUMENTOS SI HAY MAS DE 6.
+	}
+
+	private void executeEndMethod(StatementCode stmt) throws IOException{
+		writeFile(bw,"leave");
+		writeFile(bw,"ret\n");
+	}
+
+	private void executeParamDecl(StatementCode stmt) throws IOException{
+		/*ParamDecl paramDecl = (ParamDecl) stmt.getOperand1().getExpression();
+		Integer offSet = paramDecl.getoff();
+		writeFile(bw,"movq $0, -"+String.valueOf(offSet)+"(%rbp)");
+		*/
+	}
+
+	private void executeIntDecl(StatementCode stmt) throws IOException{
+		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
+		Integer offSet = idDecl.getOff();
+		writeFile(bw,"movq $0, -"+String.valueOf(offSet)+"(%rbp)");	
+	}
+
+	private void executeBoolDecl (StatementCode stmt) throws IOException{
+		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
+		Integer offSet = idDecl.getOff();
+		writeFile(bw,"movq $0, -"+String.valueOf(offSet)+"(%rbp)");	
+	}
+
+	private void executeBeginIf (StatementCode stmt) throws IOException{
+		writeFile(bw,"# begin if ");
+	}
+
+	private void executeEndIf (StatementCode stmt) throws IOException{
+		Integer numberLbl = stmt.getOperand2().getNumber();
+		writeFile(bw,OperationCode.ENDIF.toString()+String.valueOf(numberLbl)+": ");
+	}
+
+	private void executeElseIf(StatementCode stmt) throws IOException{
+		Integer numberLbl = stmt.getOperand2().getNumber();
+		writeFile(bw,OperationCode.ELSEIF.toString()+String.valueOf(numberLbl)+": ");
+	}
+
+	private void executeBeginFor(StatementCode stmt) throws IOException{
+		Integer forNumber = stmt.getOperand2().getNumber();
+		String label = OperationCode.BEGINFOR.toString()+String.valueOf(forNumber);
+		writeFile(bw,label+": ");
+	}
+
+	private void executeIncFor (StatementCode stmt) throws IOException{
+		Integer lblNumber = stmt.getOperand2().getNumber();
+		String label = OperationCode.INCFOR.toString()+String.valueOf(lblNumber);
+		writeFile(bw,label+": ");
+	}
+
+	private void executeEndFor(StatementCode stmt) throws IOException{
+		Integer lblNumber = stmt.getOperand2().getNumber();
+		String label = OperationCode.ENDFOR.toString()+ String.valueOf(lblNumber);
+		writeFile(bw,label+": ");	
+	}
+
+	private void executeJmpFalse(StatementCode stmt) throws IOException{
+		VarLocation condition = (VarLocation) stmt.getOperand1().getExpression();
+		Integer conditionOffSet = condition.getOff();
+		String label = stmt.getOperand2().getName();
+		writeFile(bw,"mov -"+conditionOffSet+"(%rbp),%r11");
+		writeFile(bw,"cmp $0, %r11");
+		writeFile(bw,"jne "+label);
+	}
+
+	private void executeJmp(StatementCode stmt) throws IOException{
+		String label = stmt.getOperand2().getName();
+		writeFile(bw,"jmp "+label);
 	}
 }

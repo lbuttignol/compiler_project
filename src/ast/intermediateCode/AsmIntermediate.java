@@ -472,6 +472,7 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation cond =  temporal;
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
 		stmt.getIfBlock().accept(this);
+		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null,null));
 		this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(intLit),null));
 		stmt.getElseBlock().accept(this);
 		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(intLit),null));

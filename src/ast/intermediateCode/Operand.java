@@ -50,7 +50,7 @@ public class Operand {
 		this.expression = exp;	
 	}
 
-	public AST getEspression(){
+	public AST getExpression(){
 		return this.expression;
 	} 
 
