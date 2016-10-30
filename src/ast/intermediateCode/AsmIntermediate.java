@@ -30,10 +30,6 @@ public class AsmIntermediate implements ASTVisitor {
 		this.endLoop 	= new Stack<LoopLabel>();
 	}
 
-	public List<StatementCode> getPseudo(){
-		return this.code;
-	}
-
 	private void initActualOffset(){
 		this.actualOffset =1;
 	}
