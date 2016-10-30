@@ -433,8 +433,10 @@ public class AsmIntermediate implements ASTVisitor {
 		stmt.getInit().accept(this);
 		VarLocation contInit = temporal; 
 		this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(stmt.getCounterName())));
+		stmt.getEnd().accept(this);
+		VarLocation contEnd = temporal;
 		this.addStatement(new StatementCode(OperationCode.BEGINFOR,new Operand(stmt),new Operand(forNum),null));
-		RelationalBinOp forCond = new RelationalBinOp(contInit,BinOpType.SMALL,stmt.getEnd(),stmt.getLineNumber(),stmt.getColumnNumber());
+		RelationalBinOp forCond = new RelationalBinOp(contInit,BinOpType.SMALL,contEnd,stmt.getLineNumber(),stmt.getColumnNumber());
 		forCond.accept(this);
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDFOR.toString()+forNum.toString()),null));
 		stmt.getBody().accept(this);
