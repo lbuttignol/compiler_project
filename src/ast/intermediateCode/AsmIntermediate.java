@@ -79,6 +79,10 @@ public class AsmIntermediate implements ASTVisitor {
 		return ret;
 	}
 
+	/*private VarLocation createTemporalArrLoc(ArrayLocation stmt){
+
+	}*/
+
 	@Override
 	public void visit(ArithmeticBinOp stmt){
 		Expression exprL = stmt.getLeftOperand();
@@ -196,6 +200,8 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayLocation stmt){
+		stmt.getExpression().accept(this);
+		/*
 		switch (stmt.getType()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),null,null));
@@ -208,7 +214,7 @@ public class AsmIntermediate implements ASTVisitor {
 				break;
 			default:
 				throw new IllegalStateException("Some error in array type");
-		}
+		}*/
 	}
 	
 	@Override
@@ -283,7 +289,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeArrayLocation stmt){
-		switch (stmt.getType()) {
+		/*switch (stmt.getType()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCI,new Operand(stmt),null,null));
 				break;
@@ -295,12 +301,12 @@ public class AsmIntermediate implements ASTVisitor {
 				break;
 			default:
 				throw new IllegalStateException("Some error in array type");
-		}
+		}*/
 	}
 	
 	@Override
 	public void visit(AttributeLocation stmt){
-		switch (stmt.getType()) {
+		/*switch (stmt.getType()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
 				break;
@@ -312,7 +318,7 @@ public class AsmIntermediate implements ASTVisitor {
 				break;
 			default:
 				throw new IllegalStateException("Some error in array type");
-		}
+		}*/
 	}
 	
 	@Override
