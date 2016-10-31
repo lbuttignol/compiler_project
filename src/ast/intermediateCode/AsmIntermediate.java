@@ -12,26 +12,22 @@ import java.util.Stack;
 public class AsmIntermediate implements ASTVisitor {
 //	private String programName;
 	private List<StatementCode> code;
-	private VarLocation temporal;
-	private Integer tempNum;
-	private Integer ifCounter, whileCounter, forCounter;
-	private Stack<LoopLabel> beginLoop, endFor;
-	private Stack<LoopLabel> endLoop, endWile;
+	private VarLocation 		temporal;
+	private Integer 			tempNum;
+	private Integer 			ifCounter, whileCounter, forCounter;
+	private Stack<LoopLabel> 	beginLoop, endFor;
+	private Stack<LoopLabel> 	endLoop, endWile;
 
 	private Integer actualOffset;
 
 	public AsmIntermediate(){
-		this.code = new LinkedList<StatementCode>();
-		this.ifCounter 	= 0;
-		this.whileCounter = 0;
-		this.forCounter = 0;
-		this.tempNum = 0;
-		this.beginLoop 	= new Stack<LoopLabel>();
-		this.endLoop 	= new Stack<LoopLabel>();
-	}
-
-	public List<StatementCode> getPseudo(){
-		return this.code;
+		this.code 			= new LinkedList<StatementCode>();
+		this.ifCounter 		= 0;
+		this.whileCounter 	= 0;
+		this.forCounter 	= 0;
+		this.tempNum 		= 0;
+		this.beginLoop 		= new Stack<LoopLabel>();
+		this.endLoop 		= new Stack<LoopLabel>();
 	}
 
 	private void initActualOffset(){
@@ -53,8 +49,8 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 
 	private Integer incActualOffsetArray(Integer cant){
-		this.actualOffset = this.actualOffset + cant;
-		Integer aux = this.actualOffset--;
+		this.actualOffset 	= this.actualOffset + cant;
+		Integer aux 		= this.actualOffset--;
 		return aux;
 	}
 
@@ -62,8 +58,8 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(AST stmt){}
 
 	private VarLocation createTemporalLit(Literal stmt){
-		String tName = "t" + getTemporalNumber().toString();
-		List lName = new LinkedList<String>();
+		String tName 	= "t" + getTemporalNumber().toString();
+		List lName 		= new LinkedList<String>();
 		lName.add(tName);
 		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
 		ret.setType(stmt.getType());
@@ -74,8 +70,8 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 	
 	private VarLocation createTemporal(Expression stmt,String type){
-		String tName = "t" + getTemporalNumber().toString();
-		List lName = new LinkedList<String>();
+		String tName 	= "t" + getTemporalNumber().toString();
+		List lName 		= new LinkedList<String>();
 		lName.add(tName);
 		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
 		ret.setType(type);
@@ -89,10 +85,10 @@ public class AsmIntermediate implements ASTVisitor {
 
 	@Override
 	public void visit(ArithmeticBinOp stmt){
-		Expression exprL = stmt.getLeftOperand();
-		Expression exprR = stmt.getRightOperand();
-		BinOpType op = stmt.getOperator();
-		OperationCode c = createBinOpCode(exprL, op, exprR );
+		Expression exprL 	= stmt.getLeftOperand();
+		Expression exprR 	= stmt.getRightOperand();
+		BinOpType op 		= stmt.getOperator();
+		OperationCode c 	= createBinOpCode(exprL, op, exprR );
 		VarLocation auxL, auxR;
 		switch (operandsType(exprL,exprR)) {
 			case II:
@@ -170,12 +166,12 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation aux;
 		switch (stmt.getOperand().getType()) {
 			case "INTEGER":
-				aux = temporal; 
+				aux 	 = temporal; 
 				temporal = createTemporal(stmt,"INTEGER");
 				this.addStatement(new StatementCode(OperationCode.SUBUI,new Operand(aux),null,new Operand(temporal)));
 				break;
 			case "FLOAT":
-				aux = temporal;
+				aux 	 = temporal;
 				temporal = createTemporal(stmt,"FLOAT");
 				this.addStatement(new StatementCode(OperationCode.SUBUF,new Operand(aux),null,new Operand(temporal)));
 				break;
@@ -465,6 +461,7 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation cond =  temporal;
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
 		stmt.getIfBlock().accept(this);
+		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null,null));
 		this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(intLit),null));
 		stmt.getElseBlock().accept(this);
 		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(intLit),null));
