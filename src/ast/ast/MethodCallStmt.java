@@ -1,7 +1,7 @@
 package ir.ast;
 import ir.ASTVisitor;
 public class MethodCallStmt extends Statement{
-	MethodCall methodC;
+	private MethodCall methodC;
 
 	public MethodCallStmt(MethodCall mc, int line, int col){
 		super(line,col);

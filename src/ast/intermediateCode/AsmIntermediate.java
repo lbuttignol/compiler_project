@@ -514,16 +514,28 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(MethodCall stmt){
-		// primero debería evaluar todos los parametros y luego apilarlos uno por uno o modificar mi clse Operand para poder almacenar una lista de varlocations
-		//this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand( stmt), null, null));
-		//this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
+		List<Expression> param = stmt.getParams();
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+			
+			param.get(cont).accept(this);
+			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
+			
+		}
+		this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
 	} 
 	
 	@Override
 	public void visit(MethodCallStmt stmt){
-		// primero debería evaluar todos los parametros y luego apilarlos uno por uno o modificar mi clse Operand para poder almacenar una lista de varlocations
-		//this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand( stmt), null, null));
-		//this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
+		List<Expression> param = stmt.getMethodCall().getParams();
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+			
+			param.get(cont).accept(this);
+			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
+			
+		}
+		this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
 	}
 	
 	@Override
