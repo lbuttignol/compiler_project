@@ -23,6 +23,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
+		this.actualOffset = 0;
 	}
 
 	// visit statements

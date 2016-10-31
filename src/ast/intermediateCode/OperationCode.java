@@ -110,6 +110,7 @@ public enum OperationCode {
 
 // Assign
 	ASSIGNATION	, // Variable 	- null			- Result 			//VER SI SE TIENE QIE DIVIDIR O NO°!!!!!""
+	ASSIGNCONST , // Variable   - Literal
 	ASSINCI		, // Variable 	- null			- IntResult
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult

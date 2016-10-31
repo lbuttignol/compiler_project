@@ -62,10 +62,25 @@ public class AsmIntermediate implements ASTVisitor {
 		List lName 		= new LinkedList<String>();
 		lName.add(tName);
 		VarLocation ret = new VarLocation(lName,stmt.getLineNumber(),stmt.getColumnNumber());
-		ret.setType(stmt.getType());
+		ret.setType(stmt.getType().toUpperCase());
 		ret.setOff(incActualOffset());
-		AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
-		initTemporal.accept(this);
+		Integer res=0;
+		if (stmt.getType().toUpperCase().equals("BOOLEAN")){
+			BooleanLiteral booleanLit = (BooleanLiteral) stmt;
+			if (booleanLit.getValue()){
+				res = 0;
+			}else{
+				res =1;
+			}
+		}
+		if (stmt.getType().toUpperCase().equals("INTEGER")){
+			IntLiteral intLit = (IntLiteral) stmt;
+			res = intLit.getValue();
+		}
+		if ((stmt.getType().toUpperCase().equals("BOOLEAN"))||(stmt.getType().toUpperCase().equals("INTEGER")))
+			addStatement(new StatementCode(OperationCode.ASSIGNCONST,new Operand(ret),new Operand(String.valueOf(res)),null));
+		//AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
+		//initTemporal.accept(this);
 		return ret;
 	}
 	
@@ -164,7 +179,7 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(ArithmeticUnaryOp stmt){
 		stmt.getOperand().accept(this);
 		VarLocation aux;
-		switch (stmt.getOperand().getType()) {
+		switch (stmt.getOperand().getType().toUpperCase()) {
 			case "INTEGER":
 				aux 	 = temporal; 
 				temporal = createTemporal(stmt,"INTEGER");
@@ -183,7 +198,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayIdDecl stmt){
-		switch (stmt.getType()) {
+		switch (stmt.getType().toUpperCase()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
 				break;
@@ -209,7 +224,7 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation aux;
 		switch (stmt.getOperator()) {
 			case INCREMENT:
-				/*switch(stmt.getExpression().getType()){
+				/*switch(stmt.getExpression().getType().toUpperCase()){
 					case INTEGER:
 						stmt.getExpression().accept(this);
 						aux = (IntLiteral) temporal; 
@@ -224,12 +239,12 @@ public class AsmIntermediate implements ASTVisitor {
 						throw new IllegalStateException("Wrong assignation type");
 						break;
 				}*/
-				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+				if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
 					stmt.getExpression().accept(this);
 					aux = temporal; 
 					this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
 				} else {
-					if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+					if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
 						stmt.getExpression().accept(this);
 						aux = temporal;
 						this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
@@ -239,7 +254,7 @@ public class AsmIntermediate implements ASTVisitor {
 				}
 				break;
 			case DECREMENT:
-				/*switch (stmt.getExpression().getType()){
+				/*switch (stmt.getExpression().getType().toUpperCase()){
 					case INTEGER:
 						stmt.getExpression().accept(this);
 						aux = (IntLiteral) temporal; 
@@ -254,12 +269,12 @@ public class AsmIntermediate implements ASTVisitor {
 						throw new IllegalStateException("Wrong assignation type");
 						break;
 				}*/
-				if (stmt.getExpression().getType().compareTo("INTEGER")==0) {
+				if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
 					stmt.getExpression().accept(this);
 					aux = temporal; 
 					this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
 				} else {
-					if (stmt.getExpression().getType().compareTo("FLOAT")==0) {
+					if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
 						stmt.getExpression().accept(this);
 						aux = temporal;
 						this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
@@ -269,14 +284,15 @@ public class AsmIntermediate implements ASTVisitor {
 				}
 				break;
 			case ASSIGN:
-				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(stmt.getExpression()),null, new Operand(stmt.getLocation())));
+				stmt.getExpression().accept(this);
+				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));
 				break;
 		}
 	}
 	
 	@Override
 	public void visit(AttributeArrayLocation stmt){
-		/*switch (stmt.getType()) {
+		/*switch (stmt.getType().toUpperCase()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCI,new Operand(stmt),null,null));
 				break;
@@ -293,7 +309,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeLocation stmt){
-		/*switch (stmt.getType()) {
+		/*switch (stmt.getType().toUpperCase()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
 				break;
@@ -399,7 +415,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(FieldDecl fieldDecl){
-		String type = fieldDecl.getType();
+		String type = fieldDecl.getType().toUpperCase();
 		List<IdDecl> idDeclList = fieldDecl.getNames();
 		for ( IdDecl idDecl : idDeclList) {
 			idDecl.accept(this);
@@ -437,7 +453,8 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl loc){
-		switch (loc.getType()) {
+		System.out.println(loc.getName());
+		switch (loc.getType().toUpperCase().toUpperCase()) {
 			case "INTEGER":
 				this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
 				break;
@@ -449,7 +466,8 @@ public class AsmIntermediate implements ASTVisitor {
 				break;
 
 			default:
-				System.out.println("Some error in idDecl type");
+				System.out.println("There is an object!!");
+				//System.out.println("Some error in idDecl type");
 
 		}	
 	}
@@ -505,7 +523,7 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(LogicalUnaryOp stmt){
 		stmt.getOperand().accept(this);
 		VarLocation aux;
-		if (stmt.getOperand().getType().compareTo("BOOLEAN")==0) {
+		if (stmt.getOperand().getType().toUpperCase().compareTo("BOOLEAN")==0) {
 			aux = temporal; 
 			temporal = createTemporal(stmt,"BOOLEAN");
 			this.addStatement(new StatementCode(OperationCode.NOT,new Operand(aux),null,null));
@@ -543,7 +561,7 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(MethodDecl methodDecl){
 		initActualOffset(methodDecl.getOff());
-		String type = methodDecl.getType();
+		String type = methodDecl.getType().toUpperCase();
 		String name = methodDecl.getName();
 		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD,new Operand( methodDecl), null, null));
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
@@ -559,7 +577,7 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ParamDecl paramDecl){
 		String name = paramDecl.getName();
-		String type = paramDecl.getType();
+		String type = paramDecl.getType().toUpperCase();
 		this.addStatement(new StatementCode(OperationCode.PARAMDECL,new Operand(paramDecl), null, null));
 	}
 	
@@ -719,8 +737,8 @@ public class AsmIntermediate implements ASTVisitor {
 	}
 
 	private OperandsType operandsType(Expression l, Expression r){
-		String leftType = l.getType();
-		String rightType = r.getType();
+		String leftType = l.getType().toUpperCase();
+		String rightType = r.getType().toUpperCase();
 		if ((leftType.equals("INTEGER")) && (rightType.equals("INTEGER"))) {
 			return OperandsType.II;
 		}

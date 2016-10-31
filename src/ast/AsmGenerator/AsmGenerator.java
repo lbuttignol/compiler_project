@@ -300,6 +300,10 @@ public class AsmGenerator {
 					executeAssignation(stmt);
 					System.out.println( "ASSIGNATION");
 					break;
+				case ASSIGNCONST:
+					executeAssignConst(stmt);
+					System.out.println("ASSIGNCONST");
+					break;
 				case ASSINCI:
 					executeAssIncI(stmt);
 					System.out.println( "ASSINCI");
@@ -468,7 +472,7 @@ public class AsmGenerator {
 	}
 
 	private void executeJmp(StatementCode stmt) throws IOException{
-		String label = stmt.getOperand2().getName();
+		String label = stmt.getOperand1().getName();
 		writeFile(bw,"jmp "+label);
 	}
 
@@ -845,5 +849,12 @@ public class AsmGenerator {
 	private void executeRet(StatementCode stmt) throws IOException{
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %rax");
+	}
+
+	private void executeAssignConst(StatementCode stmt) throws IOException{
+		operand1 = (VarLocation) stmt.getOperand1().getExpression();
+		String value = stmt.getOperand2().getName();
+		writeFile(bw,"mov $"+value+", -"+String.valueOf(operand1.getOff())+"(%rbp)");
+
 	}
 }
