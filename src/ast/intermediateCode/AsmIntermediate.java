@@ -30,10 +30,6 @@ public class AsmIntermediate implements ASTVisitor {
 		this.endLoop 		= new Stack<LoopLabel>();
 	}
 
-	public List<StatementCode> getPseudo(){
-		return this.code;
-	}
-
 	private void initActualOffset(){
 		this.actualOffset =1;
 	}
@@ -205,20 +201,7 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ArrayLocation stmt){
 		stmt.getExpression().accept(this);
-		/*
-		switch (stmt.getType()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCF,new Operand(stmt),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCB,new Operand(stmt),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in array type");
-		}*/
+		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(temporal),null));
 	}
 	
 	@Override
@@ -478,6 +461,7 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation cond =  temporal;
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
 		stmt.getIfBlock().accept(this);
+		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null,null));
 		this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(intLit),null));
 		stmt.getElseBlock().accept(this);
 		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(intLit),null));
