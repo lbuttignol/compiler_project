@@ -317,8 +317,8 @@ public class AsmGenerator {
 					System.out.println( "ASSDECF");
 					break;
 				case INC:
-					System.out.println( "INC");
 					executeInc(stmt);
+					System.out.println( "INC");
 					break;
 
 				case PUSHPARAMS:
@@ -330,6 +330,7 @@ public class AsmGenerator {
 					System.out.print( "CALL");
 					break;
 				case RET:
+					executeRet(stmt);
 					System.out.print( "RET");
 					break;
 				case RETVOID:
@@ -392,7 +393,6 @@ public class AsmGenerator {
 		Integer methodOff = methodDecl.getOff();
 		writeFile(bw,label+":");
 		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
-		List<ParamDecl> paramDecl = methodDecl.getParams();
 	}
 
 	private void executeEndMethod(StatementCode stmt) throws IOException{
@@ -401,10 +401,7 @@ public class AsmGenerator {
 	}
 
 	private void executeParamDecl(StatementCode stmt) throws IOException{
-		/*ParamDecl paramDecl = (ParamDecl) stmt.getOperand1().getExpression();
-		Integer offSet = paramDecl.getoff();
-		writeFile(bw,"movq $0, -"+String.valueOf(offSet)+"(%rbp)");
-		*/
+	
 	}
 
 	private void executeIntDecl(StatementCode stmt) throws IOException{
@@ -834,11 +831,19 @@ public class AsmGenerator {
 	}
 
 	private void executePushParams(StatementCode stmt) throws IOException{
-
+		String register = stmt.getOperand1().getName();
+		operand2 = (VarLocation) stmt.getOperand2().getExpression();
+		writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %"+register);
 	}
 
 	private void executeCall(StatementCode stmt) throws IOException{
-		String lbl = stmt.getOperand1().getName();
+		MethodCall methodCall = (MethodCall) stmt.getOperand1().getExpression();
+		String lbl = methodCall.getIds().get(methodCall.getIds().size()-1).getName();
 		writeFile(bw,"call "+lbl);
+	}
+
+	private void executeRet(StatementCode stmt) throws IOException{
+		operand1 = (VarLocation) stmt.getOperand1().getExpression();
+		writeFile(bw,"mov -"+String.valueOf(operand1.getOff())+"(%rbp), %rax");
 	}
 }
