@@ -460,8 +460,10 @@ public class AsmIntermediate implements ASTVisitor {
 			case "BOOLEAN":
 				this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
 				break;
+
 			default:
 				System.out.println("Some error in idDecl type");
+
 		}	
 	}
 	
@@ -662,19 +664,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(VarLocation loc){
-		switch (loc.getType()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.VARLOCI,new Operand(loc),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.VARLOCF,new Operand(loc),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.VARLOCB,new Operand(loc),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in var type");
-		}
+		temporal = loc;
 	}
 	
 	@Override
@@ -976,6 +966,10 @@ public class AsmIntermediate implements ASTVisitor {
 				new IllegalStateException("Operation no declarated");
 		}
 		return result;
+	}
+
+	public List<StatementCode> getPseudo(){
+		return this.code;
 	}
 
 }

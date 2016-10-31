@@ -378,11 +378,14 @@ public class AsmGenerator {
 					break;
 				case INC:
 					System.out.println( "INC");
+					executeInc(stmt);
 					break;
 				case PUSHPARAMS:
+					executePushParams(stmt);
 					System.out.print("PUSHPARAMS");
 					break;
 				case CALL:
+					executeCall(stmt);
 					System.out.print( "CALL");
 					break;
 				case RET:
@@ -402,7 +405,7 @@ public class AsmGenerator {
 
 	public void execute(){
 		for (StatementCode stmtCode : this.intermediateCode){
-
+			translate(stmtCode);
 		}
 	}
 
@@ -442,18 +445,12 @@ public class AsmGenerator {
 	}
 
 	private void executeBeginMethod(StatementCode stmt) throws IOException{
-		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};	
 		MethodDecl methodDecl = (MethodDecl) stmt.getOperand1().getExpression();
 		String label = methodDecl.getName();
-		Integer methodOff = 0;
+		Integer methodOff = methodDecl.getOff();
 		writeFile(bw,label+":");
 		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
 		List<ParamDecl> paramDecl = methodDecl.getParams();
-		for (int i=0;i<6&&i<paramDecl.size();i++){
-			//offSet = paramDecl.getOff();
-		//	writeFile(bw,"mov %"+registers[i]+", -"+offSet+"(%rbp)");
-		}
-		// DONDE PONGO LOS ARGUMENTOS SI HAY MAS DE 6.
 	}
 
 	private void executeEndMethod(StatementCode stmt) throws IOException{
@@ -853,5 +850,19 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand3.getOff())+"(%rbp), %r11");
 		writeFile(bw,"sub %r11, %r10");
 		writeFile(bw,"mov %r10, -"+String.valueOf(operand1.getOff())+"(%rbp)");
+	}
+
+	private void executeInc(StatementCode stmt) throws IOException{
+		operand3 = (VarLocation) stmt.getOperand3().getExpression();
+		writeFile(bw,"add $1,-"+String.valueOf(operand3.getOff())+"(%rbp)");
+	}
+
+	private void executePushParams(StatementCode stmt) throws IOException{
+
+	}
+
+	private void executeCall(StatementCode stmt) throws IOException{
+		String lbl = stmt.getOperand1().getName();
+		writeFile(bw,"call "+lbl);
 	}
 }
