@@ -201,20 +201,7 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ArrayLocation stmt){
 		stmt.getExpression().accept(this);
-		/*
-		switch (stmt.getType()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCF,new Operand(stmt),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ARRAYLOCB,new Operand(stmt),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in array type");
-		}*/
+		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(temporal),null));
 	}
 	
 	@Override
