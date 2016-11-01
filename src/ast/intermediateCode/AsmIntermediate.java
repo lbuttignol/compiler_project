@@ -78,7 +78,7 @@ public class AsmIntermediate implements ASTVisitor {
 			res = intLit.getValue();
 		}
 		if ((stmt.getType().toUpperCase().equals("BOOLEAN"))||(stmt.getType().toUpperCase().equals("INTEGER")))
-			addStatement(new StatementCode(OperationCode.ASSIGNCONST,new Operand(ret),new Operand(String.valueOf(res)),null));
+			addStatement(new StatementCode(OperationCode.ASSIGNCONST,new Operand(ret)	,new Operand(String.valueOf(res)),null));
 		//AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
 		//initTemporal.accept(this);
 		return ret;

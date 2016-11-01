@@ -18,7 +18,6 @@ public class Main {
 		if (args.length==0) parser = new Parser(new Scanner(System.in,sf),sf);
 		else parser = new Parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf);
 		symbol = parser.parse();
-
 		String programName = args[0];
 		Program program = (Program) symbol.value; 
 		program.setProgramName(programName);
@@ -36,7 +35,7 @@ public class Main {
 	    program.accept(intermediateCode);
 	    // System.out.println(intermediateCode.toString());
 
-	    AsmGenerator asm = new AsmGenerator(intermediateCode.getPseudo(),"./","test.asm");
+	    AsmGenerator asm = new AsmGenerator(intermediateCode.getPseudo(),"./",args[0]);
 	    asm.execute();
 
 	}		

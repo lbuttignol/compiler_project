@@ -34,8 +34,8 @@ public class AsmGenerator {
 		this.originalFileName = name;
 		this.name = name.split("//.")[0]+".s";
 		try{
-			File file = new File(path+name);
-			if (file.exists()){
+			File file = new File(this.path+this.name);
+			if (!file.exists()){
 				file.createNewFile();
 			}
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
@@ -841,7 +841,13 @@ public class AsmGenerator {
 	}
 
 	private void executeCall(StatementCode stmt) throws IOException{
-		MethodCall methodCall = (MethodCall) stmt.getOperand1().getExpression();
+		MethodCall methodCall = null;
+		if (stmt.getOperand1().getExpression() instanceof MethodCallStmt){
+			methodCall = (MethodCall) ((MethodCallStmt)stmt.getOperand1().getExpression()).getMethodCall();
+		}else{
+			methodCall = (MethodCall) stmt.getOperand1().getExpression();
+
+		}
 		String lbl = methodCall.getIds().get(methodCall.getIds().size()-1).getName();
 		writeFile(bw,"call "+lbl);
 	}
