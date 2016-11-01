@@ -33,7 +33,11 @@ public class VarLocation extends Location {
 	}
 
 	public Integer getOff(){
-		return this.offset;
+		if (getDeclaration()!=null){
+			return this.getDeclaration().getOff();
+		}else{
+			return this.offset;
+		}
 	}
 
 	@Override

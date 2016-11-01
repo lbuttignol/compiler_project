@@ -240,6 +240,7 @@ public class AsmIntermediate implements ASTVisitor {
 						break;
 				}*/
 				if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+
 					stmt.getExpression().accept(this);
 					aux = temporal; 
 					this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
@@ -284,9 +285,12 @@ public class AsmIntermediate implements ASTVisitor {
 				}
 				break;
 			case ASSIGN:
+
 				stmt.getExpression().accept(this);
 				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));
+
 				break;
+
 		}
 	}
 	
@@ -432,17 +436,23 @@ public class AsmIntermediate implements ASTVisitor {
 		Integer forNum = this.getForCounter();
 		this.beginLoop.push(new LoopLabel(LabelType.FOR,forNum));
 		this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
+		IdDecl counterName = stmt.getCounterName();
+		counterName.accept(this);
 		this.addStatement(new StatementCode(OperationCode.IDDECL,new Operand(stmt.getCounterName()),null,null));
 		stmt.getInit().accept(this);
 		VarLocation contInit = temporal; 
-		this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(stmt.getCounterName())));
+		List<String> nameLoc = new LinkedList<String>();
+		nameLoc.add(counterName.getName());
+		VarLocation counter = new VarLocation(nameLoc,counterName.getLineNumber(),counterName.getColumnNumber());
+		counter.setDeclaration(counterName);
+		this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(counter)));
 		stmt.getEnd().accept(this);
 		VarLocation contEnd = temporal;
 		this.addStatement(new StatementCode(OperationCode.BEGINFOR,new Operand(stmt),new Operand(forNum),null));
 		RelationalBinOp forCond = new RelationalBinOp(contInit,BinOpType.SMALL,contEnd,stmt.getLineNumber(),stmt.getColumnNumber());
 		forCond.accept(this);
 		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDFOR.toString()+forNum.toString()),null));
-		stmt.getBody().accept(this);
+		stmt.getBody().accept(this);				
 		this.addStatement(new StatementCode(OperationCode.INCFOR,new Operand(stmt),new Operand(forNum),null));
 		this.addStatement(new StatementCode(OperationCode.INC,null,null,new Operand(contInit)));
 		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINFOR.toString()+forNum.toString()),null,null));
