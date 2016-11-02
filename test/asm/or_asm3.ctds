@@ -1,0 +1,11 @@
+class Main {
+	integer print_bool(bool x) extern;
+ 	void main() {
+		bool x,y,c;
+		x = true;
+		y = false;
+		c = x || y;
+		print_bool(c);
+		return;
+	}
+}
