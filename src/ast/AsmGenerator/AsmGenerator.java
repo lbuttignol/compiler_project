@@ -28,7 +28,7 @@ public class AsmGenerator {
 	private String label;
 	private Integer numberLbl;
 
-	private final static Integer VARSIZE = 4;
+	private final static Integer VARSIZE = 8;
 
 	public AsmGenerator(List<StatementCode> program,String path,String name){
 		this.intermediateCode = program;
@@ -576,9 +576,9 @@ public class AsmGenerator {
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand2 = (VarLocation) stmt.getOperand2().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
+		writeFile(bw,"xor %rdx, %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %rax");
-		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"idiv %r10");
+		writeFile(bw,"idivq -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp)");
 		writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -586,9 +586,9 @@ public class AsmGenerator {
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand2 = (VarLocation) stmt.getOperand2().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
+		writeFile(bw,"xor %rdx, %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %rax");
-		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"idiv %r10");
+		writeFile(bw,"idivq -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp)");
 		writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -596,9 +596,9 @@ public class AsmGenerator {
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand2 = (VarLocation) stmt.getOperand2().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
+		writeFile(bw,"xor %rdx, %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %rax");
-		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"idiv %r10");
+		writeFile(bw,"idivq -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp)");
 		writeFile(bw, "mov %rdx, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
