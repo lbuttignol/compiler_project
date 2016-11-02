@@ -400,6 +400,7 @@ public class AsmGenerator {
 		Integer methodOff = methodDecl.getOff()*VARSIZE;
 		writeFile(bw,label+":");
 		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
+
 	}
 
 	private void executeEndMethod(StatementCode stmt) throws IOException{
@@ -407,7 +408,10 @@ public class AsmGenerator {
 	}
 
 	private void executeParamDecl(StatementCode stmt) throws IOException{
-	
+		ParamDecl paramDecl = (ParamDecl) stmt.getOperand1().getExpression();
+		Integer offSet = paramDecl.getOff()*VARSIZE;
+		writeFile(bw,"mov $0, %r10");	
+		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");	
 	}
 
 	private void executeIntDecl(StatementCode stmt) throws IOException{
@@ -866,7 +870,7 @@ public class AsmGenerator {
 	private void executePushParams(StatementCode stmt) throws IOException{
 		String register = stmt.getOperand1().getName();
 		operand2 = (VarLocation) stmt.getOperand2().getExpression();
-		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %"+register);
+		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %"+register);
 	}
 
 	private void executeCall(StatementCode stmt) throws IOException{
