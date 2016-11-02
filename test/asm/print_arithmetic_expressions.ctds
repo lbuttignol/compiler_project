@@ -1,0 +1,26 @@
+class Main{
+	
+	integer print_int(integer x) extern;
+
+	void main(){
+		integer x,y,z;
+		x=1;
+		y=2;
+		print_int(x);
+		print_int(y);
+		//Suma
+		z = x+y;
+		print_int(z);
+		print_int(x+y);
+		x=5;
+		y=8;
+		z=x-y;
+		print_int(z);
+		z=x%2;
+		print_int(z);
+		x=643;
+		z=x/123;
+		print_int(z);
+		return;
+	}
+}
