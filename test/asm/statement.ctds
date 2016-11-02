@@ -1,0 +1,46 @@
+class Main{
+	
+	integer print_int(integer x) extern;
+
+	void main(){
+		integer x,z;
+		x=4;
+		if (x==1){
+			x=6;
+			print_int(x);
+		}else{
+			if (x==4){
+				print_int(9999);
+			}else{
+				x=10;
+				print_int(x);
+			}
+			
+		}
+		for i=0,x{
+			print_int(i);
+			for j=0 , 5{
+				print_int(j);
+				
+			}
+		}
+		x=0;
+		while(true){
+			x+=1;
+			if (x==2000){
+				print_int(x);
+				break;
+			}
+		}
+
+		while(x<=2000){
+			x-=1;
+			if (x==0){
+				print_int(x);
+				break;
+			}
+		}
+		
+		
+	}
+}
