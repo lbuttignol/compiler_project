@@ -411,7 +411,9 @@ public class AsmGenerator {
 
 	private void executeIntDecl(StatementCode stmt) throws IOException{
 		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
+		System.out.println(idDecl.getName());
 		Integer offSet = idDecl.getOff()*VARSIZE;
+		System.out.println("Error");
 		writeFile(bw,"mov $0, %r10");	
 		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");	
 
@@ -678,7 +680,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovl $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovl %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -690,7 +693,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovl $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovl %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -702,7 +706,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovle $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovle %rdx, %rax");		
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -714,7 +719,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovle $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovle %rdx, %rax");		
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 

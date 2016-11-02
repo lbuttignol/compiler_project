@@ -256,6 +256,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ForStmt stmt){
 		this.stack.newLevel();
 		IdDecl counterName   = stmt.getCounterName();
+		counterName.setOff(incActualOffset());
 		this.stack.addDeclare(new SymbolInfo(counterName.getType(), counterName));
 
 		Expression initValue = stmt.getInit();
