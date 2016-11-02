@@ -4,7 +4,7 @@ class Main {
 		bool x,y,c;
 		x = false;
 		y = true;
-		c = x == y;
+		c = x && y;
 		print_bool(c);
 		return;
 	}

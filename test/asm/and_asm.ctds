@@ -2,10 +2,11 @@ class Main {
 	integer print_bool(bool x) extern;
  	void main() {
 		bool x,y,c;
-		x = false;
+		x = true;
 		y = true;
-		c = x == y;
+		c = x && y;
 		print_bool(c);
 		return;
 	}
 }
+

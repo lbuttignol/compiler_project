@@ -3,7 +3,7 @@ class Main {
  	void main() {
 		bool x,y,c;
 		x = false;
-		y = true;
+		y = false;
 		c = x == y;
 		print_bool(c);
 		return;
