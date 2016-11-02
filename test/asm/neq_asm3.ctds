@@ -3,10 +3,9 @@ class Main {
  	void main() {
 		bool x,y,c;
 		x = true;
-		y = true;
-		c = x == y;
+		y = false;
+		c = x != y;
 		print_bool(c);
 		return;
 	}
 }
-
