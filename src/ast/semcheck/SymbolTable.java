@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
 import ir.ast.*;
+import ir.error.Error;
 
 
 public class SymbolTable {
@@ -13,10 +14,16 @@ public class SymbolTable {
 	private int top;
 	private IdDecl current;
 	private SymbolInfo currentS;
+	private List<Error> errors;
 
 	public SymbolTable(){
 		this.symbolTable = new ArrayList<List<SymbolInfo>>();
-		this.top = -1;
+		this.top 		 = -1;
+		this.errors 	 = new LinkedList();
+	}
+
+	public List<Error> getErrors(){
+		return this.errors;
 	}
 
 	public IdDecl currentId(){
@@ -29,7 +36,7 @@ public class SymbolTable {
 
 	public void addDeclare(SymbolInfo decl){
 		if (this.contains(decl, this.top)){
-			new ir.error.Error(decl.getLineNumber(),decl.getColumnNumber(),"Repeated identifier "+decl.getName());
+			this.errors.add(new Error(decl.getLineNumber(),decl.getColumnNumber(),"Repeated identifier "+decl.getName()));
 		}else{
 			this.symbolTable.get(this.top).add(decl);
 		}
@@ -114,14 +121,14 @@ public class SymbolTable {
 					if (!result){
 						int line = lastElem.getLineNumber();
 						int col  = lastElem.getColumnNumber();
-						new ir.error.Error(line,col,"Unreachable identifier "+lastElem.getName());
+						this.errors.add(new Error(line,col,"Unreachable identifier "+lastElem.getName()));
 
 					}
 				}
 			}else{
 				int line = symb.getLineNumber();
 				int col  = symb.getColumnNumber();
-				new ir.error.Error(line,col,"The class "+symb.getName()+" not exist");
+				this.errors.add(new Error(line,col,"The class "+symb.getName()+" not exist"));
 			}
 		}
 	}

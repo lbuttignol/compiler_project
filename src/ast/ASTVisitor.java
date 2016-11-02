@@ -1,11 +1,17 @@
 package ir;
 
 import ir.ast.*;
-
+import ir.error.Error;
+import java.util.List;
+import java.util.LinkedList;
 // Abstract visitor
 public interface ASTVisitor {
 // visit statements
 
+	public List<Error> errors = new LinkedList();
+
+	public List<Error> getErrors();
+	public List<Error> stackErrors();
 	public void visit(AST stmt);
 	public void visit(ArithmeticBinOp stmt);
 	public void visit(ArithmeticUnaryOp stmt);
