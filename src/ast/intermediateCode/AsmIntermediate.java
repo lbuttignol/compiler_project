@@ -379,7 +379,8 @@ public class AsmIntermediate implements ASTVisitor {
 			fieldDecl.accept(this);
 		}
 		for (MethodDecl methodDecl : methodDeclList){
-			methodDecl.accept(this);
+			if (!methodDecl.getBody().isExtern())
+				methodDecl.accept(this);
 		}
 		this.addStatement(new StatementCode(OperationCode.ENDCLASS,new Operand(classDecl),null,null));
 	}
