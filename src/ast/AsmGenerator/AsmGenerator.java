@@ -34,7 +34,8 @@ public class AsmGenerator {
 		this.intermediateCode = program;
 		this.path = path;
 		this.originalFileName = name;
-		this.name = name.split("//.")[0]+".s";
+		this.name = name.split("/")[name.split("/").length-1];
+		this.name = name.split("\\.")[0]+".s";
 		try{
 			File file = new File(this.path+this.name);
 			if (!file.exists()){
@@ -366,7 +367,7 @@ public class AsmGenerator {
 
 	private void executeBeginProgram(StatementCode stmt) throws IOException{
 		writeFile(bw,"# begin program");
-		writeFile(bw,".file \""+this.name+"\"");
+		writeFile(bw,".file \""+this.originalFileName+"\"");
 		writeFile(bw,".globl main");
 		writeFile(bw,".type	main, @function");
 	}
@@ -644,7 +645,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovne $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovne %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -656,7 +658,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovne $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovne %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -668,7 +671,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovne $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovne %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -732,7 +736,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovg $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovg %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 	
@@ -744,7 +749,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovg $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovg %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -756,7 +762,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovge $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovge %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -768,7 +775,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $1, %rax");
 		writeFile(bw,"cmp %r10, %r11");
-		writeFile(bw,"cmovge $0, %rax");
+		writeFile(bw,"mov $0, %rdx");
+		writeFile(bw,"cmovge %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 
@@ -780,9 +788,11 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov $0, %rax");
 		writeFile(bw,"cmp $0, %r10");
-		writeFile(bw,"cmovne $1, %rax");
+		writeFile(bw,"mov $1, %rdx");
+		writeFile(bw,"cmovne %rdx, %rax");
 		writeFile(bw,"cmp $0, %r11");
-		writeFile(bw,"cmovne $1, %rax");
+		writeFile(bw,"mov $1, %rdx");
+		writeFile(bw,"cmovne %rdx, %rax");
 		writeFile(bw,"mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}
 

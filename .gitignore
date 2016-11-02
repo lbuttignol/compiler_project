@@ -5,3 +5,7 @@
 /src/Compiler/Scanner.java
 /src/Compiler/Scanner.java~
 /src/Compiler/sym.java
+
+######Trash Files###### 
+*.s
+*.ctds.s
