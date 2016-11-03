@@ -7,12 +7,22 @@ import java.util.LinkedList;
 public class VarLocation extends Location {
 	private int blockId;
 	private Integer offset = 0;
+	private Boolean isAttribute;
 
 	public VarLocation(List<String> ids, int line, int col){
 		super(ids,line,col);
 		//List<String> ids = new LinkedList<String> ();
 		//super(ids.add(id));
 		this.blockId = -1;
+		this.isAttribute = referenceToAtt();
+	}
+
+	public Boolean isAttribute(){
+		return this.isAttribute;
+	}
+
+	public void setIsAttribute(Boolean isAttribute){
+		this.isAttribute = isAttribute;
 	}
 	
 	public int getBlockId() {
@@ -38,6 +48,13 @@ public class VarLocation extends Location {
 		}else{
 			return this.offset;
 		}
+	}
+
+	public Boolean referenceToAtt(){
+		if (getDeclaration()!=null){
+			return this.isAttribute();
+		}
+		return false;
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayIdDecl id){
-		String arrayType = id.getType() +"ARRAY";
+		String type = id.getType();
 		int index = id.getNumber();
 		int line = id.getLineNumber();
 		int col  = id.getColumnNumber();
@@ -44,7 +44,13 @@ public class BuilderVisitor implements ASTVisitor {
 			new ir.error.Error(line,col,"Array size is not valid");
 
 		}
-		this.stack.addDeclare(new SymbolInfo(arrayType,id,index));
+		if (!Type.isNativeType(type)){
+			SymbolInfo sym = this.stack.getCurrentSymbolInfoClass(type);
+			if (sym!=null){
+				id.setClassRef((ClassDecl)sym.getReference());
+			}
+		}
+		this.stack.addDeclare(new SymbolInfo(type,id,index));
 	}
 	
 	@Override
@@ -102,7 +108,7 @@ public class BuilderVisitor implements ASTVisitor {
 		this.stack.reachable(ids,false,true);
 		Expression exprArray = loc.getExpr();
 		checkExpression(exprArray);
-		IdDecl id = ids.get(ids.size()-1);
+		IdDecl id = ids.get(0);
 		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
 		if (referencesDecl!=null)
 			loc.setDeclaration(referencesDecl.getReference());
@@ -116,7 +122,7 @@ public class BuilderVisitor implements ASTVisitor {
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
 		this.stack.reachable(ids,false,false);	
-		IdDecl id = ids.get(ids.size()-1);
+		IdDecl id = ids.get(0);
 		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
 		if (referencesDecl!=null)
 			loc.setDeclaration(referencesDecl.getReference());
@@ -175,6 +181,7 @@ public class BuilderVisitor implements ASTVisitor {
 		for (FieldDecl fieldDecl : fieldDeclList){
 			if (!Type.isNativeType(fieldDecl.getType()))
 				new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(),"The class attributes should be of a native type.");
+			fieldDecl.setIsAttribute(true);
 			fieldDecl.accept(this);
 		}
 		
@@ -261,6 +268,7 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	
 	@Override
+
 	public void visit(Expression expr){}
 	
 	
@@ -269,6 +277,13 @@ public class BuilderVisitor implements ASTVisitor {
 		String type = fieldDecl.getType();
 		for (IdDecl idDecl : fieldDecl.getNames()){
 			idDecl.setType(type);
+			if (!Type.isNativeType(type)){
+				SymbolInfo sym = this.stack.getCurrentSymbolInfoClass(type);
+				if (sym!=null){
+					idDecl.setClassRef((ClassDecl)sym.getReference());
+				}
+			}
+			idDecl.setIsAttribute(fieldDecl.isAttribute());
 			idDecl.accept(this);
 		}
 	}
@@ -297,6 +312,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl id){
+
 		this.stack.addDeclare(new SymbolInfo(id.getType(),id));
 	}
 	

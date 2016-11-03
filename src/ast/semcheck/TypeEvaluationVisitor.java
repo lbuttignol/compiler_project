@@ -18,14 +18,36 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	private List<Error> errors;
 
 	private Integer actualOffset;
+	private Integer classMemory;
 
 	private final static int VARSIZE=1;
 
 	public TypeEvaluationVisitor(){
 		this.stack = new SymbolTable();
 		this.actualOffset = 0;
+		this.classMemory  = 0;
 	}
 
+	// visit statements
+	private void initClassMemory(){
+		this.classMemory =1;
+	}
+
+	private Integer getClassMemory(){
+		return this.classMemory;
+	}
+
+	private Integer incClassMemory(){
+		Integer aux = this.classMemory;
+		this.classMemory++;
+		return aux;
+	}
+
+	private Integer incClassMemoryArray(Integer cant){
+		this.classMemory = this.classMemory + cant;
+		Integer aux = this.classMemory-1;
+		return aux;
+	}
 	// visit statements
 	private void initActualOffset(){
 		this.actualOffset =1;
@@ -181,6 +203,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ClassDecl classDecl){
+		initClassMemory();
 		List<FieldDecl> fieldDeclList 	= classDecl.getAttributes();
 		List<MethodDecl> methodDeclList = classDecl.getMethods();
 		this.stack.newLevel();
@@ -198,7 +221,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		for (MethodDecl methodDecl : methodDeclList){
 			methodDecl.accept(this);
 		}
-		
+		classDecl.setOff(getClassMemory());
 		this.stack.closeLevel();
 	}
 	
@@ -238,12 +261,30 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<IdDecl> idDeclList 		= fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
-			if(idDecl instanceof ArrayIdDecl){
-				idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
+			if (idDecl.isAttribute()){
+
+				if(idDecl instanceof ArrayIdDecl){
+					idDecl.setOff(incClassMemoryArray (((ArrayIdDecl) idDecl).getNumber()));
+				}else{
+					idDecl.setOff(incClassMemory());
+				}
 			}else{
-				idDecl.setOff(incActualOffset());
+				if (!Type.isNativeType(type)){
+					if(idDecl instanceof ArrayIdDecl){
+						idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber())); //VER
+					}else{
+						idDecl.setOff(incActualOffsetArray(idDecl.getClassRef().getOff()));
+					}
+				}else{
+					if(idDecl instanceof ArrayIdDecl){
+						idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
+					}else{
+						idDecl.setOff(incActualOffset());
+					}
+				}
 			}
 			this.stack.addDeclare(new SymbolInfo(fieldDecl.getType(), idDecl));
+
 		}
 	}
 

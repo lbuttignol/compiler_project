@@ -18,7 +18,7 @@ public enum OperationCode {
 	INTDECL		, // IdDecl 	- null			- null
 	FLOATDECL	, // IdDecl 	- null			- null
 	BOOLDECL	, // IdDecl 	- null			- null
-
+	OBJDECL     , // IdDecl 	- null			- null
 //Locations
 	ARRAYLOCI	, // ArrayLocat - null			- null
 	ARRAYLOCF 	, // ArrayLocat - null			- null

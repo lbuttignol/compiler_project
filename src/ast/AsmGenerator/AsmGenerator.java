@@ -99,6 +99,8 @@ public class AsmGenerator {
 				case BOOLDECL:
 					executeBoolDecl(stmt);
 					break;
+				case OBJDECL:
+					executeObjDecl(stmt);
 
 			//Locations
 				case ARRAYLOCI:
@@ -430,6 +432,14 @@ public class AsmGenerator {
 		Integer offSet = idDecl.getOff()*VARSIZE;
 		writeFile(bw,"mov $0, %r10");	
 		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");		
+	}
+
+	
+	private void executeObjDecl(StatementCode stmt) throws IOException{
+		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
+		Integer offSet = idDecl.getOff()*VARSIZE;
+		writeFile(bw,"mov $0, %r10");	
+		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");
 	}
 
 	private void executeBeginIf (StatementCode stmt) throws IOException{
@@ -905,5 +915,23 @@ public class AsmGenerator {
 		writeFile(bw,"mov $"+value+", %r10");	
 		writeFile(bw,"mov %r10, -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp)");	
 
+	}
+
+	private void executeAttLocI(StatementCode stmt) throws IOException{
+		/*AttributeLocation attLoc = (AttributeLocation) stmt.getOperand1().getExpression();
+		Integer offsetObj = attLoc.getOff();
+		ClassDecl classDecl = (ClassDecl) attLoc.getDeclaration().getClassRef();		
+		String attVar = stmt.getIds().get(1);
+		IdDecl idVar = null;
+		for (FieldDecl fieldDecl : classDecl.getAttributes()){
+			for (IdDecl idDecl : fieldDecl.getNames()){
+				if (idDecl.getName().equals(attVar)){
+					idVar = idDecl;
+					break;
+				}
+			}
+		}
+		Integer offsetField = idVar.getOff();
+	*/
 	}
 }

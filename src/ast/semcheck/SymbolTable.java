@@ -68,6 +68,19 @@ public class SymbolTable {
 		return null;
 	}
 
+	public SymbolInfo getCurrentSymbolInfoClass(String id){
+		List<SymbolInfo> symList;
+		for(int i=top; i>=0; i--){
+			symList = this.symbolTable.get(i);
+			for (SymbolInfo sym: symList){
+				if ((sym.getName().toUpperCase().equals(id.toUpperCase()))&&(sym.getReference() instanceof ClassDecl)){
+					return sym;
+				}
+			}
+		}
+		return null;
+	}
+
 	public void newLevel(){
 		List<SymbolInfo> SymbolInfoList = new LinkedList<SymbolInfo>();
 		this.symbolTable.add(SymbolInfoList);

@@ -19,7 +19,6 @@ public class AsmIntermediate implements ASTVisitor {
 	private Stack<LoopLabel> 	endLoop, endWile;
 
 	private Integer actualOffset;
-
 	public AsmIntermediate(){
 		this.code 			= new LinkedList<StatementCode>();
 		this.ifCounter 		= 0;
@@ -29,6 +28,8 @@ public class AsmIntermediate implements ASTVisitor {
 		this.beginLoop 		= new Stack<LoopLabel>();
 		this.endLoop 		= new Stack<LoopLabel>();
 	}
+
+
 
 	private void initActualOffset(){
 		this.actualOffset =1;
@@ -198,18 +199,20 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayIdDecl stmt){
-		switch (stmt.getType().toUpperCase()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLF,new Operand(stmt),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLB,new Operand(stmt),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in array type");
+		if (stmt.isAttribute()){
+			switch (stmt.getType().toUpperCase()) {
+				case "INTEGER":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
+					break;
+				case "FLOAT":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLF,new Operand(stmt),null,null));
+					break;
+				case "BOOLEAN":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLB,new Operand(stmt),null,null));
+					break;
+				default:
+					throw new IllegalStateException("Some error in array type");
+			}
 		}
 	}
 	
@@ -311,21 +314,32 @@ public class AsmIntermediate implements ASTVisitor {
 		}*/
 	}
 	
+
 	@Override
 	public void visit(AttributeLocation stmt){
-		/*switch (stmt.getType().toUpperCase()) {
+		VarLocation temp =null;
+		switch (stmt.getType().toUpperCase()) {
 			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
+				temp= new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber());
+				temp.setDeclaration(stmt.getDeclaration());
+				temporal = temp;
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
 				break;
 			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,null));
+				temp = new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber());
+				temp.setDeclaration(stmt.getDeclaration());
+				temporal = temp;
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,null));
 				break;
 			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,null));
+				temp = new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber());
+				temp.setDeclaration(stmt.getDeclaration());
+				temporal = temp;
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,null));
 				break;
 			default:
 				throw new IllegalStateException("Some error in array type");
-		}*/
+		}
 	}
 	
 	@Override
@@ -465,22 +479,23 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl loc){
-		System.out.println(loc.getName());
-		switch (loc.getType().toUpperCase().toUpperCase()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.FLOATDECL,new Operand(loc),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
-				break;
+		if (!loc.isAttribute()){
+			switch (loc.getType().toUpperCase().toUpperCase()) {
+				case "INTEGER":
+					this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
+					break;
+				case "FLOAT":
+					this.addStatement(new StatementCode(OperationCode.FLOATDECL,new Operand(loc),null,null));
+					break;
+				case "BOOLEAN":
+					this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
+					break;
 
-			default:
-				System.out.println("There is an object!!");
-				//System.out.println("Some error in idDecl type");
-
+				default:
+					this.addStatement(new StatementCode(OperationCode.OBJDECL,new Operand(loc),null,null));
+					System.out.println("There is an object!!");
+					//System.out.println("Some error in idDecl type");
+			}
 		}	
 	}
 	
