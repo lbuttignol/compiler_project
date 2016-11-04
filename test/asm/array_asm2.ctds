@@ -1,0 +1,12 @@
+class Main {
+	integer print_int(integer x) extern;
+ 	void main() {
+		integer a[5];
+		integer b;
+		b=10;
+		a[1]=b;
+		print_int(a[1]);
+		print_int(555);
+		return;
+	}
+}
