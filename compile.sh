@@ -7,5 +7,6 @@ execut="pepito" # runeable file
 
 java -jar $comp $srcfile
 gcc $printlib "${srcfile%.ctds}.s" -o $execut
+clear 
 ./$execut
 exit 0

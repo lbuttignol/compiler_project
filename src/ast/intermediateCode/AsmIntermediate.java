@@ -297,11 +297,11 @@ public class AsmIntermediate implements ASTVisitor {
 				break;
 			case ASSIGN:
 				if (stmt.getLocation() instanceof ArrayLocation){
-					ArrayLocation tmp = (ArrayLocation) stmt.getLocation();
-					tmp.getExpression().accept(this);
+					ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+					arr.getExpression().accept(this);
 					VarLocation steps = temporal;
 					stmt.getExpression().accept(this);
-					this.addStatement(new StatementCode(OperationCode.ASSIGNARRAY,new Operand(temporal),new Operand(steps),new Operand(tmp)));
+					this.addStatement(new StatementCode(OperationCode.ASSIGNARRAY,new Operand(temporal),new Operand(steps),new Operand(arr)));
 				}else{
 					stmt.getExpression().accept(this);
 					this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));

@@ -231,6 +231,7 @@ public class AsmGenerator {
 					System.out.println( "MODII");
 					executeModII(stmt);
 					break;
+			
 			// Eq operations													
 				case EQII:
 					System.out.println( "EQII");
@@ -325,6 +326,7 @@ public class AsmGenerator {
 					break;
 				case ASSIGNARRAY:
 					System.out.print("ASSIGNARRAY");
+					executeAssignArray(stmt);
 					break;
 				case ASSINCI:
 					System.out.println( "ASSINCI");
@@ -381,10 +383,10 @@ public class AsmGenerator {
 		Integer indVal = index.getOff();
 		VarLocation aux = (VarLocation) stmt.getOperand3().getExpression();
 		Integer temOff = aux.getOff();
-		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
 		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
 		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov (%r10, %r11, "+String.valueOf(VARSIZE)+"), %rcx");
+		writeFile(bw,"mov %rcx, -"+String.valueOf(temOff*VARSIZE)+"(%rbp)");
 	}
 
 	public void execute(){
@@ -938,5 +940,18 @@ public class AsmGenerator {
 		String value = stmt.getOperand2().getName();
 		writeFile(bw,"mov $"+value+", %r10");	
 		writeFile(bw,"mov %r10, -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp)");	
+	}
+
+	private void executeAssignArray(StatementCode stmt) throws IOException{
+		ArrayLocation arr = (ArrayLocation) stmt.getOperand3().getExpression();
+		Integer arrOfSet = arr.getDeclaration().getOff();
+		VarLocation index = (VarLocation) stmt.getOperand2().getExpression();
+		Integer indVal = index.getOff();
+		VarLocation aux = (VarLocation) stmt.getOperand1().getExpression();
+		Integer temOff = aux.getOff();
+		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
+		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
+		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
+		writeFile(bw,"mov %rcx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
 	}
 }

@@ -2,15 +2,13 @@ class Main {
 	integer print_int(integer x) extern;
  	void main() {
 		integer a[5];
-		x[1]=654;
-		print_int(x[10]);
-
-		for i=0 , 4{
-			x[i] = i;
+		for i=0 , 10{
+			a[i] = i;
 		}
-		for i=0 , 4{
-			print_int(x[1]);
+		for i=0 , 10{
+			print_int(a[i]);
 		}
+		print_int(5255);
 		return;
 	}
 }

@@ -4,6 +4,9 @@ class Main {
 		integer a[5];
 		a[1]=654;
 		print_int(a[1]);
+		for i=0 , 4{
+			print_int(a[i]);
+		}
 		print_int(555);
 		return;
 	}
