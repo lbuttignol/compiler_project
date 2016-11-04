@@ -40,8 +40,8 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	}
 
 	private Integer incActualOffsetArray(Integer cant){
-		Integer aux = this.actualOffset;
 		this.actualOffset = this.actualOffset + cant;
+		Integer aux = this.actualOffset-1;
 		return aux;
 	}
 
