@@ -3,7 +3,7 @@ package ir.intermediateCode;
 import ir.ASTVisitor;
 import ir.ast.*;
 import ir.semcheck.*;
-import ir.error.*;
+import ir.error.Error;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -28,6 +28,16 @@ public class AsmIntermediate implements ASTVisitor {
 		this.tempNum 		= 0;
 		this.beginLoop 		= new Stack<LoopLabel>();
 		this.endLoop 		= new Stack<LoopLabel>();
+	}
+
+	@Override
+	public List<Error> stackErrors() {
+		return null;
+	}
+
+	@Override
+	public List<Error> getErrors() {
+		return this.errors;
 	}
 
 	private void initActualOffset(){

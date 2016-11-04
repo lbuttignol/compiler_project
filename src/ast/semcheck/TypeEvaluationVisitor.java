@@ -14,8 +14,6 @@ import ir.semcheck.SymbolTable;
 public class TypeEvaluationVisitor implements ASTVisitor {
 
 	private SymbolTable stack;
-	
-	private List<Error> errors;
 
 	private Integer actualOffset;
 
@@ -64,7 +62,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		}
 		if (!( ( exprLeft.getType().equalsIgnoreCase("INTEGER")&&(exprRight.getType().equalsIgnoreCase("INTEGER")) ) ||
 			((exprLeft.getType().equalsIgnoreCase("FLOAT")&&(exprRight.getType().equalsIgnoreCase("FLOAT")) )))){
-			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Invalid artihmetic operation, both expressions should be INTEGER or FLOAT");
+			this.errors.add(new Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Invalid artihmetic operation, both expressions should be INTEGER or FLOAT"));
 		}else{
 			stmt.setType(exprLeft.getType());
 		}
@@ -75,7 +73,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression expr = stmt.getOperand();
 		expr.accept(this);
 		if (!((expr.getType().equalsIgnoreCase("INTEGER"))||(expr.getType().equalsIgnoreCase("FLOAT")))){
-			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Invalid aritmetic operation, "+expr.getType()+" expression expected");
+			this.errors.add(new Error(expr.getLineNumber(),expr.getColumnNumber(), "Invalid aritmetic operation, "+expr.getType()+" expression expected"));
 		}else{
 			stmt.setType(expr.getType());
 		}
@@ -96,7 +94,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression expr  = loc.getExpression();
 		expr.accept(this);
 		if(!expr.getType().equalsIgnoreCase("INTEGER"))
-			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Only Integer index allowed");
+			this.errors.add(new Error(expr.getLineNumber(),expr.getColumnNumber(), "Only Integer index allowed"));
 	}
 	
 	@Override
@@ -107,7 +105,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		expr.accept(this);
 		if (!loc.getType().equalsIgnoreCase(expr.getType()) && 
 			!loc.getType().equalsIgnoreCase("UNDEFINED")) {
-			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected");
+			this.errors.add(new Error(expr.getLineNumber(),expr.getColumnNumber(), loc.getType()+" expression expected"));
 		}
 
 	}
@@ -141,7 +139,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			if(this.stack.contains(atts,aux)){
 				loc.setType(this.stack.currentId().getType());
 			} else {
-				new ir.error.Error(loc.getLineNumber(),loc.getColumnNumber(), "Not a valid attribute");
+				this.errors.add(new Error(loc.getLineNumber(),loc.getColumnNumber(), "Not a valid attribute"));
 			}
 		}
 	}
@@ -217,10 +215,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 			if (exprLeft.getType().equalsIgnoreCase(exprRight.getType())){
 				stmt.setType("BOOLEAN");
 			}else{
-				new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of the same type");
+				this.errors.add(new Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of the same type"));
 			}
 		}else{
-			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Expressions of a basic type expected");
+			this.errors.add(new Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Expressions of a basic type expected"));
 		}
 	}
 
@@ -233,7 +231,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(FieldDecl fieldDecl){
 		String type = fieldDecl.getType();
 		if (!Type.contains(type)){
-			new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(), "Unexistent field declaration type");
+			this.errors.add(new Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(), "Unexistent field declaration type"));
 		}
 		List<IdDecl> idDeclList 		= fieldDecl.getNames();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
@@ -265,7 +263,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		endValue.accept(this);
 
 		if (!((initValue.getType().equalsIgnoreCase("INTEGER"))&&(endValue.getType().equalsIgnoreCase("INTEGER")))){
-			new ir.error.Error(initValue.getLineNumber(),initValue.getColumnNumber(), "Both init and end value should be Integers");
+			this.errors.add(new Error(initValue.getLineNumber(),initValue.getColumnNumber(), "Both init and end value should be Integers"));
 		}
 
 		Statement statement  = stmt.getBody();
@@ -283,7 +281,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		condition.accept(this);
 		if (!condition.getType().equalsIgnoreCase("BOOLEAN")){
-			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
+			this.errors.add(new Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition"));
 		}
 		Statement ifBlock 	= stmt.getIfBlock();
 		ifBlock.accept(this);
@@ -296,7 +294,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		condition.accept(this);
 		if (!condition.getType().equalsIgnoreCase("BOOLEAN")){
-			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition");
+			this.errors.add(new Error(condition.getLineNumber(),condition.getColumnNumber(), "Not a valid condition"));
 		}
 		Statement ifBlock 	 = stmt.getIfBlock();
 		ifBlock.accept(this);
@@ -314,7 +312,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		exprLeft.accept(this);
 		exprRight.accept(this);
 		if (!((exprLeft.getType().equalsIgnoreCase("BOOLEAN"))&&(exprRight.getType().equalsIgnoreCase("BOOLEAN")))){
-			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be booleans");
+			this.errors.add(new Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be booleans"));
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -325,7 +323,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression expr = stmt.getOperand();
 		expr.accept(this);
 		if (!expr.getType().equalsIgnoreCase("BOOLEAN")){
-			new ir.error.Error(expr.getLineNumber(),expr.getColumnNumber(), "Boolean expression expected");
+			this.errors.add(new Error(expr.getLineNumber(),expr.getColumnNumber(), "Boolean expression expected"));
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -364,10 +362,10 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				if (current.getType().equalsIgnoreCase("UNDEFINED"))
 					current.accept(this);
 				if (!param.getType().equalsIgnoreCase(current.getType()))
-					new ir.error.Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected");
+					this.errors.add(new Error(current.getLineNumber(),current.getColumnNumber(), "Parameter of type "+param.getType()+" expected"));
 			}
 		}else{
-			new ir.error.Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length");
+			this.errors.add(new Error(methodCall.getLineNumber(),methodCall.getColumnNumber(), "Actual and formal argument lists differ in length"));
 		}
 	}
 	
@@ -382,7 +380,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		initActualOffset();
 		String type = methodDecl.getType();
 		if (!Type.contains(type)){
-			new ir.error.Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type");
+			this.errors.add(new Error(methodDecl.getLineNumber(),methodDecl.getColumnNumber(), "Not a valid method type"));
 		}
 		this.stack.newLevel();
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
@@ -403,12 +401,12 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 				if(stmt instanceof ReturnStmt){
 					ReturnStmt ret = (ReturnStmt) stmt;
 					if (!ret.getExpression().getType().equalsIgnoreCase(type)){
-						new ir.error.Error(stmt.getLineNumber(),stmt.getColumnNumber(), "This method should return an expression of type "+type);
+						this.errors.add(new Error(stmt.getLineNumber(),stmt.getColumnNumber(), "This method should return an expression of type "+type));
 					}
 				}
 				if(stmt instanceof ReturnVoidStmt){
 					if (type!="VOID"){
-						new ir.error.Error(stmt.getLineNumber(),stmt.getColumnNumber(), "This method is declared as void");
+						this.errors.add(new Error(stmt.getLineNumber(),stmt.getColumnNumber(), "This method is declared as void"));
 					}
 				}
 					
@@ -422,7 +420,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 	public void visit(ParamDecl paramDecl){
 		String type = paramDecl.getType();
 		if (!Type.contains(type))
-			new ir.error.Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type");
+			this.errors.add(new Error(paramDecl.getLineNumber(),paramDecl.getColumnNumber(), "Not a valid type"));
 		paramDecl.setOff(incActualOffset());
 	}
 	
@@ -450,7 +448,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		exprRight.accept(this);
 		if (!( (exprLeft.getType().equalsIgnoreCase("INTEGER")&&(exprRight.getType().equalsIgnoreCase("INTEGER")))||
 			((exprLeft.getType().equalsIgnoreCase("FLOAT")&&(exprRight.getType().equalsIgnoreCase("FLOAT")) )))){
-			new ir.error.Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of an INTEGER or FLOAT type");
+			this.errors.add(new Error(exprLeft.getLineNumber(),exprLeft.getColumnNumber(), "Both expressions should be of an INTEGER or FLOAT type"));
 		}else{
 			stmt.setType("BOOLEAN");
 		}
@@ -493,7 +491,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		Expression condition = stmt.getCondition();
 		condition.accept(this);
 		if (!condition.getType().equalsIgnoreCase("BOOLEAN")){
-			new ir.error.Error(condition.getLineNumber(),condition.getColumnNumber(), "Condition should be a boolean");
+			this.errors.add(new Error(condition.getLineNumber(),condition.getColumnNumber(), "Condition should be a boolean"));
 		}
 		Statement body = stmt.getBody();
 		body.accept(this);
@@ -503,11 +501,18 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		this.errors.add(new Error(a.getLineNumber(), a.getColumnNumber(), desc));
 	}
 
+	@Override
 	public List<Error> getErrors() {
 		return this.errors;
 	}
 
-	public void setErrors(List<Error> errors) {
-		this.errors = errors;
+	@Override
+	public List<Error> stackErrors() {
+		return this.stack.getErrors();
 	}
+
+	public SymbolTable getStack(){
+		return this.stack;
+	}
+
 }

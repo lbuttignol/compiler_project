@@ -1,0 +1,20 @@
+class Main{
+	integer x;
+
+	integer print_int(integer x) extern;
+
+	void main(){
+		method();
+		print_int(x);
+	}
+
+	void method(){
+		integer x;
+		method2();
+	}
+
+	void method2(){
+		x=5;
+	}
+
+}

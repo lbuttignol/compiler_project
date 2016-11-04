@@ -24,19 +24,24 @@ public class Main {
 
 		BuilderVisitor builderVisitor = new BuilderVisitor();
 		program.accept(builderVisitor);
-	    
-	    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-	    TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
-	    program.accept(typeEV);
+		if (builderVisitor.getErrors().isEmpty() && builderVisitor.getStack().getErrors().isEmpty()){
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-	    System.out.println("START INTERMEDIATE CODE CREATION ************************************");
-	    AsmIntermediate intermediateCode = new AsmIntermediate();
-	    program.accept(intermediateCode);
-	    // System.out.println(intermediateCode.toString());
+		    TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
+		    program.accept(typeEV);
 
-	    AsmGenerator asm = new AsmGenerator(intermediateCode.getPseudo(),"./",args[0]);
-	    asm.execute();
+		    if (typeEV.getErrors().isEmpty() && typeEV.getStack().getErrors().isEmpty()){
+			    System.out.println("START INTERMEDIATE CODE CREATION ************************************");
+			    AsmIntermediate intermediateCode = new AsmIntermediate();
+			    program.accept(intermediateCode);
+			    // System.out.println(intermediateCode.toString());
+
+			    AsmGenerator asm = new AsmGenerator(intermediateCode.getPseudo(),"./",args[0]);
+			    asm.execute();
+			}
+
+		}
 
 	}		
     public void syntax_error(Symbol sym){ 
