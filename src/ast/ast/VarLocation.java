@@ -14,6 +14,8 @@ public class VarLocation extends Location {
 		//super(ids.add(id));
 		this.blockId = -1;
 	}
+
+	
 	
 	public int getBlockId() {
 		return blockId;
@@ -39,6 +41,16 @@ public class VarLocation extends Location {
 			return this.offset;
 		}
 	}
+
+
+	public Boolean isAttribute(){
+		if (getDeclaration()!=null){
+			return ((IdDecl)this.getDeclaration()).isAttribute();
+		}
+		return 	false;
+
+	}
+	
 
 	@Override
 	public void accept(ASTVisitor v) {
