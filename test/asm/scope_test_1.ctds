@@ -1,0 +1,33 @@
+class Main{
+	
+	integer x,y,z;
+	integer method(){
+		bool exist;
+		float f;
+		z=x+y;
+		x=-y;
+		y=z-x;
+		z=(x+y)/x;
+		exist= ! false;
+		f = 2.35;
+		return x-z;
+	}
+
+	bool method1(bool x,float g){
+		bool z;
+		x = true;
+		g = 3.5;
+		if (x){
+			z = true;
+		}else{
+			z = false; 
+		}
+		return z;
+	}
+
+	void main(){
+		return;
+	}
+}
+
+	

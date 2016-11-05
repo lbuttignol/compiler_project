@@ -20,7 +20,7 @@ public enum OperationCode {
 	BOOLDECL	, // IdDecl 	- null			- null
 	OBJDECL     , // IdDecl 	- null			- null
 //Locations
-	ARRAYLOCI	, // ArrayLocat - null			- null
+	ARRAYLOCI	, // ArrayLocat - index			- Result
 	ARRAYLOCF 	, // ArrayLocat - null			- null
 	ARRAYLOCB 	, // ArrayLocat - null			- null
 	ATTARRAYLOCI, // AttArrayLoc- null			- null
@@ -114,6 +114,7 @@ public enum OperationCode {
 	ASSIGNATTR  , // Temporal	-				- Variable
 	ASSATTINCI	, // Temporal 	- 				- Variable
 	ASSATTINCF  , // Temporal   -               - Variable
+	ASSIGNARRAY , // ArrayLocat - Index			- Result
 	ASSINCI		, // Variable 	- null			- IntResult
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult
@@ -321,7 +322,11 @@ public enum OperationCode {
 
 		// Assign
 			case ASSIGNATION:
-				return "ASSIGNATION"; 		
+				return "ASSIGNATION";
+			case ASSIGNCONST:
+				return "ASSIGNCONST";
+			case ASSIGNARRAY :
+				return "ASSIGNARRAY "; 		
 			case ASSINCI:
 				return "ASSINCI";
 			case ASSDECI:

@@ -227,7 +227,9 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(ArrayLocation stmt){
 		stmt.getExpression().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(temporal),null));
+		VarLocation steps = temporal;
+		this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(steps),new Operand(temporal)));
 	}
 	
 	@Override
@@ -344,13 +346,16 @@ public class AsmIntermediate implements ASTVisitor {
 				}
 			break;
 			case ASSIGN:
-
 				if (stmt.getLocation() instanceof VarLocation){
 					stmt.getExpression().accept(this);
 					this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));
 				}else{
 					if (stmt.getLocation() instanceof ArrayLocation){
-
+						ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+						arr.getExpression().accept(this);
+						VarLocation steps = temporal;
+						stmt.getExpression().accept(this);
+						this.addStatement(new StatementCode(OperationCode.ASSIGNARRAY,new Operand(temporal),new Operand(steps),new Operand(arr)));
 					}else{
 						if (stmt.getLocation() instanceof AttributeLocation){
 							AttributeLocation attLoc = (AttributeLocation) stmt.getLocation();
@@ -359,7 +364,6 @@ public class AsmIntermediate implements ASTVisitor {
 						}
 					}
 				}
-
 				break;
 
 		}

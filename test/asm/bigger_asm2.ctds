@@ -3,7 +3,7 @@ class Main {
  	void main() {
 		integer x,y;
 		bool c;
-		x = 10;
+		x = 13;
 		y = 10;
 		c = x > y;
 		print_bool(c);
