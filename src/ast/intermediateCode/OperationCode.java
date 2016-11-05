@@ -26,9 +26,9 @@ public enum OperationCode {
 	ATTARRAYLOCI, // AttArrayLoc- null			- null
 	ATTARRAYLOCF, // AttArrayLoc- null			- null
 	ATTARRAYLOCB, // AttArrayLoc- null			- null
-	ATTLOCI 	, // AttLoc 	- null			- null
-	ATTLOCF 	, // AttLoc 	- null			- null
-	ATTLOCB 	, // AttLoc 	- null			- null
+	ATTLOCI 	, // AttLoc 	- null			- Temporal
+	ATTLOCF 	, // AttLoc 	- null			- Temporal
+	ATTLOCB 	, // AttLoc 	- null			- Temporal
 	VARLOCI 	, // VarLod 	- null 			- null
 	VARLOCF 	, // VarLod 	- null 			- null
 	VARLOCB 	, // VarLod 	- null 			- null
@@ -111,15 +111,21 @@ public enum OperationCode {
 // Assign
 	ASSIGNATION	, // Variable 	- null			- Result 			//VER SI SE TIENE QIE DIVIDIR O NO°!!!!!""
 	ASSIGNCONST , // Variable   - Literal
+	ASSIGNATTR  , // Temporal	-				- Variable
+	ASSATTINCI	, // Temporal 	- 				- Variable
+	ASSATTINCF  , // Temporal   -               - Variable
 	ASSINCI		, // Variable 	- null			- IntResult
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult
 	ASSDECF		, // Variable 	- null			- FloatResult
+	ASSATTDECI	, // Temporal 	- 				- Variable
+	ASSATTDECF  , // Temporal   -               - Variable
 	INC 		, // null 		- null			- VarDatoResult
 
 // 
 	PUSHPARAMS	, // MethodCall - null			- NULL
 	CALL 		, // methodCall - null 			- null 
+	CALLOBJ		, // MethodCall - null 			- null
 	RET 		, // VarLoc 	- null 			- null 
 	RETVOID		; // null 		- null 			- null
 	@Override

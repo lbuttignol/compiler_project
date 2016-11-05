@@ -199,6 +199,7 @@ public class BuilderVisitor implements ASTVisitor {
 		//ya tenemos los metodos y variables globales
 
 		for (MethodDecl methodDecl : methodDeclList){
+			methodDecl.setClassRef(classDecl);
 			methodDecl.accept(this);
 		}
 		this.stack.closeLevel();
@@ -360,16 +361,30 @@ public class BuilderVisitor implements ASTVisitor {
 		int line   = methodCall.getLineNumber();
 		if (ids.size()>1){
 			this.stack.reachable(ids,true,false);
+			SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getName());
+			System.out.println(referencesDecl);
+			if (referencesDecl!=null)
+				methodCall.setObject((IdDecl)referencesDecl.getReference());
+			referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(1).getName());
+						System.out.println(referencesDecl);
+
+			if (referencesDecl!=null)
+				methodCall.setMethodDecl((MethodDecl)referencesDecl.getReference());
 		}else {
 			for (IdDecl id : ids){
 				if (!(this.stack.reachable(new SymbolInfo(id),true))) {
 					new ir.error.Error(line,col,"Unreachable identifier "+id.getName());
 				}			
 			}
+			SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getName());
+			if (referencesDecl!=null)
+				methodCall.setMethodDecl((MethodDecl)referencesDecl.getReference());
 		}
 		for (Expression param : params){
 			checkExpression(param);
 		}
+
+
 	}
 	
 	@Override

@@ -8,7 +8,8 @@ public class MethodDecl extends Declaration{
 	private List<ParamDecl> params;
 	private BodyDecl body;
 	private boolean forceReturn = false;
-	
+	private ClassDecl classRef;
+
 	public MethodDecl( String type,String name,List<ParamDecl> params, 
 					   BodyDecl body, int line, int col){
 		super(line,col,name);
@@ -70,6 +71,13 @@ public class MethodDecl extends Declaration{
 		this.body = b;
 	}
 
+	public ClassDecl getClassRef(){
+		return this.classRef;
+	}
+
+	public void setClassRef(ClassDecl classDecl){
+		this.classRef = classDecl;
+	}
 	@Override
 	public void accept(ASTVisitor v) {
 		v.visit(this);

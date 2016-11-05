@@ -7,23 +7,15 @@ import java.util.LinkedList;
 public class VarLocation extends Location {
 	private int blockId;
 	private Integer offset = 0;
-	private Boolean isAttribute;
 
 	public VarLocation(List<String> ids, int line, int col){
 		super(ids,line,col);
 		//List<String> ids = new LinkedList<String> ();
 		//super(ids.add(id));
 		this.blockId = -1;
-		this.isAttribute = referenceToAtt();
 	}
 
-	public Boolean isAttribute(){
-		return this.isAttribute;
-	}
-
-	public void setIsAttribute(Boolean isAttribute){
-		this.isAttribute = isAttribute;
-	}
+	
 	
 	public int getBlockId() {
 		return blockId;
@@ -50,12 +42,15 @@ public class VarLocation extends Location {
 		}
 	}
 
-	public Boolean referenceToAtt(){
+
+	public Boolean isAttribute(){
 		if (getDeclaration()!=null){
-			return this.isAttribute();
+			return ((IdDecl)this.getDeclaration()).isAttribute();
 		}
-		return false;
+		return 	false;
+
 	}
+	
 
 	@Override
 	public void accept(ASTVisitor v) {
