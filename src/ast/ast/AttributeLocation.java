@@ -7,6 +7,7 @@ import ir.ASTVisitor;
 public class AttributeLocation extends Location {
 	
 	private int blockId;
+	private Integer offset = 0;
 
 
 	public AttributeLocation(List<String>ids, int line, int col){
@@ -24,6 +25,19 @@ public class AttributeLocation extends Location {
 	}
 */
 
+
+	public void setOff(Integer off){
+		this.offset = off;
+	}
+
+	public Integer getOff(){
+		if (getDeclaration()!=null){
+			return this.getDeclaration().getOff();
+		}else{
+			return this.offset;
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return ids.toString();

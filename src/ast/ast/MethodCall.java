@@ -9,7 +9,8 @@ public class MethodCall extends Expression{
 
 	private List<IdDecl> ids;
 	private List<Expression> params;
-
+	private IdDecl object ;
+	private MethodDecl methodDecl;
 	public MethodCall(List<String> ids, List<Expression> params, int line, int col){
 		super(line,col);
 		this.ids = new LinkedList<IdDecl>();
@@ -42,6 +43,22 @@ public class MethodCall extends Expression{
 
 	public void setParams(List<Expression> params){
 		this.params = params;
+	}
+
+	public void setObject(IdDecl idDecl){
+		this.object = idDecl;
+	}
+
+	public IdDecl getObject(){
+		return this.object;
+	}
+
+	public void setMethodDecl(MethodDecl methodDecl){
+		this.methodDecl = methodDecl;
+	}
+
+	public MethodDecl getMethodDecl(){
+		return this.methodDecl;
 	}
 
 	public String toString(){

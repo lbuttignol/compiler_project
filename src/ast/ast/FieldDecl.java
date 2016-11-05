@@ -6,14 +6,24 @@ import java.util.List;
 public class FieldDecl extends AST{
 	protected String type;
 	private List<IdDecl> names;
-
+	private Boolean isAttribute;
+	
 	public FieldDecl(String type, List<IdDecl> names, int line, int col){
 		super(line,col);
 		this.type = type;
 		this.names = names;
+		this.isAttribute = false;
 		for (IdDecl name : names){
 			name.setType(type.toUpperCase());
 		}
+	}
+
+	public Boolean isAttribute(){
+		return this.isAttribute;
+	}
+
+	public void setIsAttribute(Boolean isAttribute){
+		this.isAttribute = isAttribute;
 	}
 
 	public String getType(){
