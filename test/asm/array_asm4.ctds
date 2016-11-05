@@ -1,0 +1,13 @@
+class Main {
+	integer print_int(integer x) extern;
+ 	void main() {
+		integer a[100];
+		for i=0,100{
+			a[i]=i;
+		}
+		for i=0,100{
+			print_int(a[i]);
+		}
+		return;
+	}
+}
