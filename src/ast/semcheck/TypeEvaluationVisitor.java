@@ -219,6 +219,7 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		for (MethodDecl methodDecl : methodDeclList){
 			methodDecl.accept(this);
 		}
+		System.out.println("Class"+getClassMemory());
 		classDecl.setOff(getClassMemory());
 		this.stack.closeLevel();
 	}
@@ -260,23 +261,30 @@ public class TypeEvaluationVisitor implements ASTVisitor {
 		List<SymbolInfo> symbolInfoList = new LinkedList<SymbolInfo>();
 		for (IdDecl idDecl : idDeclList){
 			if (idDecl.isAttribute()){
-
+				System.out.println("ASDAGFDAGADGA");
 				if(idDecl instanceof ArrayIdDecl){
 					idDecl.setOff(incClassMemoryArray (((ArrayIdDecl) idDecl).getNumber()));
 				}else{
 					idDecl.setOff(incClassMemory());
 				}
 			}else{
+				System.out.println("E1"+type);
 				if (!Type.isNativeType(type)){
 					if(idDecl instanceof ArrayIdDecl){
 						idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber())); //VER
 					}else{
+						System.out.println("E2");
+						System.out.println(idDecl.getClassRef().getOff());
 						idDecl.setOff(incActualOffsetArray(idDecl.getClassRef().getOff()));
 					}
 				}else{
+									System.out.println("E3");
+
 					if(idDecl instanceof ArrayIdDecl){
 						idDecl.setOff(incActualOffsetArray(((ArrayIdDecl) idDecl).getNumber()));
 					}else{
+										System.out.println("E4");
+
 						idDecl.setOff(incActualOffset());
 					}
 				}
