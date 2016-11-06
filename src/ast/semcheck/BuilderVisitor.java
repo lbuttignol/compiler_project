@@ -193,6 +193,7 @@ public class BuilderVisitor implements ASTVisitor {
 		for (FieldDecl fieldDecl : fieldDeclList){
 			if (!Type.isNativeType(fieldDecl.getType()))
 				this.errors.add(new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(),"The class attributes should be of a native type."));
+
 			fieldDecl.setIsAttribute(true);
 			fieldDecl.accept(this);
 		}

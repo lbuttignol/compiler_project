@@ -1,26 +1,48 @@
-class Main{
+class Persona{
 	
-	integer print_int(integer x) extern;
-
-	void main(){
-		integer x,y,z;
-		x=1;
-		y=2;
-		print_int(x);
-		print_int(y);
-		//Suma
-		z = x+y;
-		print_int(z);
-		print_int(x+y);
-		x=5;
-		y=8;
-		z=x-y;
-		print_int(z);
-		z=x%2;
-		print_int(z);
-		x=643;
-		z=x/123;
-		print_int(z);
-		return;
+	integer x,v;
+	boolean pupu;
+	boolean b;
+	integer get(){
+		return v+2;
 	}
+	
+
+}
+
+class Main{
+	integer print_int(integer x) extern;
+	integer d(){
+		return 4;
+	}
+	void main(){
+		Persona c;
+		Persona obj;
+		Persona puli;
+		Persona martin;
+		integer x,y,z;
+		puli.pupu = false;
+		martin.pupu = true;
+		if (martin.pupu||puli.pupu){
+			x=1;
+		}else{
+			x=0;
+		}
+		print_int(x);
+
+		z=4;
+		obj.b = false;
+		c.v = 6; 
+		x=c.v;
+		z = x + c.v;
+		print_int(z);
+		z=c.get();
+		y = -z;
+		//c.b = !false;
+		print_int(y);	
+
+
+	}
+
+
 }
