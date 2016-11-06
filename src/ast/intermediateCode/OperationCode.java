@@ -125,6 +125,7 @@ public enum OperationCode {
 
 // 
 	PUSHPARAMS	, // MethodCall - null			- NULL
+	PULLPARAMS	, // MethodCall - null			- NULL
 	CALL 		, // methodCall - null 			- null 
 	CALLOBJ		, // MethodCall - null 			- null
 	RET 		, // VarLoc 	- null 			- null 

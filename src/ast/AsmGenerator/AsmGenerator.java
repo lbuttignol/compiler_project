@@ -373,6 +373,10 @@ public class AsmGenerator {
 					System.out.print("PUSHPARAMS");
 					executePushParams(stmt);
 					break;
+				case PULLPARAMS:
+					System.out.print("PULLPARAMS");
+					executePullParams(stmt);
+					break;
 				case CALL:
 					System.out.print( "CALL");
 					executeCall(stmt);
@@ -461,8 +465,10 @@ public class AsmGenerator {
 			label = methodDecl.getName();
 		}
 		Integer methodOff = methodDecl.getOff()*VARSIZE;
+		System.out.println(label);
 		writeFile(bw,label+":");
 		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
+
 	}
 
 	private void executeEndMethod(StatementCode stmt) throws IOException{
@@ -1238,10 +1244,18 @@ public class AsmGenerator {
 	}
 
 	private void executeAssignation(StatementCode stmt) throws IOException{
+
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"mov %r10, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov %r10, (%rbx,%r8,8)");
+		}else{
+			writeFile(bw,"mov %r10, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+
+		}
 	}
 
 	private void executeAssignAttr(StatementCode stmt) throws IOException{
@@ -1449,7 +1463,19 @@ public class AsmGenerator {
 	private void executePushParams(StatementCode stmt) throws IOException{
 		String register = stmt.getOperand1().getName();
 		operand2 = (VarLocation) stmt.getOperand2().getExpression();
-		writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %"+register);
+		if (operand2.isAttribute()){
+			Integer offset = operand2.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8), %"+register);
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %"+register);
+		}
+	}
+
+	private void executePullParams(StatementCode stmt) throws IOException{
+		String register = stmt.getOperand1().getName();
+		operand2 = (VarLocation) stmt.getOperand2().getExpression();
+		writeFile(bw,"mov %"+register+",-"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp)");
 	}
 
 	private void executeCall(StatementCode stmt) throws IOException{

@@ -1,4 +1,4 @@
-package ir.intermediateCode;
+	package ir.intermediateCode;
 
 import ir.ASTVisitor;
 import ir.ast.*;
@@ -671,9 +671,14 @@ public class AsmIntermediate implements ASTVisitor {
 		String name = methodDecl.getName();
 		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD,new Operand( methodDecl), null, null));
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
-		for (ParamDecl paramDecl : paramDeclList) {
-			paramDecl.accept(this);
+		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
+		List<ParamDecl> param = methodDecl.getParams();
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+				this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),param.get(cont).getLineNumber(),param.get(cont).getColumnNumber()),param.get(cont).getType());
+				this.temporal.setOff(param.get(cont).getOff());
+				this.addStatement(new StatementCode(OperationCode.PULLPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
 		}
+		
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
 		methodDecl.setOff(getActualOffset());
