@@ -127,7 +127,6 @@ integer int2bin(integer d){
              else { break; }
           }
          }     			
-
           acum=acum +aux;  // resultado parcial 
           i=i+1;           
           d=d/2;           // toma el resto del numero decimal
@@ -137,7 +136,6 @@ integer int2bin(integer d){
       }
        { integer j;
          j=0;
-                            
          while (true){         // ubica el ultimo digito en la posicion que corresponde
             if (j<i){
               d = d * 10;
