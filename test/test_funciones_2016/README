@@ -1,0 +1,32 @@
+descripción de los Archivos para el testing del compilador C-TDS
+
+testCTDS.ctds: casos de pruebas para el compilador c-tds
+testCTDS1.ctds: más casos de pruebas para el compilador c-tds
+libtestCTDS.c: funciones auxiliares para el test
+
+input: entradas para la ejecución de testCTDS.ctds. 
+output: salidas esperadas para la ejecución de testCTDS.ctds.
+output1: salidas esperadas para la ejecución de testCTDS1.ctds.
+
+test.c: las mismas funciones de testCDTS.ctds en formato C (para corroborar las salidas) 
+
+----------------
+Compilar con: 
+> c-tds testCTDS.ctds libtestCTDS.c
+o
+> c-tds testCTDS1.ctds libtestCTDS.c 
+segun se desee.
+
+----------------
+Ejecutar con 
+> ./testCTDS > salida.txt
+o
+> ./testCTDS1 > salida.txt
+según corresponda.
+
+----------------
+Corroborar salida
+> diff salida.txt output
+o
+> diff salida.txt output1
+segun corresponda.

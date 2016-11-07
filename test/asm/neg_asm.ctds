@@ -3,12 +3,18 @@ class Main {
 	void main() {
 		integer a;
 		print_int(5);
-		//print_int(-5);
+		print_int(-5);
 		a=10;
 		print_int(a);
 		print_int(-a);
 		print_int(--a);
 		print_int(---a);
+		print_int(----a);
+		print_int(-----a);
+		print_int(------a);
+		print_int(-------a);
+		print_int(--------a);
+		print_int(---------a);
 		print_int(-(-a));
 		
 	}

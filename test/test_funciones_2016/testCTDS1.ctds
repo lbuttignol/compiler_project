@@ -1,0 +1,28 @@
+class Main{
+	integer get_int() extern;
+void print_string(integer s) extern;
+integer close_input() extern;
+integer init_input(integer f) extern;
+integer print_int(integer x) extern;
+	
+	// retorna el factorial de v
+integer factorial (integer v){
+  integer limit;
+  limit = 15;
+  if ( v > limit) { return -1;}
+  { 
+	integer c, fact;
+	c = 0;
+	fact = 1;
+    while (c<v){
+       c = c+1;
+       fact = fact*c;
+    }
+    return fact;
+  }
+}
+
+void main(){
+	print_int(factorial(7));	
+}
+}
