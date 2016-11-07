@@ -115,12 +115,16 @@ public enum OperationCode {
 	ASSATTINCI	, // Temporal 	- 				- Variable
 	ASSATTINCF  , // Temporal   -               - Variable
 	ASSIGNARRAY , // ArrayLocat - Index			- Result
+	ASSIGNARRAYINCI,// ArrayLocat - Index			- Result
+	ASSIGNARRAYINCF,// ArrayLocat - Index			- Result
 	ASSINCI		, // Variable 	- null			- IntResult
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult
 	ASSDECF		, // Variable 	- null			- FloatResult
 	ASSATTDECI	, // Temporal 	- 				- Variable
 	ASSATTDECF  , // Temporal   -               - Variable
+	ASSIGNARRAYDECI,// ArrayLocat - Index			- Result
+	ASSIGNARRAYDECF,// ArrayLocat - Index			- Result
 	INC 		, // null 		- null			- VarDatoResult
 
 // 
