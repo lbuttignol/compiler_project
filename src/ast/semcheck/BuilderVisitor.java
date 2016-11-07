@@ -54,7 +54,6 @@ public class BuilderVisitor implements ASTVisitor {
 		int col  = id.getColumnNumber();
 		if(index<1){
 			this.errors.add(new ir.error.Error(line,col,"Array size is not valid"));
-
 		}
 		if (!Type.isNativeType(type)){
 			SymbolInfo sym = this.stack.getCurrentSymbolInfoClass(type);
@@ -282,7 +281,6 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	
 	@Override
-
 	public void visit(Expression expr){}
 	
 	

@@ -8,14 +8,14 @@ public class Block extends Statement {
 	private List<FieldDecl> variables;
 	private List<Statement> statements;
 	private int blockId;
-	
+
 	public Block(int bId, int line, int col){
 		super(line,col);
 		blockId = bId;
 		variables = new LinkedList<FieldDecl>();
 		statements = new LinkedList<Statement>();
 	}
-	
+
 	/*
 	public Block(int bId, List<Statement> s) {
 		blockId = bId;
@@ -50,6 +50,10 @@ public class Block extends Statement {
 	public List<Statement> getStatements() {
 		return this.statements;
 	} 
+
+	public void setStatements(List<Statement> newList){
+		this.statements = newList;
+	}
 		
 	public int getBlockId() {
 		return blockId;
