@@ -773,9 +773,9 @@ public class AsmGenerator {
 		if (operand1.isAttribute()){
 			Integer offset = operand1.getOff();
 			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
-			writeFile(bw,"mov (%rbx,%r8,8),%r10");
+			writeFile(bw,"mov (%rbx,%r8,8),%rax");
 		}else{
-			writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
+			writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %rax");
 		}
 		if (operand2.isAttribute()){
 			Integer offset = operand2.getOff();
