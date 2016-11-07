@@ -1347,9 +1347,9 @@ public class AsmGenerator {
 		if (operand3.isAttribute()){
 			Integer offset = operand3.getOff();
 			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
-			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+			writeFile(bw,"mov %r11,(%rbx,%r8,8)");
 		}else{
-			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+			writeFile(bw,"mov %r11,-"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp) ");
 		}
 	}
 
@@ -1459,8 +1459,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov $"+String.valueOf(attOff)+", %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
 		writeFile(bw,"mov (%rcx,%rdx,8),%r11");
-		writeFile(bw,"sub %r11, %r10");
-		writeFile(bw,"mov %r10, (%rcx,%rdx,8)");
+		writeFile(bw,"sub %r10, %r11");
+		writeFile(bw,"mov %r11, (%rcx,%rdx,8)");
 	}
 
 	private void executeAssignAttDecrF(StatementCode stmt) throws IOException{
