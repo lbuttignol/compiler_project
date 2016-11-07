@@ -1,5 +1,31 @@
+class Punto{
+	integer x,y;
+
+	integer print_int(integer x) extern;
+	void setX(integer val){
+		x=val;
+	}
+
+	void setY(integer val){
+	 	y=val;
+	}
+
+	integer getX(){
+		return x;
+	}
+
+	integer getY(){
+		return y;
+	}
+
+	printPunto(){
+		print_int(x);
+		print_int(y);
+	}
+}
+
+
 class Main {
-	//integer global;
 	integer print_int(integer x) extern;
 	integer aux(integer a){
 		print_int(a);
