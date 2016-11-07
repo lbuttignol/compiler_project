@@ -56,7 +56,6 @@ public class BuilderVisitor implements ASTVisitor {
 		int col  = id.getColumnNumber();
 		if(index<1){
 			this.errors.add(new Error(line,col,"Array size is not valid"));
-
 		}
 		this.stack.addDeclare(new SymbolInfo(arrayType,id,index));
 	}

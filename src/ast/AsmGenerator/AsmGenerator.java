@@ -344,7 +344,6 @@ public class AsmGenerator {
 					executeRetVoid(stmt);
 					System.out.print( "RETVOID");
 					break;
-
 			}			
 		}catch(IOException e){
 			e.printStackTrace();
@@ -411,7 +410,7 @@ public class AsmGenerator {
 	private void executeParamDecl(StatementCode stmt) throws IOException{
 		ParamDecl paramDecl = (ParamDecl) stmt.getOperand1().getExpression();
 		Integer offSet = paramDecl.getOff()*VARSIZE;
-		writeFile(bw,"mov $0, %r10");	
+		writeFile(bw,"mov $0, %r10");
 		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");	
 	}
 
@@ -420,9 +419,8 @@ public class AsmGenerator {
 		System.out.println(idDecl.getName());
 		Integer offSet = idDecl.getOff()*VARSIZE;
 		System.out.println("Error");
-		writeFile(bw,"mov $0, %r10");	
-		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");	
-
+		writeFile(bw,"mov $0, %r10");
+		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");
 	}
 
 	private void executeBoolDecl (StatementCode stmt) throws IOException{
@@ -903,7 +901,6 @@ public class AsmGenerator {
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		String value = stmt.getOperand2().getName();
 		writeFile(bw,"mov $"+value+", %r10");	
-		writeFile(bw,"mov %r10, -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp)");	
-
+		writeFile(bw,"mov %r10, -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp)");
 	}
 }
