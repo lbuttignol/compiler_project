@@ -3,7 +3,7 @@ class Main {
 
 	void main() {
 		print_int(9876);
-		/*for i=0,5
+		for i=0,5
 		{
 			print_int(i);
 			for j=0,2
@@ -14,8 +14,8 @@ class Main {
 					print_int(321);
 				}
 			}
-		}*/
-		for c=5 , 1{
+		}
+		for c=1,5{
 			print_int(46554);
 		}
 	}

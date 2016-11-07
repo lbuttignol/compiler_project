@@ -1,0 +1,46 @@
+class Num{
+	integer val;
+	void incremento(){
+		val+=1;
+	}
+	void decremento(){
+		val-=1;
+	}
+}
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+		Num j;
+		integer a[5];
+		integer i;
+		
+		i=4;
+		print_int(i);
+		i-=1;
+		print_int(i);
+		
+		a[0]=5;
+		print_int(a[0]);
+		a[0]-=1;
+		print_int(a[0]);
+		a[0]+=1;
+		print_int(a[0]);
+		
+		j.val = 8;
+		print_int(j.val);
+		j.val -= 1;
+		print_int(j.val);
+		j.val += 1;
+		print_int(j.val);
+
+		j.incremento();
+		print_int(j.val);
+		j.decremento();
+		print_int(j.val);
+		/*while (1<i){
+			print_int(i);
+			i-=1;
+		}*/
+	}
+}
