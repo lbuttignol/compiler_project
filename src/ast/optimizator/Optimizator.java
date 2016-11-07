@@ -10,7 +10,7 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public List<Error> getErrors() {
-		return this.errors;
+		return null;
 	}
 
 	@Override
@@ -20,42 +20,42 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(AST stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ArithmeticBinOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ArithmeticUnaryOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ArrayIdDecl stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ArrayLocation stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(AssignStmt stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(AttributeArrayLocation stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(AttributeLocation stmt){
-	
+		return;
 	}
 
 	@Override
@@ -69,148 +69,199 @@ public class Optimizator implements ASTVisitor {
 				List<Statement> newList = statements.subList(0,statements.indexOf(statement)+1);
 				block.setStatements(newList);
 				break;
+			} else {
+				statement.accept(this);
 			}
 		}
 	}
 
-	@Override 		//VER
-	public void visit(BodyDecl stmt){
-	
+	@Override
+	public void visit(BodyDecl body){
+		if (!body.isExtern()){
+			Block block = body.getBlock();
+			block.accept(this);
+		}
 	}
 
 	@Override
 	public void visit(BooleanLiteral lit){
-	
+		return;
 	}
 
 	@Override
 	public void visit(BreakStmt stmt){
-	
+		return;
 	}
 
 	@Override
-	public void visit(ClassDecl stmt){
-	
+	public void visit(ClassDecl classDecl){
+		List<FieldDecl> fieldDeclList   = classDecl.getAttributes();
+		List<MethodDecl> methodDeclList = classDecl.getMethods();
+		for (FieldDecl fieldDecl : fieldDeclList){
+			fieldDecl.accept(this);
+		}
+		for (MethodDecl methodDecl : methodDeclList){
+			methodDecl.accept(this);
+		}
 	}
 
 	@Override
 	public void visit(ContinueStmt stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(EqBinOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(Expression stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(FieldDecl stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(FloatLiteral lit){
-	
+		return;
 	}
 
 	@Override
-	public void visit(ForStmt stmt){
-	
+	public void visit(ForStmt forst){
+		if (forst.getEnd() instanceof IntLiteral && forst.getInit() instanceof IntLiteral) {
+			IntLiteral beg, end;
+			beg = (IntLiteral) forst.getInit();
+			end = (IntLiteral) forst.getEnd();
+			if (!(beg.getValue()<=end.getValue())) {
+				forst = null;
+				return;
+			}
+		}
+		Statement body = forst.getBody();
+		body.accept(this);
 	}
 
 	@Override
 	public void visit(IdDecl loc){
-	
+		return;
 	}
 
 	@Override
-	public void visit(IfThenElseStmt stmt){
-	
+	public void visit(IfThenElseStmt ifte){
+		if (ifte.getCondition() instanceof BooleanLiteral) {
+			BooleanLiteral cond = (BooleanLiteral) ifte.getCondition();
+			if (cond.getValue())
+				ifte.setElseBlock(null);
+			else
+				ifte.setIfBlock(null);
+			return;
+		}
+		Statement block = ifte.getIfBlock();
+		block.accept(this);
+		block = ifte.getElseBlock();
+		block.accept(this);
 	}
 
 	@Override
-	public void visit(IfThenStmt stmt){
-	
+	public void visit(IfThenStmt ift){
+		if (ift.getCondition() instanceof BooleanLiteral) {
+			BooleanLiteral cond = (BooleanLiteral) ift.getCondition();
+			if (!cond.getValue())
+				ift = null;
+		}
+		Statement block = ift.getIfBlock();
+		block.accept(this);
 	}
 
 	@Override
 	public void visit(IntLiteral lit){
-	
+		return;
 	}
 
 	@Override
 	public void visit(LogicalBinOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(LogicalUnaryOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(MethodCall stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(MethodCallStmt stmt){
-	
+		return;
 	}
 
 	@Override
-	public void visit(MethodDecl stmt){
-	
+	public void visit(MethodDecl meth){
+		BodyDecl body = meth.getBody();
+		body.accept(this);
 	}
 
 	@Override
 	public void visit(ParamDecl stmt){
-	
+		return;
 	}
 
 	@Override
-	public void visit(Program stmt){
-	
+	public void visit(Program prog){
+		List<ClassDecl> classDeclList = prog.getClassDeclare();
+		for (ClassDecl classDecl : classDeclList){
+			classDecl.accept(this);
+		}
 	}
 
 	@Override
 	public void visit(RelationalBinOp stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ReturnStmt stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(ReturnVoidStmt stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(Skip stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(Statement stmt){
-	
+		return;
 	}
 
 	@Override
 	public void visit(VarLocation loc){
-	
+		return;
 	}
 
 	@Override
-	public void visit(WhileStmt stmt){
-	
+	public void visit(WhileStmt whilest) {
+		if (whilest.getCondition() instanceof BooleanLiteral) {
+			BooleanLiteral cond = (BooleanLiteral) whilest.getCondition();
+			if (!cond.getValue()) {
+				whilest = null;
+				return;
+			}
+		}
+		Statement body = whilest.getBody();
+		body.accept(this);
 	}
 
 }
