@@ -1294,37 +1294,83 @@ public class AsmGenerator {
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}
 		writeFile(bw,"add %r10, %r11");
-		writeFile(bw,"mov %r11, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov %r11,(%rbx,%r8,8)");
+		}else{
+			writeFile(bw,"mov %r11, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+		}
 	}
 
 	private void executeAssDecI(StatementCode stmt) throws IOException{
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}
 		writeFile(bw,"sub %r10, %r11");
-		writeFile(bw,"mov %r11, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}
 	}
 
 	private void executeAssIncF(StatementCode stmt) throws IOException{
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}
 		writeFile(bw,"add %r10, %r11");
-		writeFile(bw,"mov %r11, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}
 	}
 
 	private void executeAssDecF(StatementCode stmt) throws IOException{
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
-		writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
-		writeFile(bw,"sub %r11, %r10");
-		writeFile(bw,"mov %r10, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
-	}
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}		writeFile(bw,"sub %r11, %r10");
+		if (operand3.isAttribute()){
+			Integer offset = operand3.getOff();
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
+			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+		}else{
+			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+		}	}
 
 	public void executeAssignAttIncI(StatementCode stmt) throws IOException{
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
