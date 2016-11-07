@@ -375,11 +375,9 @@ public class BuilderVisitor implements ASTVisitor {
 		if (ids.size()>1){
 			this.stack.reachable(ids,true,false);
 			SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getName());
-			System.out.println(referencesDecl);
 			if (referencesDecl!=null)
 				methodCall.setObject((IdDecl)referencesDecl.getReference());
 			referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(1).getName());
-						System.out.println(referencesDecl);
 
 			if (referencesDecl!=null)
 				methodCall.setMethodDecl((MethodDecl)referencesDecl.getReference());
