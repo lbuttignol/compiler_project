@@ -664,11 +664,14 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(MethodCall stmt){
 		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
 		List<Expression> param = stmt.getParams();
+		List<VarLocation> tempList = new LinkedList<VarLocation>();
 		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
 			
 			param.get(cont).accept(this);
-			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
-			
+			tempList.add(temporal);
+		}
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(tempList.get(cont)), null));
 		}
 		if (stmt.getIds().size()>1){
 			this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
