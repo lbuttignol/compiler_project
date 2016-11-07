@@ -16,8 +16,10 @@ class Main {
 		integer i;
 		
 		i=4;
-		print_int(i);
+		/*print_int(i);
 		i-=1;
+		print_int(i);
+		i+=1;
 		print_int(i);
 		
 		a[0]=5;
@@ -38,9 +40,10 @@ class Main {
 		print_int(j.val);
 		j.decremento();
 		print_int(j.val);
-		/*while (1<i){
+		*/
+		while (1<i){
 			print_int(i);
 			i-=1;
-		}*/
+		}
 	}
 }
