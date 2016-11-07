@@ -28,7 +28,7 @@ class Main {
 	void main() {
 		//integer altura;
 		Persona juan; //declaración de objetos
-		//altura = 4;
+		juan.altura = 4;
 		juan.setEdad(21);	//acceso a metodos
 		juan.print_persona();
 		print_int(juan.anioNac());

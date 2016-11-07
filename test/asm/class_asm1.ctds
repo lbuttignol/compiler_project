@@ -1,9 +1,7 @@
 class Main {
-	//integer global;
 	integer print_int(integer x) extern;
 	integer aux(integer a){
 		print_int(a);
-		//global = 78;
 		return 50;
 	}
 
@@ -12,10 +10,7 @@ class Main {
 	}
 
 	void main() {
-		//global = 89;
-		//print_int(global);
 		print_int(aux(5));
-		//print_int(global);
 		aux2(3465);
 	}
 }	
