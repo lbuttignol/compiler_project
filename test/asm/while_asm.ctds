@@ -1,0 +1,6 @@
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+	}
+}

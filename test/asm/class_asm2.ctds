@@ -18,7 +18,7 @@ class Punto{
 		return y;
 	}
 
-	printPunto(){
+	void printPunto(){
 		print_int(x);
 		print_int(y);
 	}
@@ -27,21 +27,21 @@ class Punto{
 
 class Main {
 	integer print_int(integer x) extern;
-	integer aux(integer a){
-		print_int(a);
-		//global = 78;
-		return 50;
-	}
-
-	void aux2(integer 	q){
-		print_int(q);
-	}
 
 	void main() {
-		//global = 89;
-		//print_int(global);
-		print_int(aux(5));
-		//print_int(global);
-		aux2(3465);
+		Punto a,s,d;
+		a.setX(1);
+		a.setY(2);
+		a.printPunto();
+		s.setX(3);
+		s.y = 4;
+		s.printPunto();
+		a.printPunto();
+		d.setX(a.getY());
+		d.setY(s.y);
+		a.printPunto();
+		s.printPunto();
+		d.printPunto();
+
 	}
 }	
