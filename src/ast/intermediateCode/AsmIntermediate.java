@@ -508,7 +508,7 @@ public class AsmIntermediate implements ASTVisitor {
 				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.INCFOR.toString()+aux.getLabelNumber().toString()),null,null));
 				break;
 			case WHILE :
-				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDWHILE.toString()+aux.getLabelNumber().toString()),null,null));
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINWHILE.toString()+aux.getLabelNumber().toString()),null,null));
 				break;
 			default:
 				new IllegalStateException("Wrong type on Break Statement");
