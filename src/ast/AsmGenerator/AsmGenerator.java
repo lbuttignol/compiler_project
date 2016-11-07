@@ -332,6 +332,22 @@ public class AsmGenerator {
 					System.out.print("ASSIGNARRAY");
 					executeAssignArray(stmt);
 					break;
+				case ASSIGNARRAYINCI:
+					System.out.print("ASSIGNARRAYINCI");
+					executeAssignArrayIncI(stmt);
+					break;
+				case ASSIGNARRAYINCF:
+					System.out.print("ASSIGNARRAYINCF");
+					executeAssignArrayIncF(stmt);
+					break;
+				case ASSIGNARRAYDECI:
+					System.out.print("ASSIGNARRAYDECI");
+					executeAssignArrayDecI(stmt);
+					break;
+				case ASSIGNARRAYDECF:
+					System.out.print("ASSIGNARRAYDECF");
+					executeAssignArrayDecF(stmt);
+					break;
 				case ASSIGNATTR:
 					executeAssignAttr(stmt);
 					System.out.println("ASSIGNATTR");
@@ -1347,9 +1363,9 @@ public class AsmGenerator {
 		if (operand3.isAttribute()){
 			Integer offset = operand3.getOff();
 			writeFile(bw,"mov $"+String.valueOf(offset)+",%r8");
-			writeFile(bw,"mov (%rbx,%r8,8),%r11");
+			writeFile(bw,"mov %r11,(%rbx,%r8,8)");
 		}else{
-			writeFile(bw,"mov -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp), %r11");
+			writeFile(bw,"mov %r11,-"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp) ");
 		}
 	}
 
@@ -1459,8 +1475,8 @@ public class AsmGenerator {
 		writeFile(bw,"mov $"+String.valueOf(attOff)+", %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
 		writeFile(bw,"mov (%rcx,%rdx,8),%r11");
-		writeFile(bw,"sub %r11, %r10");
-		writeFile(bw,"mov %r10, (%rcx,%rdx,8)");
+		writeFile(bw,"sub %r10, %r11");
+		writeFile(bw,"mov %r11, (%rcx,%rdx,8)");
 	}
 
 	private void executeAssignAttDecrF(StatementCode stmt) throws IOException{
@@ -1595,6 +1611,65 @@ public class AsmGenerator {
 		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
 		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
 		writeFile(bw,"mov %rcx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
+	}
+
+	private void executeAssignArrayIncI(StatementCode stmt) throws IOException{
+		ArrayLocation arr = (ArrayLocation) stmt.getOperand3().getExpression();
+		Integer arrOfSet = arr.getDeclaration().getOff();
+		VarLocation index = (VarLocation) stmt.getOperand2().getExpression();
+		Integer indVal = index.getOff();
+		VarLocation aux = (VarLocation) stmt.getOperand1().getExpression();
+		Integer temOff = aux.getOff();
+		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
+		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
+		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
+		writeFile(bw,"mov (%r10, %r11, "+String.valueOf(VARSIZE)+"), %rdx");
+		writeFile(bw,"add %rcx,%rdx");
+		writeFile(bw,"mov %rdx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
+	}
+
+	private void executeAssignArrayDecI(StatementCode stmt) throws IOException{
+		ArrayLocation arr = (ArrayLocation) stmt.getOperand3().getExpression();
+		Integer arrOfSet = arr.getDeclaration().getOff();
+		VarLocation index = (VarLocation) stmt.getOperand2().getExpression();
+		Integer indVal = index.getOff();
+		VarLocation aux = (VarLocation) stmt.getOperand1().getExpression();
+		Integer temOff = aux.getOff();
+		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
+		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
+		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
+		writeFile(bw,"mov (%r10, %r11, "+String.valueOf(VARSIZE)+"), %rdx");
+		writeFile(bw,"sub %rcx,%rdx");
+		writeFile(bw,"mov %rdx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
+	}
+	private void executeAssignArrayIncF(StatementCode stmt) throws IOException{
+		ArrayLocation arr = (ArrayLocation) stmt.getOperand3().getExpression();
+		Integer arrOfSet = arr.getDeclaration().getOff();
+		VarLocation index = (VarLocation) stmt.getOperand2().getExpression();
+		Integer indVal = index.getOff();
+		VarLocation aux = (VarLocation) stmt.getOperand1().getExpression();
+		Integer temOff = aux.getOff();
+		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
+		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
+		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
+		writeFile(bw,"mov (%r10, %r11, "+String.valueOf(VARSIZE)+"), %rdx");
+		writeFile(bw,"add %rcx,%rdx");
+		writeFile(bw,"mov %rdx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
+	}
+
+	private void executeAssignArrayDecF(StatementCode stmt) throws IOException{
+		ArrayLocation arr = (ArrayLocation) stmt.getOperand3().getExpression();
+		Integer arrOfSet = arr.getDeclaration().getOff();
+		VarLocation index = (VarLocation) stmt.getOperand2().getExpression();
+		Integer indVal = index.getOff();
+		VarLocation aux = (VarLocation) stmt.getOperand1().getExpression();
+		Integer temOff = aux.getOff();
+		writeFile(bw,"lea -"+String.valueOf(arrOfSet*VARSIZE)+"(%rbp), %r10");
+		writeFile(bw,"mov -"+String.valueOf(indVal*VARSIZE)+"(%rbp), %r11");
+		writeFile(bw,"mov -"+String.valueOf(temOff*VARSIZE)+"(%rbp), %rcx");
+		writeFile(bw,"mov (%r10, %r11, "+String.valueOf(VARSIZE)+"), %rdx");
+		writeFile(bw,"sub %rcx,%rdx");
+		writeFile(bw,"mov %rdx, (%r10, %r11, "+String.valueOf(VARSIZE)+")");
 	}
 
 	private void executeAttLocI(StatementCode stmt) throws IOException{
