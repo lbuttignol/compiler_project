@@ -1,4 +1,4 @@
-package ir.intermediateCode;
+	package ir.intermediateCode;
 
 import ir.ASTVisitor;
 import ir.ast.*;
@@ -19,7 +19,6 @@ public class AsmIntermediate implements ASTVisitor {
 	private Stack<LoopLabel> 	endLoop, endWile;
 
 	private Integer actualOffset;
-
 	public AsmIntermediate(){
 		this.code 			= new LinkedList<StatementCode>();
 		this.ifCounter 		= 0;
@@ -208,25 +207,29 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayIdDecl stmt){
-		switch (stmt.getType().toUpperCase()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLF,new Operand(stmt),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ARRAYDECLB,new Operand(stmt),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in array type");
+		if (stmt.isAttribute()){
+			switch (stmt.getType().toUpperCase()) {
+				case "INTEGER":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLI,new Operand(stmt),null,null));
+					break;
+				case "FLOAT":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLF,new Operand(stmt),null,null));
+					break;
+				case "BOOLEAN":
+					this.addStatement(new StatementCode(OperationCode.ARRAYDECLB,new Operand(stmt),null,null));
+					break;
+				default:
+					throw new IllegalStateException("Some error in array type");
+			}
 		}
 	}
 	
 	@Override
 	public void visit(ArrayLocation stmt){
 		stmt.getExpression().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(temporal),null));
+		VarLocation steps = temporal;
+		this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+		this.addStatement(new StatementCode(OperationCode.ARRAYLOCI,new Operand(stmt),new Operand(steps),new Operand(temporal)));
 	}
 	
 	@Override
@@ -249,20 +252,45 @@ public class AsmIntermediate implements ASTVisitor {
 						throw new IllegalStateException("Wrong assignation type");
 						break;
 				}*/
-				if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
-
-					stmt.getExpression().accept(this);
-					aux = temporal; 
-					this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
-				} else {
-					if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+				if (stmt.getLocation() instanceof VarLocation){
+					if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+						System.out.println("EXPRESSION");
 						stmt.getExpression().accept(this);
-						aux = temporal;
-						this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						aux = temporal; 
+						this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
+					} else {
+						if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+							stmt.getExpression().accept(this);
+							aux = temporal;
+							this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						}else{
+							throw new IllegalStateException("Wrong assignation type");
+						}
+					}
+				}else{
+					if (stmt.getLocation() instanceof ArrayLocation){
+
 					}else{
-						throw new IllegalStateException("Wrong assignation type");
+						if(stmt.getLocation() instanceof AttributeLocation){
+							if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+								System.out.println("EXPRESSION");
+								stmt.getExpression().accept(this);
+								aux = temporal; 
+								this.addStatement(new StatementCode(OperationCode.ASSATTINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
+							} else {
+								if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+									stmt.getExpression().accept(this);
+									aux = temporal;
+									this.addStatement(new StatementCode(OperationCode.ASSATTINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
+								}else{
+									throw new IllegalStateException("Wrong assignation type");
+								}
+							}
+						}
 					}
 				}
+				
+
 				break;
 			case DECREMENT:
 				/*switch (stmt.getExpression().getType().toUpperCase()){
@@ -280,25 +308,62 @@ public class AsmIntermediate implements ASTVisitor {
 						throw new IllegalStateException("Wrong assignation type");
 						break;
 				}*/
-				if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
-					stmt.getExpression().accept(this);
-					aux = temporal; 
-					this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
-				} else {
-					if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+				if (stmt.getLocation() instanceof VarLocation){
+
+					if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
 						stmt.getExpression().accept(this);
-						aux = temporal;
-						this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						aux = temporal; 
+						this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
+					} else {
+						if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+							stmt.getExpression().accept(this);
+							aux = temporal;
+							this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+						}else{
+							throw new IllegalStateException("Wrong assignation type");
+						}
+					}
+				}else{
+					if (stmt.getLocation() instanceof ArrayLocation){
+
 					}else{
-						throw new IllegalStateException("Wrong assignation type");
+						if(stmt.getLocation() instanceof AttributeLocation){
+							if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+								stmt.getExpression().accept(this);
+								aux = temporal; 
+								this.addStatement(new StatementCode(OperationCode.ASSATTDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
+							} else {
+								if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+									stmt.getExpression().accept(this);
+									aux = temporal;
+									this.addStatement(new StatementCode(OperationCode.ASSATTDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
+								}else{
+									throw new IllegalStateException("Wrong assignation type");
+								}
+							}
+						}
 					}
 				}
-				break;
+			break;
 			case ASSIGN:
-
-				stmt.getExpression().accept(this);
-				this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));
-
+				if (stmt.getLocation() instanceof VarLocation){
+					stmt.getExpression().accept(this);
+					this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(temporal),null, new Operand(stmt.getLocation())));
+				}else{
+					if (stmt.getLocation() instanceof ArrayLocation){
+						ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+						arr.getExpression().accept(this);
+						VarLocation steps = temporal;
+						stmt.getExpression().accept(this);
+						this.addStatement(new StatementCode(OperationCode.ASSIGNARRAY,new Operand(temporal),new Operand(steps),new Operand(arr)));
+					}else{
+						if (stmt.getLocation() instanceof AttributeLocation){
+							AttributeLocation attLoc = (AttributeLocation) stmt.getLocation();
+							stmt.getExpression().accept(this);
+							this.addStatement(new StatementCode(OperationCode.ASSIGNATTR,new Operand(temporal),null,new Operand(attLoc)));	
+						}
+					}
+				}
 				break;
 
 		}
@@ -321,21 +386,29 @@ public class AsmIntermediate implements ASTVisitor {
 		}*/
 	}
 	
+
 	@Override
 	public void visit(AttributeLocation stmt){
-		/*switch (stmt.getType().toUpperCase()) {
+		VarLocation temp =null;
+		switch (stmt.getType().toUpperCase()) {
 			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
+				this.temporal = this.createTemporal(new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+				this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,new Operand(temporal)));
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCI,new Operand(stmt),null,null));
 				break;
 			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,null));
+				this.temporal = this.createTemporal(new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+				this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,new Operand(temporal)));
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCF,new Operand(stmt),null,null));
 				break;
 			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,null));
+				this.temporal = this.createTemporal(new VarLocation(stmt.getIdsName(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+				this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,new Operand(temporal)));
+				//this.addStatement(new StatementCode(OperationCode.ATTLOCB,new Operand(stmt),null,null));
 				break;
 			default:
 				throw new IllegalStateException("Some error in array type");
-		}*/
+		}
 	}
 	
 	@Override
@@ -475,22 +548,23 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl loc){
-		System.out.println(loc.getName());
-		switch (loc.getType().toUpperCase().toUpperCase()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.FLOATDECL,new Operand(loc),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
-				break;
+		if (!loc.isAttribute()){
+			switch (loc.getType().toUpperCase().toUpperCase()) {
+				case "INTEGER":
+					this.addStatement(new StatementCode(OperationCode.INTDECL,new Operand(loc),null,null));
+					break;
+				case "FLOAT":
+					this.addStatement(new StatementCode(OperationCode.FLOATDECL,new Operand(loc),null,null));
+					break;
+				case "BOOLEAN":
+					this.addStatement(new StatementCode(OperationCode.BOOLDECL,new Operand(loc),null,null));
+					break;
 
-			default:
-				System.out.println("There is an object!!");
-				//System.out.println("Some error in idDecl type");
-
+				default:
+					this.addStatement(new StatementCode(OperationCode.OBJDECL,new Operand(loc),null,null));
+					System.out.println("There is an object!!");
+					//System.out.println("Some error in idDecl type");
+			}
 		}	
 	}
 	
@@ -548,7 +622,7 @@ public class AsmIntermediate implements ASTVisitor {
 		if (stmt.getOperand().getType().toUpperCase().compareTo("BOOLEAN")==0) {
 			aux = temporal; 
 			temporal = createTemporal(stmt,"BOOLEAN");
-			this.addStatement(new StatementCode(OperationCode.NOT,new Operand(aux),null,null));
+			this.addStatement(new StatementCode(OperationCode.NOT,new Operand(aux),new Operand(temporal),null));
 		}else{
 			throw new IllegalStateException("Wrong boolean unary type");
 		}
@@ -564,11 +638,19 @@ public class AsmIntermediate implements ASTVisitor {
 			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
 			
 		}
-		this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+		if (stmt.getIds().size()>1){
+			this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+			this.addStatement(new StatementCode(OperationCode.CALLOBJ,new Operand(stmt),new Operand(temporal),null));
+		}else{
+			this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
+			this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),new Operand(temporal),null));		
+		}
 	} 
 	
 	@Override
 	public void visit(MethodCallStmt stmt){
+		stmt.getMethodCall().accept(this);
+		/*
 		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
 		List<Expression> param = stmt.getMethodCall().getParams();
 		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
@@ -577,7 +659,9 @@ public class AsmIntermediate implements ASTVisitor {
 			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
 			
 		}
-		this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),null,null));
+		this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getMethodDecl().getType());
+		this.addStatement(new StatementCode(OperationCode.CALL,new Operand(stmt),new Operand(temporal),null));
+		*/
 	}
 	
 	@Override
@@ -587,9 +671,14 @@ public class AsmIntermediate implements ASTVisitor {
 		String name = methodDecl.getName();
 		this.addStatement(new StatementCode(OperationCode.BEGINMETHOD,new Operand( methodDecl), null, null));
 		List<ParamDecl> paramDeclList = methodDecl.getParams();
-		for (ParamDecl paramDecl : paramDeclList) {
-			paramDecl.accept(this);
+		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
+		List<ParamDecl> param = methodDecl.getParams();
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+				this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),param.get(cont).getLineNumber(),param.get(cont).getColumnNumber()),param.get(cont).getType());
+				this.temporal.setOff(param.get(cont).getOff());
+				this.addStatement(new StatementCode(OperationCode.PULLPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
 		}
+		
 		BodyDecl body = methodDecl.getBody();
 		body.accept(this);
 		methodDecl.setOff(getActualOffset());

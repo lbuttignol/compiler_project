@@ -18,17 +18,17 @@ public enum OperationCode {
 	INTDECL		, // IdDecl 	- null			- null
 	FLOATDECL	, // IdDecl 	- null			- null
 	BOOLDECL	, // IdDecl 	- null			- null
-
+	OBJDECL     , // IdDecl 	- null			- null
 //Locations
-	ARRAYLOCI	, // ArrayLocat - null			- null
+	ARRAYLOCI	, // ArrayLocat - index			- Result
 	ARRAYLOCF 	, // ArrayLocat - null			- null
 	ARRAYLOCB 	, // ArrayLocat - null			- null
 	ATTARRAYLOCI, // AttArrayLoc- null			- null
 	ATTARRAYLOCF, // AttArrayLoc- null			- null
 	ATTARRAYLOCB, // AttArrayLoc- null			- null
-	ATTLOCI 	, // AttLoc 	- null			- null
-	ATTLOCF 	, // AttLoc 	- null			- null
-	ATTLOCB 	, // AttLoc 	- null			- null
+	ATTLOCI 	, // AttLoc 	- null			- Temporal
+	ATTLOCF 	, // AttLoc 	- null			- Temporal
+	ATTLOCB 	, // AttLoc 	- null			- Temporal
 	VARLOCI 	, // VarLod 	- null 			- null
 	VARLOCF 	, // VarLod 	- null 			- null
 	VARLOCB 	, // VarLod 	- null 			- null
@@ -111,15 +111,23 @@ public enum OperationCode {
 // Assign
 	ASSIGNATION	, // Variable 	- null			- Result 			//VER SI SE TIENE QIE DIVIDIR O NO°!!!!!""
 	ASSIGNCONST , // Variable   - Literal
+	ASSIGNATTR  , // Temporal	-				- Variable
+	ASSATTINCI	, // Temporal 	- 				- Variable
+	ASSATTINCF  , // Temporal   -               - Variable
+	ASSIGNARRAY , // ArrayLocat - Index			- Result
 	ASSINCI		, // Variable 	- null			- IntResult
 	ASSDECI		, // Variable 	- null			- IntResult
 	ASSINCF		, // Variable 	- null			- FloatResult
 	ASSDECF		, // Variable 	- null			- FloatResult
+	ASSATTDECI	, // Temporal 	- 				- Variable
+	ASSATTDECF  , // Temporal   -               - Variable
 	INC 		, // null 		- null			- VarDatoResult
 
 // 
 	PUSHPARAMS	, // MethodCall - null			- NULL
+	PULLPARAMS	, // MethodCall - null			- NULL
 	CALL 		, // methodCall - null 			- null 
+	CALLOBJ		, // MethodCall - null 			- null
 	RET 		, // VarLoc 	- null 			- null 
 	RETVOID		; // null 		- null 			- null
 	@Override
@@ -315,7 +323,11 @@ public enum OperationCode {
 
 		// Assign
 			case ASSIGNATION:
-				return "ASSIGNATION"; 		
+				return "ASSIGNATION";
+			case ASSIGNCONST:
+				return "ASSIGNCONST";
+			case ASSIGNARRAY :
+				return "ASSIGNARRAY "; 		
 			case ASSINCI:
 				return "ASSINCI";
 			case ASSDECI:

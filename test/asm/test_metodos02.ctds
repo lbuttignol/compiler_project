@@ -1,4 +1,4 @@
-class test{
+class Main{
    float c;
 
    void alo(bool b, integer x){
@@ -20,25 +20,19 @@ class test{
       x =  x + 1; 
       return x; 
    }
- 
-}
 
-class Main{
-
-   void print_int(integer i)extern;
-
- 
    void main(){
-        float c;
-        test t;
+
+        
         integer y;
         y = 7;
-        t.alo(true,y);
+        alo(true,y);
         
         c = 8.0;
-        y = t.alo2(y);
-        print_int(t.alo2((3)*y)); 
+        y = alo2(y); 
+        alo(false, (3)*y); 
         return;
    }
 
+ 
 }

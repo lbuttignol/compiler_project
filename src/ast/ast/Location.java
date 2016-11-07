@@ -4,10 +4,12 @@ import java.util.LinkedList;
 import ir.ASTVisitor;
 public abstract class Location extends Expression {
 	protected List<IdDecl> ids;
+	protected List<String> idsName;
 	private Declaration decl;
 
 	public Location(List<String> ids, int line, int col){
 		super(line,col);
+		this.idsName = ids;
 		this.ids = new LinkedList<IdDecl>();
 		for(String id: ids){
 			this.ids.add(new IdDecl(id, line, col, this.getType()));
@@ -16,6 +18,7 @@ public abstract class Location extends Expression {
 
 	public Location(List<String> ids, Expression expr, int line, int col){
 		super(line,col);
+		this.idsName = ids;
 		this.ids = new LinkedList<IdDecl>();
 		for(String id: ids){
 			this.ids.add(new IdDecl(id, line, col, this.getType()));
@@ -31,6 +34,14 @@ public abstract class Location extends Expression {
 		for(IdDecl id: ids){
 			ids.add(id);
 		}
+	}
+
+	public List<String> getIdsName(){
+		return this.idsName;
+	}
+
+	public void setIdsName(List<String> ids){
+	    this.idsName=ids;
 	}
 
 	public String toString(){

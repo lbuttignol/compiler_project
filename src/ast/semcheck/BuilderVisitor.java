@@ -5,7 +5,7 @@ import ir.ast.*;
 import ir.semcheck.*;
 import java.util.List;
 import java.util.LinkedList;
-import ir.error.Error;
+import ir.error.*;
 
 public class BuilderVisitor implements ASTVisitor {
 
@@ -14,21 +14,19 @@ public class BuilderVisitor implements ASTVisitor {
 	public BuilderVisitor(){
 		this.stack = new SymbolTable();
 	}
-
 	public SymbolTable getStack(){
 		return this.stack;
 	}
 
 	@Override
-	public List<Error> getErrors() {
+	public List<ir.error.Error> getErrors() {
 		return this.errors;
 	}
 	
 	@Override
-	public List<Error> stackErrors() {
+	public List<ir.error.Error> stackErrors() {
 		return this.stack.getErrors();
 	}
-
 	@Override
 	public void visit(AST stmt){
 
@@ -50,14 +48,20 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(ArrayIdDecl id){
-		String arrayType = id.getType() +"ARRAY";
+		String type = id.getType();
 		int index = id.getNumber();
 		int line = id.getLineNumber();
 		int col  = id.getColumnNumber();
 		if(index<1){
-			this.errors.add(new Error(line,col,"Array size is not valid"));
+			this.errors.add(new ir.error.Error(line,col,"Array size is not valid"));
 		}
-		this.stack.addDeclare(new SymbolInfo(arrayType,id,index));
+		if (!Type.isNativeType(type)){
+			SymbolInfo sym = this.stack.getCurrentSymbolInfoClass(type);
+			if (sym!=null){
+				id.setClassRef((ClassDecl)sym.getReference());
+			}
+		}
+		this.stack.addDeclare(new SymbolInfo(type,id,index));
 	}
 	
 	@Override
@@ -70,7 +74,7 @@ public class BuilderVisitor implements ASTVisitor {
 			SymbolInfo symb = new SymbolInfo(id);
 			symb.setIndex(1);
 			if (!(this.stack.reachable(symb,false))) {
-				this.errors.add(new Error(line,col,"Unreachable identifier "+id.getName()));
+				this.errors.add(new ir.error.Error(line,col,"Unreachable identifier "+id.getName()));
 			}			
 		}
 		IdDecl id = ids.get(ids.size()-1);
@@ -115,7 +119,7 @@ public class BuilderVisitor implements ASTVisitor {
 		this.stack.reachable(ids,false,true);
 		Expression exprArray = loc.getExpr();
 		checkExpression(exprArray);
-		IdDecl id = ids.get(ids.size()-1);
+		IdDecl id = ids.get(0);
 		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
 		if (referencesDecl!=null)
 			loc.setDeclaration(referencesDecl.getReference());
@@ -129,7 +133,7 @@ public class BuilderVisitor implements ASTVisitor {
 		int col = loc.getColumnNumber();
 		int line =  loc.getLineNumber();
 		this.stack.reachable(ids,false,false);	
-		IdDecl id = ids.get(ids.size()-1);
+		IdDecl id = ids.get(0);
 		SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(id.getName());
 		if (referencesDecl!=null)
 			loc.setDeclaration(referencesDecl.getReference());
@@ -173,7 +177,7 @@ public class BuilderVisitor implements ASTVisitor {
 		int col = stmt.getColumnNumber();
 		int line =  stmt.getLineNumber();
 		if (inLoop==0)
-			this.errors.add(new Error(line,col,"Break statement is not inside of a loop"));
+			this.errors.add(new ir.error.Error(line,col,"Break statement is not inside of a loop"));
 	}
 	
 	@Override
@@ -187,7 +191,9 @@ public class BuilderVisitor implements ASTVisitor {
 		
 		for (FieldDecl fieldDecl : fieldDeclList){
 			if (!Type.isNativeType(fieldDecl.getType()))
-				this.errors.add(new Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(),"The class attributes should be of a native type."));
+				this.errors.add(new ir.error.Error(fieldDecl.getLineNumber(),fieldDecl.getColumnNumber(),"The class attributes should be of a native type."));
+
+			fieldDecl.setIsAttribute(true);
 			fieldDecl.accept(this);
 		}
 		
@@ -205,6 +211,7 @@ public class BuilderVisitor implements ASTVisitor {
 		//ya tenemos los metodos y variables globales
 
 		for (MethodDecl methodDecl : methodDeclList){
+			methodDecl.setClassRef(classDecl);
 			methodDecl.accept(this);
 		}
 		this.stack.closeLevel();
@@ -215,7 +222,7 @@ public class BuilderVisitor implements ASTVisitor {
 		int col = stmt.getColumnNumber();
 		int line =  stmt.getLineNumber();
 		if (inLoop==0)
-			this.errors.add(new Error(line,col,"Continue statement is not inside of a loop"));
+			this.errors.add(new ir.error.Error(line,col,"Continue statement is not inside of a loop"));
 	}
 	
 	@Override
@@ -274,6 +281,7 @@ public class BuilderVisitor implements ASTVisitor {
 	}
 	
 	@Override
+
 	public void visit(Expression expr){}
 	
 	
@@ -282,6 +290,13 @@ public class BuilderVisitor implements ASTVisitor {
 		String type = fieldDecl.getType();
 		for (IdDecl idDecl : fieldDecl.getNames()){
 			idDecl.setType(type);
+			if (!Type.isNativeType(type)){
+				SymbolInfo sym = this.stack.getCurrentSymbolInfoClass(type);
+				if (sym!=null){
+					idDecl.setClassRef((ClassDecl)sym.getReference());
+				}
+			}
+			idDecl.setIsAttribute(fieldDecl.isAttribute());
 			idDecl.accept(this);
 		}
 	}
@@ -310,6 +325,7 @@ public class BuilderVisitor implements ASTVisitor {
 	
 	@Override
 	public void visit(IdDecl id){
+
 		this.stack.addDeclare(new SymbolInfo(id.getType(),id));
 	}
 	
@@ -357,16 +373,30 @@ public class BuilderVisitor implements ASTVisitor {
 		int line   = methodCall.getLineNumber();
 		if (ids.size()>1){
 			this.stack.reachable(ids,true,false);
+			SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getName());
+			System.out.println(referencesDecl);
+			if (referencesDecl!=null)
+				methodCall.setObject((IdDecl)referencesDecl.getReference());
+			referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(1).getName());
+						System.out.println(referencesDecl);
+
+			if (referencesDecl!=null)
+				methodCall.setMethodDecl((MethodDecl)referencesDecl.getReference());
 		}else {
 			for (IdDecl id : ids){
 				if (!(this.stack.reachable(new SymbolInfo(id),true))) {
-					this.errors.add(new Error(line,col,"Unreachable identifier "+id.getName()));
+					this.errors.add(new ir.error.Error(line,col,"Unreachable identifier "+id.getName()));
 				}			
 			}
+			SymbolInfo referencesDecl = this.stack.getCurrentSymbolInfo(ids.get(0).getName());
+			if (referencesDecl!=null)
+				methodCall.setMethodDecl((MethodDecl)referencesDecl.getReference());
 		}
 		for (Expression param : params){
 			checkExpression(param);
 		}
+
+
 	}
 	
 	@Override
@@ -401,7 +431,7 @@ public class BuilderVisitor implements ASTVisitor {
 			}
 			else{
 				if(checkReturnStmt(stmtList,false,method.getLineNumber(),method.getColumnNumber()))
-					this.errors.add(new Error(method.getLineNumber(),method.getColumnNumber(),"Invalid return statement"));
+						new ir.error.Error(method.getLineNumber(),method.getColumnNumber(),"Invalid return statement");
 			}
 
 		}
@@ -521,7 +551,7 @@ public class BuilderVisitor implements ASTVisitor {
 
 		for (IdDecl id : ids){
 			if (!(this.stack.reachable(new SymbolInfo(id),false))) {
-				this.errors.add(new Error(line,col,"Unreachable identifier "+id.getName()));
+				this.errors.add(new ir.error.Error(line,col,"Unreachable identifier "+id.getName()));
 			}			
 		}
 		IdDecl id = ids.get(ids.size()-1);
@@ -558,12 +588,12 @@ public class BuilderVisitor implements ASTVisitor {
 		int line = prog.getLineNumber();
 		int col  = prog.getColumnNumber();
 		if (!existsMainClass){
-			this.errors.add(new Error(line,col,"The Main class not exist"));
+			this.errors.add(new ir.error.Error(line,col,"The Main class not exist"));
 
 		}else{
 			if (!existsMainMethod){
-			this.errors.add(new Error(line,col,"The main method not exist"));
-			}
+			this.errors.add(new ir.error.Error(line,col,"The main method not exist"));
+		}
 		}
 	}
 
@@ -576,7 +606,7 @@ public class BuilderVisitor implements ASTVisitor {
 		if (!thereIsReturnStmt){
 			result =hasReturnStmt(stmtL,line,col);
 			if ((!result)&& printErrors){
-				this.errors.add(new Error(line,col,"Missing a return statement"));
+				this.errors.add(new ir.error.Error(line,col,"Missing a return statement"));
 			}
 			return result;
 		}else{
