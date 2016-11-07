@@ -44,7 +44,7 @@ public class VarLocation extends Location {
 
 
 	public Boolean isAttribute(){
-		if (getDeclaration()!=null){
+		if ((getDeclaration()!=null)&&!(getDeclaration() instanceof ParamDecl)){
 			return ((IdDecl)this.getDeclaration()).isAttribute();
 		}
 		return 	false;
