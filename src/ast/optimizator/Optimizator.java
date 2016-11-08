@@ -8,6 +8,9 @@ import ir.error.Error;
 
 public class Optimizator implements ASTVisitor {
 
+	private Literal temporal;
+	private Boolean wasSeted=false;
+
 	@Override
 	public List<Error> getErrors() {
 		return null;
@@ -18,6 +21,167 @@ public class Optimizator implements ASTVisitor {
 		return null;
 	}
 
+	public Literal getLiteralBinExpr(BinOpExpr stmt){
+		Literal aux=null;
+		switch (stmt.getOperator()) {
+			case PLUS:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new IntLiteral(l.getValue()+r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new FloatLiteral(l.getValue()+r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case MINUS:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new IntLiteral(l.getValue()-r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new FloatLiteral(l.getValue()-r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case TIMES:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new IntLiteral(l.getValue()*r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new FloatLiteral(l.getValue()*r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case DIV:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new IntLiteral(l.getValue()/r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new FloatLiteral(l.getValue()/r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case MOD:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new IntLiteral(l.getValue()%r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new FloatLiteral(l.getValue()%r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case SMALL:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()<r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()<r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case LTOE:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()<=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()<=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case BIGGER:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()>r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()>r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case GTOE:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()>=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()>=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case EQUAL:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()==r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()==r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case DISTINCT:
+				if(stmt.getLeftOperand() instanceof IntLiteral && stmt.getRightOperand() instanceof IntLiteral ){
+					IntLiteral l,r;
+					l = (IntLiteral) stmt.getLeftOperand(); 
+					r = (IntLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()!=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}else{
+					FloatLiteral l,r;
+					l = (FloatLiteral) stmt.getLeftOperand(); 
+					r = (FloatLiteral) stmt.getRightOperand(); 
+					aux = new BooleanLiteral(l.getValue()!=r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				}
+				break;
+			case AND:
+				BooleanLiteral l,r;
+				l = (BooleanLiteral) stmt.getLeftOperand(); 
+				r = (BooleanLiteral) stmt.getRightOperand(); 
+				aux = new BooleanLiteral(l.getValue()&&r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				break;
+			case OR:
+				l = (BooleanLiteral) stmt.getLeftOperand(); 
+				r = (BooleanLiteral) stmt.getRightOperand(); 
+				aux = new BooleanLiteral(l.getValue()||r.getValue(),stmt.getLineNumber(),stmt.getColumnNumber());
+				break;
+		}
+		return aux;
+	}
+
 	@Override
 	public void visit(AST stmt){
 		return;
@@ -25,6 +189,20 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(ArithmeticBinOp stmt){
+		stmt.getLeftOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setLeftOperand(temporal);
+		}
+		stmt.getRightOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setRightOperand(temporal);
+		}
+		if(stmt.getLeftOperand() instanceof Literal && stmt.getRightOperand() instanceof Literal ){
+			this.temporal = getLiteralBinExpr(stmt);
+			this.wasSeted = true;
+		}else{
+			this.wasSeted = false;
+		}
 		return;
 	}
 
@@ -85,6 +263,8 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(BooleanLiteral lit){
+		this.temporal = lit;
+		this.wasSeted = true; 
 		return;
 	}
 
@@ -112,6 +292,20 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(EqBinOp stmt){
+		stmt.getLeftOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setLeftOperand(temporal);
+		}
+		stmt.getRightOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setRightOperand(temporal);
+		}
+		if(stmt.getLeftOperand() instanceof Literal && stmt.getRightOperand() instanceof Literal ){
+			this.temporal = getLiteralBinExpr(stmt);
+			this.wasSeted = true;
+		}else{
+			this.wasSeted = false;
+		}
 		return;
 	}
 
@@ -127,6 +321,8 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(FloatLiteral lit){
+		this.temporal = lit;
+		this.wasSeted = true;
 		return;
 	}
 
@@ -179,11 +375,27 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(IntLiteral lit){
+		this.temporal = lit;
+		this.wasSeted = true;
 		return;
 	}
 
 	@Override
 	public void visit(LogicalBinOp stmt){
+		stmt.getLeftOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setLeftOperand(temporal);
+		}
+		stmt.getRightOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setRightOperand(temporal);
+		}
+		if(stmt.getLeftOperand() instanceof Literal && stmt.getRightOperand() instanceof Literal ){
+			this.temporal = getLiteralBinExpr(stmt);
+			this.wasSeted = true;
+		}else{
+			this.wasSeted = false;
+		}
 		return;
 	}
 
@@ -223,6 +435,20 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(RelationalBinOp stmt){
+		stmt.getLeftOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setLeftOperand(temporal);
+		}
+		stmt.getRightOperand().accept(this);
+		if(this.wasSeted){
+			stmt.setRightOperand(temporal);
+		}
+		if(stmt.getLeftOperand() instanceof Literal && stmt.getRightOperand() instanceof Literal ){
+			this.temporal = getLiteralBinExpr(stmt);
+			this.wasSeted = true;
+		}else{
+			this.wasSeted = false;
+		}
 		return;
 	}
 
