@@ -208,6 +208,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(ArithmeticUnaryOp stmt){
+		stmt.getOperand().accept(this);
+		if (this.wasSeted){
+			stmt.setOperand(temporal);
+		}
+		this.wasSeted = false;
 		return;
 	}
 
@@ -223,6 +228,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(AssignStmt stmt){
+		stmt.getExpression().accept(this);
+		if (this.wasSeted) {
+			stmt.setExpression(temporal);
+		}
+		this.wasSeted = false;
 		return;
 	}
 
@@ -328,6 +338,16 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(ForStmt forst){
+		forst.getInit().accept(this);
+		if (this.wasSeted){
+			forst.setInit(temporal);
+			this.wasSeted = false;
+		}
+		forst.getEnd().accept(this);
+		if (this.wasSeted){
+			forst.setEnd(temporal);
+			this.wasSeted = false;
+		}
 		if (forst.getEnd() instanceof IntLiteral && forst.getInit() instanceof IntLiteral) {
 			IntLiteral beg, end;
 			beg = (IntLiteral) forst.getInit();
@@ -348,6 +368,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(IfThenElseStmt ifte){
+		ifte.getCondition().accept(this);
+		if (this.wasSeted){
+			ifte.setCondition(temporal);
+			this.wasSeted = false;
+		}
 		if (ifte.getCondition() instanceof BooleanLiteral) {
 			BooleanLiteral cond = (BooleanLiteral) ifte.getCondition();
 			if (cond.getValue())
@@ -364,6 +389,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(IfThenStmt ift){
+		ift.getCondition().accept(this);
+		if (this.wasSeted){
+			ift.setCondition(temporal);
+			this.wasSeted = false;
+		}
 		if (ift.getCondition() instanceof BooleanLiteral) {
 			BooleanLiteral cond = (BooleanLiteral) ift.getCondition();
 			if (!cond.getValue())
@@ -401,6 +431,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(LogicalUnaryOp stmt){
+		stmt.getOperand().accept(this);
+		if (this.wasSeted){
+			stmt.setOperand(temporal);
+		}
+		this.wasSeted = false;
 		return;
 	}
 
@@ -454,6 +489,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(ReturnStmt stmt){
+		stmt.getExpression().accept(this);
+		if (this.wasSeted){
+			stmt.setExpression(temporal);
+			this.wasSeted = false;
+		}
 		return;
 	}
 
@@ -479,6 +519,11 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(WhileStmt whilest) {
+		whilest.getCondition().accept(this);
+		if (this.wasSeted){
+			whilest.setCondition(temporal);
+			this.wasSeted = false;
+		}
 		if (whilest.getCondition() instanceof BooleanLiteral) {
 			BooleanLiteral cond = (BooleanLiteral) whilest.getCondition();
 			if (!cond.getValue()) {
