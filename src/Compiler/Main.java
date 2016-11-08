@@ -31,8 +31,10 @@ public class Main {
 		    TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
 		    program.accept(typeEV);
 		    
-		    Optimizator op = new Optimizator();
-		    program.accept(op);
+		    if (args.length>=2){
+			    Optimizator op = new Optimizator();
+			    program.accept(op);
+		    }
 			
 		    if (typeEV.getErrors().isEmpty() && typeEV.getStack().getErrors().isEmpty()){
 			    System.out.println("START INTERMEDIATE CODE CREATION ************************************");
