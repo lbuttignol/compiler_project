@@ -1,11 +1,34 @@
 class Main {
 	integer print_bool(bool x) extern;
  	void main() {
-		bool x,y,c;
-		x = true;
-		y = true;
-		c = x && y;
-		print_bool(c);
+		integer a;
+		a=1+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1;
+		while(false){
+			bool x,y,c;
+			x = true;
+			y = true;
+			c = x && y;
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+		}
 		return;
 	}
 }
