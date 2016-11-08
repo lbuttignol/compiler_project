@@ -1,0 +1,24 @@
+descripción de los Archivos para el testing del compilador C-TDS
+
+test.c: las mismas funciones de testCDTS.ctds en formato C (para corroborar las salidas) 
+
+----------------
+Compilar con C: 
+> gcc test.c libtestCTDS.c   (genera ejecutable a.out)
+o
+> gcc -o <nombreEjecutable> test.c libtestCTDS.c   (genera ejecutable con nombre "nombreEjecutable")
+
+segun se desee.
+
+----------------
+Ejecutar con 
+> ./a.out > salida.txt
+o
+> ./<nombreEjecutable> salida.txt
+según corresponda.
+
+----------------
+Corroborar salida
+> diff salida.txt output
+
+segun corresponda.

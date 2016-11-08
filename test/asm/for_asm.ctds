@@ -1,0 +1,22 @@
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+		print_int(9876);
+		for i=0,5
+		{
+			print_int(i);
+			for j=0,2
+			{
+				print_int(123);
+				for k=0,3
+				{
+					print_int(321);
+				}
+			}
+		}
+		for c=1,5{
+			print_int(46554);
+		}
+	}
+}	

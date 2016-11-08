@@ -1,0 +1,24 @@
+class Num{
+	integer val;
+	void incremento(){
+		val+=1;
+	}
+	void decremento(){
+		val-=1;
+	}
+}
+
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+		integer i;
+		Num c;
+		c.val = 80;
+		print_int(c.val);
+		c.incremento();
+		print_int(c.val);
+		c.decremento();
+		print_int(c.val);
+	}
+}

@@ -1,0 +1,16 @@
+class Main {
+	integer print_int(integer x) extern;
+	integer aux(integer a){
+		print_int(a);
+		return 50;
+	}
+
+	void aux2(integer 	q){
+		print_int(q);
+	}
+
+	void main() {
+		print_int(aux(5));
+		aux2(3465);
+	}
+}	

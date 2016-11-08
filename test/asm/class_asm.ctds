@@ -1,0 +1,40 @@
+class Persona{
+	integer edad;
+	integer altura;
+	integer print_int(integer s) extern;
+
+	integer getEdad(){
+		altura = 150;
+		return edad;
+	}
+
+	void setEdad(integer valor){
+		edad= valor;
+	}
+
+	integer anioNac(){
+		integer auxiliar;
+		auxiliar = 2016 - edad;
+		return auxiliar;
+	}
+	void print_persona(){
+		print_int(altura);
+		print_int(edad);
+	}
+}
+
+class Main {
+	integer print_int(integer x) extern;
+	void main() {
+		//integer altura;
+		Persona juan; //declaración de objetos
+		juan.altura = 4;
+		juan.setEdad(21);	//acceso a metodos
+		juan.print_persona();
+		print_int(juan.anioNac());
+		juan.altura = 45;
+		juan.edad = 52;
+		juan.print_persona();		
+		
+	}
+}

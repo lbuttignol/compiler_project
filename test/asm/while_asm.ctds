@@ -1,0 +1,12 @@
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+		integer i;
+		i=0;
+		while (i<4){
+			print_int(i);
+			i+=1;
+		}
+	}
+}

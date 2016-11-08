@@ -1,0 +1,9 @@
+class Main {
+	integer print_int(integer x) extern;
+	void main() {
+		integer a,b;
+		a=3;
+		b=5;
+		print_int(b%a);
+	}
+}

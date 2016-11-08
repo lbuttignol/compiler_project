@@ -1,0 +1,25 @@
+class Main{
+	integer get_int() extern;
+void print_string(integer s) extern;
+integer close_input() extern;
+integer init_input(integer f) extern;
+integer print_int(integer x) extern;
+
+// retorna el maximo comun divisor de a y b,
+integer gcd (integer a, integer b) {
+	integer i;
+	integer result;
+    i=1;
+    result = i;
+	while ( i < (a+b)) {
+		if (((a % i) == 0) &&  ((b%i) ==0 ))
+			{ result = i; }
+		i = i + 1;
+	}
+	return result;
+}
+
+	void main(){
+		print_int(gcd(12,10));	
+	}
+}

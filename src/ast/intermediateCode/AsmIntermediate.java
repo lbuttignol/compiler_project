@@ -269,7 +269,23 @@ public class AsmIntermediate implements ASTVisitor {
 					}
 				}else{
 					if (stmt.getLocation() instanceof ArrayLocation){
-
+						if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+							ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+							arr.getExpression().accept(this);
+							VarLocation steps = temporal;
+							stmt.getExpression().accept(this);
+							this.addStatement(new StatementCode(OperationCode.ASSIGNARRAYINCI,new Operand(temporal),new Operand(steps),new Operand(arr)));
+						} else {
+							if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+								ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+								arr.getExpression().accept(this);
+								VarLocation steps = temporal;
+								stmt.getExpression().accept(this);
+								this.addStatement(new StatementCode(OperationCode.ASSIGNARRAYINCF,new Operand(temporal),new Operand(steps),new Operand(arr)));
+							}else{
+								throw new IllegalStateException("Wrong assignation type");
+							}
+						}
 					}else{
 						if(stmt.getLocation() instanceof AttributeLocation){
 							if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
@@ -325,7 +341,23 @@ public class AsmIntermediate implements ASTVisitor {
 					}
 				}else{
 					if (stmt.getLocation() instanceof ArrayLocation){
-
+						if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
+								ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+								arr.getExpression().accept(this);
+								VarLocation steps = temporal;
+								stmt.getExpression().accept(this);
+								this.addStatement(new StatementCode(OperationCode.ASSIGNARRAYDECI,new Operand(temporal),new Operand(steps),new Operand(arr)));
+							} else {
+								if (stmt.getExpression().getType().toUpperCase().compareTo("FLOAT")==0) {
+									ArrayLocation arr = (ArrayLocation) stmt.getLocation();
+									arr.getExpression().accept(this);
+									VarLocation steps = temporal;
+									stmt.getExpression().accept(this);
+									this.addStatement(new StatementCode(OperationCode.ASSIGNARRAYDECF,new Operand(temporal),new Operand(steps),new Operand(arr)));
+								}else{
+									throw new IllegalStateException("Wrong assignation type");
+								}
+							}
 					}else{
 						if(stmt.getLocation() instanceof AttributeLocation){
 							if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
@@ -476,7 +508,7 @@ public class AsmIntermediate implements ASTVisitor {
 				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.INCFOR.toString()+aux.getLabelNumber().toString()),null,null));
 				break;
 			case WHILE :
-				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDWHILE.toString()+aux.getLabelNumber().toString()),null,null));
+				this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINWHILE.toString()+aux.getLabelNumber().toString()),null,null));
 				break;
 			default:
 				new IllegalStateException("Wrong type on Break Statement");
@@ -642,11 +674,14 @@ public class AsmIntermediate implements ASTVisitor {
 	public void visit(MethodCall stmt){
 		String[] registers = {"rdi","rsi","rdx","rcx","r8","r9"};
 		List<Expression> param = stmt.getParams();
+		List<VarLocation> tempList = new LinkedList<VarLocation>();
 		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
 			
 			param.get(cont).accept(this);
-			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(temporal), null));
-			
+			tempList.add(temporal);
+		}
+		for (int cont = 0;cont < 6 && cont< param.size() ;cont++ ) {
+			this.addStatement(new StatementCode(OperationCode.PUSHPARAMS,new Operand(registers[cont]),new Operand(tempList.get(cont)), null));
 		}
 		if (stmt.getIds().size()>1){
 			this.temporal = this.createTemporal(new VarLocation(new LinkedList<String>(),stmt.getLineNumber(),stmt.getColumnNumber()),stmt.getType());
