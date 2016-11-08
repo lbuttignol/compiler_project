@@ -1,0 +1,33 @@
+class Main {
+	integer print_int(integer x) extern;
+	void main() {
+		integer c;
+		c =54;
+		if (true){
+			print_int(c);
+		}else{
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+		}
+
+		if (false){
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+		}else{
+			print_int(c);
+		}
+
+	}
+}

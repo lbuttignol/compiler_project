@@ -1,0 +1,72 @@
+class Main {
+	integer print_int(integer x) extern;
+	void main() {
+		integer c;
+		c =54;
+		while(c>43){
+			print_int(c);
+			break;
+			if (true){
+				print_int(c);
+			}else{
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+			}
+
+			if (false){
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+			}else{
+				print_int(c);
+			}
+
+
+
+
+		}
+
+		for i=0,c{
+			print_int(c);
+			break;
+			if (true){
+				print_int(c);
+			}else{
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+			}
+
+			if (false){
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+				print_int(c);
+			}else{
+				print_int(c);
+		}
+
+
+		}
+
+	}
+}
