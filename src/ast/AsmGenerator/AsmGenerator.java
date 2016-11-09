@@ -775,10 +775,10 @@ public class AsmGenerator {
 		}
 		if (operand2.isAttribute()){
 			Integer offset = operand2.getOff();
-			writeFile(bw,"mov $"+String.valueOf(offset)+",%r9");
-			writeFile(bw,"mov (%rbx,%r9,8),%r11");
+			writeFile(bw,"mov $"+String.valueOf(offset)+",%r11");
+			writeFile(bw,"idivq (%rbx,%r11,8)");
 		}else{
-			writeFile(bw,"mov -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp), %r11");
+			writeFile(bw,"idivq -"+String.valueOf(operand2.getOff()*VARSIZE)+"(%rbp)");
 		}
 		writeFile(bw, "mov %rax, -"+String.valueOf(operand3.getOff()*VARSIZE)+"(%rbp)");
 	}

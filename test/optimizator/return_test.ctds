@@ -1,0 +1,46 @@
+class Main {
+	integer global;
+	integer print_int(integer x) extern;
+	integer aux(integer a){
+		return 1;
+		print_int(a);
+		//global = 78;
+		return 50;
+	}
+	
+	void aux2(integer q){
+		print_int(q);
+	}
+
+	void main() {
+		integer x;
+		x=0;
+		if (x==0){
+			x+=1;
+			if (x==1){
+				return;
+				x+=3;
+			}
+		}else{
+			x+=2;
+
+		}
+		while(x<10){
+			if(x==9){
+				break;
+				x=1;
+			}
+			else {
+
+			}
+			x-=1;
+		}
+		//global = 89;
+		//print_int(global);
+		print_int(x);
+		return;
+		//print_int(global);
+		x-=1;
+		aux2(x);
+	}
+}
