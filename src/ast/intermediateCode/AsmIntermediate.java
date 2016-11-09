@@ -549,7 +549,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ForStmt stmt){
-		if (stmt!=null){
+		if (stmt.getBody()!=null){
 			Integer forNum = this.getForCounter();
 			this.beginLoop.push(new LoopLabel(LabelType.FOR,forNum));
 			this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
@@ -625,7 +625,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IfThenStmt stmt){
-		if (stmt!=null){
+		if (stmt.getIfBlock()!=null){
 			Integer ifNum = this.getIfCounter();
 			IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
 			this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
@@ -842,7 +842,8 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(WhileStmt stmt){
-		if (stmt!=null){
+		if (stmt.getBody()!=null){
+			System.out.println("body "+ stmt.getBody().toString());
 			Integer whileNum = this.getWhileCounter();
 			this.beginLoop.push(new LoopLabel(LabelType.WHILE,whileNum));
 			this.endLoop.push(new LoopLabel(LabelType.WHILE, whileNum));
@@ -854,6 +855,8 @@ public class AsmIntermediate implements ASTVisitor {
 			this.addStatement(new StatementCode(OperationCode.ENDWHILE,new Operand(stmt),new Operand(whileNum),null));
 			this.beginLoop.pop();
 			this.endLoop.pop();
+		}else{
+			System.out.println("Null body");
 		}
 	}
 

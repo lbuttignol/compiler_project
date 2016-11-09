@@ -353,7 +353,7 @@ public class Optimizator implements ASTVisitor {
 			beg = (IntLiteral) forst.getInit();
 			end = (IntLiteral) forst.getEnd();
 			if (!(beg.getValue()<=end.getValue())) {
-				forst = null;
+				forst.setBody(null);
 				return;
 			}
 		}
@@ -397,7 +397,7 @@ public class Optimizator implements ASTVisitor {
 		if (ift.getCondition() instanceof BooleanLiteral) {
 			BooleanLiteral cond = (BooleanLiteral) ift.getCondition();
 			if (!cond.getValue())
-				ift = null;
+				ift.setIfBlock(null);
 		}
 		Statement block = ift.getIfBlock();
 		block.accept(this);
@@ -519,15 +519,21 @@ public class Optimizator implements ASTVisitor {
 
 	@Override
 	public void visit(WhileStmt whilest) {
+		System.out.println("While asdifnaspidgnasp");
 		whilest.getCondition().accept(this);
+		
 		if (this.wasSeted){
 			whilest.setCondition(temporal);
 			this.wasSeted = false;
 		}
+
 		if (whilest.getCondition() instanceof BooleanLiteral) {
+
 			BooleanLiteral cond = (BooleanLiteral) whilest.getCondition();
+			System.out.println("cond: "+ cond.getValue());
 			if (!cond.getValue()) {
-				whilest = null;
+				System.out.println();
+				whilest.setBody(null);
 				return;
 			}
 		}
