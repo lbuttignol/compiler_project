@@ -88,8 +88,6 @@ public class AsmIntermediate implements ASTVisitor {
 		}
 		if ((stmt.getType().toUpperCase().equals("BOOLEAN"))||(stmt.getType().toUpperCase().equals("INTEGER")))
 			addStatement(new StatementCode(OperationCode.ASSIGNCONST,new Operand(ret)	,new Operand(String.valueOf(res)),null));
-		//AssignStmt initTemporal = new AssignStmt(ret,AssignOpType.ASSIGN,stmt,stmt.getLineNumber(),stmt.getColumnNumber());
-		//initTemporal.accept(this);
 		return ret;
 	}
 	
@@ -102,10 +100,6 @@ public class AsmIntermediate implements ASTVisitor {
 		ret.setOff(incActualOffset());
 		return ret;
 	}
-
-	/*private VarLocation createTemporalArrLoc(ArrayLocation stmt){
-
-	}*/
 
 	@Override
 	public void visit(ArithmeticBinOp stmt){
@@ -237,24 +231,8 @@ public class AsmIntermediate implements ASTVisitor {
 		VarLocation aux;
 		switch (stmt.getOperator()) {
 			case INCREMENT:
-				/*switch(stmt.getExpression().getType().toUpperCase()){
-					case INTEGER:
-						stmt.getExpression().accept(this);
-						aux = (IntLiteral) temporal; 
-						this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
-						break;
-					case FLOAT:
-						stmt.getExpression().accept(this);
-						aux = (FloatLiteral) temporal;
-						this.addStatement(new StatementCode(OperationCode.ASSINCF,new Operand(aux),null,new Operand(stmt.getLocation())));
-						break;
-					default:
-						throw new IllegalStateException("Wrong assignation type");
-						break;
-				}*/
 				if (stmt.getLocation() instanceof VarLocation){
 					if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
-						System.out.println("EXPRESSION");
 						stmt.getExpression().accept(this);
 						aux = temporal; 
 						this.addStatement(new StatementCode(OperationCode.ASSINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
@@ -289,7 +267,6 @@ public class AsmIntermediate implements ASTVisitor {
 					}else{
 						if(stmt.getLocation() instanceof AttributeLocation){
 							if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
-								System.out.println("EXPRESSION");
 								stmt.getExpression().accept(this);
 								aux = temporal; 
 								this.addStatement(new StatementCode(OperationCode.ASSATTINCI,new Operand(aux),null,new Operand(stmt.getLocation())));
@@ -309,21 +286,6 @@ public class AsmIntermediate implements ASTVisitor {
 
 				break;
 			case DECREMENT:
-				/*switch (stmt.getExpression().getType().toUpperCase()){
-					case INTEGER:
-						stmt.getExpression().accept(this);
-						aux = (IntLiteral) temporal; 
-						this.addStatement(new StatementCode(OperationCode.ASSDECI,new Operand(aux),null,new Operand(stmt.getLocation())));
-						break;
-					case FLOAT:
-						stmt.getExpression().accept(this);
-						aux = (FloatLiteral) temporal;
-						this.addStatement(new StatementCode(OperationCode.ASSDECF,new Operand(aux),null,new Operand(stmt.getLocation())));
-						break;
-					default:
-						throw new IllegalStateException("Wrong assignation type");
-						break;
-				}*/
 				if (stmt.getLocation() instanceof VarLocation){
 
 					if (stmt.getExpression().getType().toUpperCase().compareTo("INTEGER")==0) {
@@ -403,19 +365,7 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(AttributeArrayLocation stmt){
-		/*switch (stmt.getType().toUpperCase()) {
-			case "INTEGER":
-				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCI,new Operand(stmt),null,null));
-				break;
-			case "FLOAT":
-				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCF,new Operand(stmt),null,null));
-				break;
-			case "BOOLEAN":
-				this.addStatement(new StatementCode(OperationCode.ATTARRAYLOCB,new Operand(stmt),null,null));
-				break;
-			default:
-				throw new IllegalStateException("Some error in array type");
-		}*/
+
 	}
 	
 
@@ -596,8 +546,6 @@ public class AsmIntermediate implements ASTVisitor {
 
 				default:
 					this.addStatement(new StatementCode(OperationCode.OBJDECL,new Operand(loc),null,null));
-					System.out.println("There is an object!!");
-					//System.out.println("Some error in idDecl type");
 			}
 		}	
 	}
@@ -843,7 +791,6 @@ public class AsmIntermediate implements ASTVisitor {
 	@Override
 	public void visit(WhileStmt stmt){
 		if (stmt.getBody()!=null){
-			System.out.println("body "+ stmt.getBody().toString());
 			Integer whileNum = this.getWhileCounter();
 			this.beginLoop.push(new LoopLabel(LabelType.WHILE,whileNum));
 			this.endLoop.push(new LoopLabel(LabelType.WHILE, whileNum));
@@ -855,8 +802,6 @@ public class AsmIntermediate implements ASTVisitor {
 			this.addStatement(new StatementCode(OperationCode.ENDWHILE,new Operand(stmt),new Operand(whileNum),null));
 			this.beginLoop.pop();
 			this.endLoop.pop();
-		}else{
-			System.out.println("Null body");
 		}
 	}
 

@@ -53,63 +53,47 @@ public class AsmGenerator {
 			switch (stmt.getOperationCode()) {
 			// Declarations
 				case BEGINPROGRAM:
-					System.out.print("BEGINPROGRAM");
 					executeBeginProgram(stmt);
 					break;
 				case ENDPROGRAM:
-					System.out.print("ENDPROGRAM");
 					executeEndProgram(stmt);
 					break;
 				case BEGINCLASS:
-					System.out.print("BEGINCLASS");
 					executeBeginClass(stmt);
 					break;
 				case ENDCLASS:
-					System.out.print("ENDCLASS");
 					executeEndClass(stmt);
 					break;
 
 				case FIELD:
-					System.out.print("FIELD");
 					executeField(stmt);
 					break;
 				case BEGINMETHOD:
-					System.out.print("BEGINMETHOD");
 					executeBeginMethod(stmt);
 					break;
 				case ENDMETHOD:
-					System.out.print("ENDMETHOD");
 					executeEndMethod(stmt);
 					break;
 				case PARAMDECL:
-					System.out.print("PARAMDECL");
 					executeParamDecl(stmt);
 					break;
 				case LOADPARAM:
-					System.out.print("LOADPARAM");
 					break;
 				case IDDECL:
-					System.out.print("IDDECL");
 					break;
 				case ARRAYDECLI:
-					System.out.print("ARRAYDECLI");
 					executeArrDeclInt(stmt);
 					break;
 				case ARRAYDECLF:
-					System.out.println( "ARRAYDECLF");
 					break;
 				case ARRAYDECLB:
-					System.out.println( "ARRAYDECLB");
 					break;
 				case INTDECL:
-					System.out.print("INTDECL");
 					executeIntDecl(stmt);
 					break;
 				case FLOATDECL:
-					System.out.println( "FLOATDECL");
 					break;
 				case BOOLDECL:
-					System.out.print("BOOLDECL");
 					executeBoolDecl(stmt);
 					break;
 				case OBJDECL:
@@ -117,300 +101,227 @@ public class AsmGenerator {
 					break;
 			//Locations
 				case ARRAYLOCI:
-					System.out.println( "ARRAYLOCI");
 					executeArrayLocI(stmt);
 					break;
 				case ARRAYLOCF:
-					System.out.println( "ARRAYLOCF");
 					break;
 				case ARRAYLOCB:
-					System.out.println( "ARRAYLOCB");
 					break;
 				case ATTARRAYLOCI:
-					System.out.println( "ATTARRAYLOCI");
 					break;
 				case ATTARRAYLOCF:
-					System.out.println( "ATTARRAYLOCF");
 					break;
 				case ATTARRAYLOCB:
-					System.out.println( "ATTARRAYLOCB");
 					break;
 				case ATTLOCI:
 					executeAttLocI(stmt);
-					System.out.println( "ATTLOCI");
 					break;
 				case ATTLOCF:
-					System.out.println( "ATTLOCF");
 					break;
 				case ATTLOCB:
 					executeAttLocB(stmt);
-					System.out.println( "ATTLOCB");
 					break;
 				case VARLOCI:
-					System.out.println( "VARLOCI");
 					break;
 				case VARLOCF:
-					System.out.println( "VARLOCF");
 					break;
 				case VARLOCB:
-					System.out.println( "VARLOCB");
 					break;
 
 			// Statements
 				case BEGINIF:
-					System.out.print("BEGINIF");
 					executeBeginIf(stmt);
 					break;
 				case ENDIF:
-					System.out.println( "ENDIF");
 					executeEndIf(stmt);
 					break;
 				case ELSEIF:
-					System.out.println( "ELSEIF");
 					executeElseIf(stmt);
 					break;
 				case BEGINFOR:
-					System.out.println( "BEGINFOR");
 					executeBeginFor(stmt);
 					break;
 				case INCFOR:
-					System.out.println( "INCFOR");
 					executeIncFor(stmt);
 					break;
 				case ENDFOR:
-					System.out.println( "ENDFOR");
 					executeEndFor(stmt);
 					break;
 				case BEGINWHILE:
-					System.out.println( "BEGINWHILE");
 					executeBeginWhile(stmt);
 					break;
 				case ENDWHILE:
-					System.out.println( "ENDWHILE");
 					executeEndWhile(stmt);
 					break;
 				
 			// Unary Aruthmetic
 				case SUBUI:
-					System.out.println( "SUBUI");
 					executeSubUI(stmt);
 					break;
 				case NOT:
-					System.out.println( "NOT"); 	
 					executeNot(stmt);
 					break;
 				case ADDII:
-					System.out.println( "ADDII");
 					executeAddII(stmt);
 					break;
 				case ADDFF:
-					System.out.println( "ADDFF");
 					executeAddFF(stmt);
 					break;
 				case SUBII:
-					System.out.println( "SUBII");
 					executeSubII(stmt);
 					break;
 				case SUBFF:
-					System.out.println( "SUBFF");
 					executeSubFF(stmt);
 					break;
 				case MULII:
-					System.out.println( "MULII");
 					executeMulII(stmt);
 					break;
 				case MULFF:
-					System.out.println( "MULFF");
 					executeMulFF(stmt);
 					break;
 				case DIVII:
-					System.out.println( "DIVII");
 					executeDivII(stmt);
 					break;	
 				case DIVFF:
-					System.out.println( "DIVFF");
 					executeDivFF(stmt);
 					break;
 				case MODII:
-					System.out.println( "MODII");
 					executeModII(stmt);
 					break;
 			
 			// Eq operations													
 				case EQII:
-					System.out.println( "EQII");
 					executeEqII(stmt);
 					break;
 				case EQFF:
-					System.out.println( "EQFF");
 					executeEqFF(stmt);
 					break;
 				case EQBB:
-					System.out.println( "EQBB");
 					executeEqBB(stmt);
 					break;
 				case NEQII:
-					System.out.println( "NEQII");
 					executeNeqII(stmt);
 					break;
 				case NEQFF:
-					System.out.println( "NEQFF");
 					executeNeqFF(stmt);
 					break;
 				case NEQBB:
-					System.out.println( "NEQBB");
 					executeNeqBB(stmt);
 					break;
 
 			// Relational operations
 				case SMALLII:
-					System.out.println( "SMALLII");
 					executeSmallII(stmt);
 					break;
 				case SMALLFF:
-					System.out.println( "SMALLFF");
 					executeSmallFF(stmt);
 					break;
 				case LTOEII:
-					System.out.println( "LTOEII");
 					executeLtoeII(stmt);
 					break;
 				case LTOEFF:
-					System.out.println( "LTOEFF");
 					executeLtoeFF(stmt);
 					break;
 				case BIGGERII:
-					System.out.println( "BIGGERII");
 					executeBiggerII(stmt);
 					break;
 				case BIGGERFF:
-					System.out.println( "BIGGERFF");
 					executeBiggerFF(stmt);
 					break;
 				case GTOEII:
-					System.out.println( "GTOEII");
 					executeGtoeII(stmt);
 					break;
 				case GTOEFF:
-					System.out.println( "GTOEFF");
 					executeGtoeFF(stmt);
 					break;
 
 			// Logical operations			
 				case ANDBB:
-					System.out.println( "ANDBB");
 					executeAndBB(stmt);
 					break;
 				case ORBB:
-					System.out.println( "ORBB");
 					executeOrBB(stmt);
 					break;
 
 			// Jump
 				case JMPFALSE:
-					System.out.print("JMPFALSE");
 					executeJmpFalse(stmt);	
 					break;
 				case JMPTRUE:
-					System.out.println( "JMPTRUE");
 					break;
 				case JMP:
-					System.out.print("JMP");
 					executeJmp(stmt);
 					break;
 
 			// Assign
 				case ASSIGNATION:
-					System.out.println( "ASSIGNATION");
 					executeAssignation(stmt);
 					break;
 				case ASSIGNCONST:
-					System.out.println("ASSIGNCONST");
 					executeAssignConst(stmt);
 					break;
 				case ASSIGNARRAY:
-					System.out.print("ASSIGNARRAY");
 					executeAssignArray(stmt);
 					break;
 				case ASSIGNARRAYINCI:
-					System.out.print("ASSIGNARRAYINCI");
 					executeAssignArrayIncI(stmt);
 					break;
 				case ASSIGNARRAYINCF:
-					System.out.print("ASSIGNARRAYINCF");
 					executeAssignArrayIncF(stmt);
 					break;
 				case ASSIGNARRAYDECI:
-					System.out.print("ASSIGNARRAYDECI");
 					executeAssignArrayDecI(stmt);
 					break;
 				case ASSIGNARRAYDECF:
-					System.out.print("ASSIGNARRAYDECF");
 					executeAssignArrayDecF(stmt);
 					break;
 				case ASSIGNATTR:
 					executeAssignAttr(stmt);
-					System.out.println("ASSIGNATTR");
 					break;
 				case ASSATTINCI:
-					System.out.print("ASSATTINCI");
 					executeAssignAttIncI(stmt);
 					break;
 				case ASSATTINCF:
-					System.out.print("ASSATTINCF");
 					executeAssignAttIncF(stmt);
 					break;
 				case ASSINCI:
-					System.out.println( "ASSINCI");
 					executeAssIncI(stmt);
 					break;
 				case ASSDECI:
-					System.out.println( "ASSDECI");
 					executeAssDecI(stmt);
 					break;
 				case ASSINCF:
-					System.out.println( "ASSINCF");
 					executeAssIncF(stmt);
 					break;
 				case ASSDECF:
-					System.out.println( "ASSDECF");
 					executeAssDecF(stmt);
 					break;
 				case ASSATTDECI:
-					System.out.print("ASSATTDECI");
 					executeAssignAttDecrI(stmt);
 					break;
 				case ASSATTDECF:
-					System.out.print("ASSARRDECF");
 					executeAssignAttDecrF(stmt);
 					break;
 				case INC:
-					System.out.println( "INC");
 					executeInc(stmt);
 					break;
 
 				case PUSHPARAMS:
-					System.out.print("PUSHPARAMS");
 					executePushParams(stmt);
 					break;
 				case PULLPARAMS:
-					System.out.print("PULLPARAMS");
 					executePullParams(stmt);
 					break;
 				case CALL:
-					System.out.print( "CALL");
 					executeCall(stmt);
 					break;
 				case CALLOBJ:
 					executeCallObj(stmt);
-					System.out.println("CALLOBJ");
 					break;
 				case RET:
-					System.out.print( "RET");
 					executeRet(stmt);
 					break;
 				case RETVOID:
-					System.out.print( "RETVOID");
 					executeRetVoid(stmt);
 					break;
 			}			
@@ -418,7 +329,6 @@ public class AsmGenerator {
 			e.printStackTrace();
 		}
 
-		System.out.println("");
 	}
 
 	private void executeArrayLocI(StatementCode stmt)throws IOException{
@@ -484,7 +394,6 @@ public class AsmGenerator {
 			label = methodDecl.getName();
 		}
 		Integer methodOff = methodDecl.getOff()*VARSIZE;
-		System.out.println(label);
 		writeFile(bw,label+":");
 		writeFile(bw,"enter $"+String.valueOf(methodOff)+",$0");
 
@@ -511,9 +420,7 @@ public class AsmGenerator {
 
 	private void executeIntDecl(StatementCode stmt) throws IOException{
 		IdDecl idDecl = (IdDecl) stmt.getOperand1().getExpression();
-		System.out.println(idDecl.getName());
 		Integer offSet = idDecl.getOff()*VARSIZE;
-		System.out.println("Error");
 		writeFile(bw,"mov $0, %r10");
 		writeFile(bw,"mov %r10, -"+String.valueOf(offSet)+"(%rbp)");
 		writeFile(bw,"mov $0, %r10");	
@@ -594,7 +501,6 @@ public class AsmGenerator {
 	}
 
 	private void executeSubUI(StatementCode stmt) throws IOException{
-		System.out.println("SubUI");
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 
@@ -1287,8 +1193,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){
@@ -1302,7 +1206,6 @@ public class AsmGenerator {
 			if (find)
 				break;	
 		}
-		System.out.println(String.valueOf(attOff));
 		writeFile(bw,"lea -"+String.valueOf(attLocOff)+"(%rbp),%rcx");
 		writeFile(bw,"mov $"+String.valueOf(attOff)+", %rdx");
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp) ,%r10");
@@ -1310,7 +1213,6 @@ public class AsmGenerator {
 		
 	}
 	private void executeAssIncI(StatementCode stmt) throws IOException{
-		System.out.println("ASS");
 		operand1 = (VarLocation) stmt.getOperand1().getExpression();
 		operand3 = (VarLocation) stmt.getOperand3().getExpression();
 		writeFile(bw,"mov -"+String.valueOf(operand1.getOff()*VARSIZE)+"(%rbp), %r10");
@@ -1400,8 +1302,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){
@@ -1430,8 +1330,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){
@@ -1460,8 +1358,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){
@@ -1490,8 +1386,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){
@@ -1570,8 +1464,6 @@ public class AsmGenerator {
     	MethodCall methodCall = (MethodCall) stmt.getOperand1().getExpression();
 
 		writeFile(bw,"lea -"+String.valueOf(methodCall.getObject().getOff()*VARSIZE)+"(%rbp),%rbx");
-		System.out.println("DASDAS");
-		System.out.println( methodCall.getMethodDecl());
 		String className = methodCall.getObject().getClassRef().getName();
 		String lbl = className+"_"+methodCall.getIds().get(1).getName();
 		writeFile(bw,"call "+lbl);
@@ -1683,8 +1575,6 @@ public class AsmGenerator {
 		Integer attOff = null;
 		ClassDecl classDecl = (ClassDecl) ((IdDecl)attLoc.getDeclaration()).getClassRef();
 		Boolean find = false;
-		System.out.println(classDecl.getName());
-		System.out.println(attLoc.getIds().get(1));
 		for (FieldDecl fieldDecl: classDecl.getAttributes()){
 			for (IdDecl idDecl : fieldDecl.getNames()){
 				if (idDecl.getName().compareTo(attLoc.getIds().get(1).getName())==0){

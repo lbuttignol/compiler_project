@@ -26,8 +26,6 @@ public class Main {
 		program.accept(builderVisitor);
 
 		if (builderVisitor.getErrors().isEmpty() && builderVisitor.getStack().getErrors().isEmpty()){
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
 		    TypeEvaluationVisitor typeEV = new TypeEvaluationVisitor();
 		    program.accept(typeEV);
 		    
@@ -37,7 +35,6 @@ public class Main {
 		    }
 			
 		    if (typeEV.getErrors().isEmpty() && typeEV.getStack().getErrors().isEmpty()){
-			    System.out.println("START INTERMEDIATE CODE CREATION ************************************");
 			    AsmIntermediate intermediateCode = new AsmIntermediate();
 			    program.accept(intermediateCode);
 			    // System.out.println(intermediateCode.toString());
