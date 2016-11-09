@@ -1,0 +1,27 @@
+class Main {
+	integer print_int(integer x) extern;
+
+	void main() {
+		integer i;
+		i=55;
+		if (7>987){
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+			print_int(i);
+		}else{
+			print_int(i);
+		}
+	}
+}
