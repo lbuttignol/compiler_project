@@ -1,0 +1,19 @@
+class Ej{
+	integer as[5];
+
+	integer entrar(integer i){
+		return as[i];
+	}
+}
+
+class Main {
+	integer print_int(integer x) extern;
+ 	void main() {
+		integer a[5];
+		Ej obj;
+		obj.as[1]=6533;
+		a[1]=654;
+		print_int(a[1]);
+		return;
+	}
+}
