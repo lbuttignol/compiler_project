@@ -1,11 +1,40 @@
 class Main {
 	integer print_bool(bool x) extern;
+ 	integer print_int(integer x) extern;
  	void main() {
-		bool x,y,c;
-		x = true;
-		y = true;
-		c = x && y;
-		print_bool(c);
+		integer a;
+		bool j;
+		a=1+2+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+4;
+		a= 1+8-654+543+65/655*54+45%4;
+		print_int(a);
+		j= (34<43 || true || 2>=32 || 2==2 || 2!=2 || 4>43||3<=43) && false;
+		print_bool(j);
+		while(false){
+			bool x,y,c;
+			x = true;
+			y = true;
+			c = x && y;
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+			print_bool(c);
+		}
 		return;
 	}
 }

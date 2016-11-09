@@ -353,9 +353,11 @@ public class AsmGenerator {
 					System.out.println("ASSIGNATTR");
 					break;
 				case ASSATTINCI:
+					System.out.print("ASSATTINCI");
 					executeAssignAttIncI(stmt);
 					break;
 				case ASSATTINCF:
+					System.out.print("ASSATTINCF");
 					executeAssignAttIncF(stmt);
 					break;
 				case ASSINCI:
@@ -375,9 +377,11 @@ public class AsmGenerator {
 					executeAssDecF(stmt);
 					break;
 				case ASSATTDECI:
+					System.out.print("ASSATTDECI");
 					executeAssignAttDecrI(stmt);
 					break;
 				case ASSATTDECF:
+					System.out.print("ASSARRDECF");
 					executeAssignAttDecrF(stmt);
 					break;
 				case INC:

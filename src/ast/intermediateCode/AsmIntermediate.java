@@ -549,33 +549,35 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(ForStmt stmt){
-		Integer forNum = this.getForCounter();
-		this.beginLoop.push(new LoopLabel(LabelType.FOR,forNum));
-		this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
-		IdDecl counterName = stmt.getCounterName();
-		counterName.accept(this);
-		//this.addStatement(new StatementCode(OperationCode.IDDECL,new Operand(counterName),null,null));
-		stmt.getInit().accept(this);
-		VarLocation contInit = temporal; 
-		List<String> nameLoc = new LinkedList<String>();
-		nameLoc.add(counterName.getName());
-		VarLocation counter = new VarLocation(nameLoc,counterName.getLineNumber(),counterName.getColumnNumber());
-		counter.setType(contInit.getType());
-		counter.setDeclaration(counterName);
-		this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(counter)));
-		stmt.getEnd().accept(this);
-		VarLocation contEnd = temporal;
-		this.addStatement(new StatementCode(OperationCode.BEGINFOR,new Operand(stmt),new Operand(forNum),null));
-		RelationalBinOp forCond = new RelationalBinOp(counter,BinOpType.SMALL,contEnd,stmt.getLineNumber(),stmt.getColumnNumber());
-		forCond.accept(this);
-		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDFOR.toString()+forNum.toString()),null));
-		stmt.getBody().accept(this);				
-		this.addStatement(new StatementCode(OperationCode.INCFOR,new Operand(stmt),new Operand(forNum),null));
-		this.addStatement(new StatementCode(OperationCode.INC,null,null,new Operand(counter)));
-		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINFOR.toString()+forNum.toString()),null,null));
-		this.addStatement(new StatementCode(OperationCode.ENDFOR,new Operand(stmt),new Operand(forNum),null));
-		this.beginLoop.pop();
-		this.endLoop.pop();
+		if (stmt!=null){
+			Integer forNum = this.getForCounter();
+			this.beginLoop.push(new LoopLabel(LabelType.FOR,forNum));
+			this.endLoop.push(new LoopLabel(LabelType.FOR, forNum));
+			IdDecl counterName = stmt.getCounterName();
+			counterName.accept(this);
+			//this.addStatement(new StatementCode(OperationCode.IDDECL,new Operand(counterName),null,null));
+			stmt.getInit().accept(this);
+			VarLocation contInit = temporal; 
+			List<String> nameLoc = new LinkedList<String>();
+			nameLoc.add(counterName.getName());
+			VarLocation counter = new VarLocation(nameLoc,counterName.getLineNumber(),counterName.getColumnNumber());
+			counter.setType(contInit.getType());
+			counter.setDeclaration(counterName);
+			this.addStatement(new StatementCode(OperationCode.ASSIGNATION,new Operand(contInit),null,new Operand(counter)));
+			stmt.getEnd().accept(this);
+			VarLocation contEnd = temporal;
+			this.addStatement(new StatementCode(OperationCode.BEGINFOR,new Operand(stmt),new Operand(forNum),null));
+			RelationalBinOp forCond = new RelationalBinOp(counter,BinOpType.SMALL,contEnd,stmt.getLineNumber(),stmt.getColumnNumber());
+			forCond.accept(this);
+			this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDFOR.toString()+forNum.toString()),null));
+			stmt.getBody().accept(this);				
+			this.addStatement(new StatementCode(OperationCode.INCFOR,new Operand(stmt),new Operand(forNum),null));
+			this.addStatement(new StatementCode(OperationCode.INC,null,null,new Operand(counter)));
+			this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINFOR.toString()+forNum.toString()),null,null));
+			this.addStatement(new StatementCode(OperationCode.ENDFOR,new Operand(stmt),new Operand(forNum),null));
+			this.beginLoop.pop();
+			this.endLoop.pop();
+		}
 	}
 	
 	@Override
@@ -602,29 +604,37 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(IfThenElseStmt stmt){
-		Integer ifNum = this.getIfCounter();
-		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
-		this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
-		stmt.getCondition().accept(this); // this method set temporal variable with a condition value		
-		VarLocation cond =  temporal;
-		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
-		stmt.getIfBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null,null));
-		this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(ifNum),null));
-		stmt.getElseBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(ifNum),null));
+		if (stmt.getElseBlock()==null) {
+			stmt.getIfBlock().accept(this);
+		} else if (stmt.getIfBlock()==null) {
+			stmt.getElseBlock().accept(this);
+		}else{
+			Integer ifNum = this.getIfCounter();
+			IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
+			this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
+			stmt.getCondition().accept(this); // this method set temporal variable with a condition value		
+			VarLocation cond =  temporal;
+			this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ELSEIF.toString()+intLit.toString()),null));
+			stmt.getIfBlock().accept(this);
+			this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null,null));
+			this.addStatement(new StatementCode(OperationCode.ELSEIF,new Operand(stmt),new Operand(ifNum),null));
+			stmt.getElseBlock().accept(this);
+			this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(ifNum),null));
+		}
 	}
 	
 	@Override
 	public void visit(IfThenStmt stmt){
-		Integer ifNum = this.getIfCounter();
-		IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
-		this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
-		stmt.getCondition().accept(this);
-		VarLocation cond = temporal;
-		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null)); //saltar al fin de if
-		stmt.getIfBlock().accept(this);
-		this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(ifNum),null));
+		if (stmt!=null){
+			Integer ifNum = this.getIfCounter();
+			IntLiteral intLit = new IntLiteral(ifNum,stmt.getLineNumber(),stmt.getColumnNumber());
+			this.addStatement(new StatementCode(OperationCode.BEGINIF,new Operand(stmt),new Operand(intLit), null));
+			stmt.getCondition().accept(this);
+			VarLocation cond = temporal;
+			this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(cond),new Operand(OperationCode.ENDIF.toString()+intLit.toString()),null)); //saltar al fin de if
+			stmt.getIfBlock().accept(this);
+			this.addStatement(new StatementCode(OperationCode.ENDIF,new Operand(stmt),new Operand(ifNum),null));
+		}
 	}
 	
 	@Override
@@ -832,17 +842,19 @@ public class AsmIntermediate implements ASTVisitor {
 	
 	@Override
 	public void visit(WhileStmt stmt){
-		Integer whileNum = this.getWhileCounter();
-		this.beginLoop.push(new LoopLabel(LabelType.WHILE,whileNum));
-		this.endLoop.push(new LoopLabel(LabelType.WHILE, whileNum));
-		this.addStatement(new StatementCode(OperationCode.BEGINWHILE,new Operand(stmt),new Operand(whileNum),null));
-		stmt.getCondition().accept(this);
-		this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDWHILE.toString()+whileNum.toString()),null));
-		stmt.getBody().accept(this);
-		this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINWHILE.toString()+whileNum.toString()),null,null));
-		this.addStatement(new StatementCode(OperationCode.ENDWHILE,new Operand(stmt),new Operand(whileNum),null));
-		this.beginLoop.pop();
-		this.endLoop.pop();
+		if (stmt!=null){
+			Integer whileNum = this.getWhileCounter();
+			this.beginLoop.push(new LoopLabel(LabelType.WHILE,whileNum));
+			this.endLoop.push(new LoopLabel(LabelType.WHILE, whileNum));
+			this.addStatement(new StatementCode(OperationCode.BEGINWHILE,new Operand(stmt),new Operand(whileNum),null));
+			stmt.getCondition().accept(this);
+			this.addStatement(new StatementCode(OperationCode.JMPFALSE,new Operand(temporal),new Operand(OperationCode.ENDWHILE.toString()+whileNum.toString()),null));
+			stmt.getBody().accept(this);
+			this.addStatement(new StatementCode(OperationCode.JMP,new Operand(OperationCode.BEGINWHILE.toString()+whileNum.toString()),null,null));
+			this.addStatement(new StatementCode(OperationCode.ENDWHILE,new Operand(stmt),new Operand(whileNum),null));
+			this.beginLoop.pop();
+			this.endLoop.pop();
+		}
 	}
 
 	@Override

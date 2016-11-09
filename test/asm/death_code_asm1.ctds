@@ -1,0 +1,22 @@
+class Main {
+	integer print_int(integer x) extern;
+	void main() {
+		integer c;
+		c =54;
+		while(false){
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+			print_int(c);
+
+		}
+		print_int(c);
+	}
+}
