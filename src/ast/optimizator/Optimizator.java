@@ -396,8 +396,10 @@ public class Optimizator implements ASTVisitor {
 		}
 		if (ift.getCondition() instanceof BooleanLiteral) {
 			BooleanLiteral cond = (BooleanLiteral) ift.getCondition();
-			if (!cond.getValue())
+			if (!cond.getValue()){
 				ift.setIfBlock(null);
+				return;
+			}
 		}
 		Statement block = ift.getIfBlock();
 		block.accept(this);
