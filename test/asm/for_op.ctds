@@ -1,0 +1,22 @@
+class Main {
+	integer print_int(integer x) extern;
+ 	integer factorial(integer i){
+ 		integer result;
+ 		if (i==0||i==1){
+ 			return 1;
+ 		}else{
+ 		 	result = i * factorial(i-1);
+ 		 	return result;
+ 		 }
+ 	}
+
+ 	void main() {
+		integer c;
+		c=5;
+		print_int(factorial(31) );
+		for j=9, 0{
+			print_int(5);
+		}
+		return;
+	}
+}

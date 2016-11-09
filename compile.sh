@@ -7,9 +7,10 @@ execut="pepito" # runeable file
 if [ -z "$2" ]; then
 	java -jar $comp $srcfile
 	gcc $printlib "${srcfile%.ctds}.s" -o $execut
+	#echo "${srcfile%.ctds}.s"
 	./$execut
 else
-	java -jar $comp $srcfile $2
+	java -jar $comp $srcfile $2  
 	gcc $printlib "${srcfile%.ctds}.s" -o $execut
 	./$execut 
 
