@@ -1,7 +1,7 @@
 class Main {
 	void main (){
 		integer i;
-		if (true){
+		if (true && true && true && true || false){
 			i = 1;
 		} else {
 			i = 2;
@@ -12,3 +12,6 @@ class Main {
 		}
 	}
 }
+
+
+
